@@ -7,7 +7,10 @@ if (!MONGODB_URI) {
 }
 
 declare global {
-  var mongoose: { conn: typeof import("mongoose") | null; promise: Promise<typeof import("mongoose")> | null };
+  var mongoose: {
+    conn: typeof import("mongoose") | null;
+    promise: Promise<typeof import("mongoose")> | null;
+  };
 }
 
 let cached = global.mongoose;
@@ -20,7 +23,9 @@ async function dbConnect() {
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, { bufferCommands: false }).then((m) => m);
+    cached.promise = mongoose
+      .connect(MONGODB_URI, { bufferCommands: false, serverSelectionTimeoutMS: 2000 })
+      .then((m) => m);
   }
 
   cached.conn = await cached.promise;

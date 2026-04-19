@@ -9,7 +9,7 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email:    { label: "Email",    type: "email" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -33,18 +33,18 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id        = (user as any).id;
-        token.role      = (user as any).role;
-        token.planId    = (user as any).planId;
+        token.id = (user as any).id;
+        token.role = (user as any).role;
+        token.planId = (user as any).planId;
         token.planEndDate = (user as any).planEndDate;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).id          = token.id;
-        (session.user as any).role        = token.role;
-        (session.user as any).planId      = token.planId;
+        (session.user as any).id = token.id;
+        (session.user as any).role = token.role;
+        (session.user as any).planId = token.planId;
         (session.user as any).planEndDate = token.planEndDate;
       }
       return session;
@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/login",
-    error:  "/login",
+    error: "/login",
   },
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,

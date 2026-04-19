@@ -7,12 +7,15 @@ export interface IState extends Document {
   isActive: boolean;
 }
 
-const StateSchema = new Schema<IState>({
-  name:      { type: String, required: true, trim: true },
-  countryId: { type: Schema.Types.ObjectId, ref: "Country", required: true },
-  code:      { type: String, trim: true, uppercase: true, default: "" },
-  isActive:  { type: Boolean, default: true },
-}, { timestamps: true });
+const StateSchema = new Schema<IState>(
+  {
+    name: { type: String, required: true, trim: true },
+    countryId: { type: Schema.Types.ObjectId, ref: "Country", required: true },
+    code: { type: String, trim: true, uppercase: true, default: "" },
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true }
+);
 
 StateSchema.index({ countryId: 1, name: 1 });
 

@@ -52,56 +52,65 @@ export default function AdminImportPage() {
   return (
     <div className="animate-fadeInUp">
       <div className="mb-8">
-        <h1 className="text-3xl font-black text-white mb-2">Bulk Data Import</h1>
-        <p className="text-gray-400">Upload CSV files to import thousands of business records into the database.</p>
+        <h1 className="mb-2 text-3xl font-black text-white">Bulk Data Import</h1>
+        <p className="text-gray-400">
+          Upload CSV files to import thousands of business records into the database.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Upload Card */}
-        <div className="lg:col-span-2 space-y-6">
-          <div 
-            className={`glass-card p-12 flex flex-col items-center justify-center border-2 border-dashed transition-all cursor-pointer ${
-              file ? "border-purple-500 bg-purple-500/5" : "border-gray-800 hover:border-gray-600 hover:bg-white/5"
+        <div className="space-y-6 lg:col-span-2">
+          <div
+            className={`glass-card flex cursor-pointer flex-col items-center justify-center border-2 border-dashed p-12 transition-all ${
+              file
+                ? "border-purple-500 bg-purple-500/5"
+                : "border-gray-800 hover:border-gray-600 hover:bg-white/5"
             }`}
             onClick={() => fileInputRef.current?.click()}
           >
-            <input 
-              type="file" 
-              accept=".csv" 
-              className="hidden" 
-              ref={fileInputRef} 
-              onChange={handleFileChange} 
+            <input
+              type="file"
+              accept=".csv"
+              className="hidden"
+              ref={fileInputRef}
+              onChange={handleFileChange}
             />
-            
+
             {complete ? (
-              <div className="text-center animate-bounce">
-                <CheckCircle2 className="w-16 h-16 text-green-400 mx-auto mb-4" />
+              <div className="animate-bounce text-center">
+                <CheckCircle2 className="mx-auto mb-4 h-16 w-16 text-green-400" />
                 <h3 className="text-xl font-bold text-white">Import Complete!</h3>
-                <p className="text-gray-400 mt-2">1,00,000 records processed successfully.</p>
+                <p className="mt-2 text-gray-400">1,00,000 records processed successfully.</p>
               </div>
             ) : isUploading ? (
               <div className="w-full max-w-md text-center">
-                <Loader2 className="w-12 h-12 text-purple-500 animate-spin mx-auto mb-6" />
-                <h3 className="text-xl font-bold text-white mb-4">Processing Records...</h3>
-                <div className="w-full bg-gray-800 rounded-full h-2.5 mb-2">
-                  <div className="bg-purple-600 h-2.5 rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
+                <Loader2 className="mx-auto mb-6 h-12 w-12 animate-spin text-purple-500" />
+                <h3 className="mb-4 text-xl font-bold text-white">Processing Records...</h3>
+                <div className="mb-2 h-2.5 w-full rounded-full bg-gray-800">
+                  <div
+                    className="h-2.5 rounded-full bg-purple-600 transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                  ></div>
                 </div>
-                <p className="text-gray-500 text-sm">{progress}% - Reading CSV chunks</p>
+                <p className="text-sm text-gray-500">{progress}% - Reading CSV chunks</p>
               </div>
             ) : (
               <div className="text-center">
-                <Upload className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+                <Upload className="mx-auto mb-4 h-16 w-16 text-gray-600" />
                 {file ? (
                   <>
                     <h3 className="text-xl font-bold text-white">{file.name}</h3>
-                    <p className="text-gray-400 mt-2">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                    <p className="text-purple-400 mt-4 text-sm font-bold">Click to change file</p>
+                    <p className="mt-2 text-gray-400">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    <p className="mt-4 text-sm font-bold text-purple-400">Click to change file</p>
                   </>
                 ) : (
                   <>
                     <h3 className="text-xl font-bold text-white">Select CSV File</h3>
-                    <p className="text-gray-400 mt-2">Drag and drop or click to browse</p>
-                    <p className="text-gray-500 text-xs mt-4 uppercase tracking-widest font-black">Strict Template Required</p>
+                    <p className="mt-2 text-gray-400">Drag and drop or click to browse</p>
+                    <p className="mt-4 text-xs font-black tracking-widest text-gray-500 uppercase">
+                      Strict Template Required
+                    </p>
                   </>
                 )}
               </div>
@@ -110,23 +119,30 @@ export default function AdminImportPage() {
 
           <div className="flex justify-end gap-3">
             {file && !isUploading && !complete && (
-              <Button 
-                variant="outline" 
-                onClick={() => setFile(null)} 
+              <Button
+                variant="outline"
+                onClick={() => setFile(null)}
                 className="border-gray-800 text-gray-400"
               >
                 Clear
               </Button>
             )}
-            <Button 
-              className="btn-glow px-8 h-12" 
+            <Button
+              className="btn-glow h-12 px-8"
               disabled={!file || isUploading || complete}
               onClick={handleUpload}
             >
               {isUploading ? "Uploading..." : complete ? "Done" : "Start Import"}
             </Button>
             {complete && (
-              <Button variant="outline" onClick={() => {setComplete(false); setFile(null);}} className="border-gray-800 text-gray-400">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setComplete(false);
+                  setFile(null);
+                }}
+                className="border-gray-800 text-gray-400"
+              >
                 Import Another
               </Button>
             )}
@@ -136,36 +152,40 @@ export default function AdminImportPage() {
         {/* Sidebar Info */}
         <div className="space-y-6">
           <div className="glass-card p-6">
-            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-              <FileText className="w-5 h-5 text-purple-400" /> CSV Template
+            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-white">
+              <FileText className="h-5 w-5 text-purple-400" /> CSV Template
             </h3>
-            <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-              To ensure data integrity, please use our standardized CSV template. Missing columns or invalid HSN codes will be skipped.
+            <p className="mb-6 text-sm leading-relaxed text-gray-400">
+              To ensure data integrity, please use our standardized CSV template. Missing columns or
+              invalid HSN codes will be skipped.
             </p>
-            <Button variant="outline" className="w-full justify-start gap-3 border-gray-800 text-gray-300">
-              <Download className="w-4 h-4" /> Download Template
+            <Button
+              variant="outline"
+              className="w-full justify-start gap-3 border-gray-800 text-gray-300"
+            >
+              <Download className="h-4 w-4" /> Download Template
             </Button>
           </div>
 
-          <div className="glass-card p-6 border-orange-900/30 bg-orange-900/5">
-            <h3 className="text-lg font-bold text-orange-400 mb-4 flex items-center gap-2">
-              <AlertCircle className="w-5 h-5" /> Import Rules
+          <div className="glass-card border-orange-900/30 bg-orange-900/5 p-6">
+            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-orange-400">
+              <AlertCircle className="h-5 w-5" /> Import Rules
             </h3>
-            <ul className="text-sm text-gray-400 space-y-3">
+            <ul className="space-y-3 text-sm text-gray-400">
               <li className="flex gap-2">
-                <span className="text-orange-500 font-bold">•</span>
+                <span className="font-bold text-orange-500">•</span>
                 Max file size: 50MB
               </li>
               <li className="flex gap-2">
-                <span className="text-orange-500 font-bold">•</span>
+                <span className="font-bold text-orange-500">•</span>
                 Batch size: 1000 records/sec
               </li>
               <li className="flex gap-2">
-                <span className="text-orange-500 font-bold">•</span>
+                <span className="font-bold text-orange-500">•</span>
                 Duplicates: Skipped by Email Address
               </li>
               <li className="flex gap-2">
-                <span className="text-orange-500 font-bold">•</span>
+                <span className="font-bold text-orange-500">•</span>
                 Required: Business Name, City, Country, HSN
               </li>
             </ul>

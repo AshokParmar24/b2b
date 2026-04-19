@@ -10,22 +10,22 @@ import slugify from "@/lib/slugify";
 export async function GET(req: Request) {
   await dbConnect();
   const { searchParams } = new URL(req.url);
-  const page  = parseInt(searchParams.get("page")  || "1");
+  const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "20");
-  const q     = searchParams.get("q") || "";
-  const hsn   = searchParams.get("hsn") || "";
-  const city  = searchParams.get("city") || "";
+  const q = searchParams.get("q") || "";
+  const hsn = searchParams.get("hsn") || "";
+  const city = searchParams.get("city") || "";
 
   const filter: any = { isActive: true };
   if (hsn) filter["hsnCodes.code"] = { $regex: hsn, $options: "i" };
   if (city) filter.cityId = city;
-  if (q)    filter.$text = { $search: q };
+  if (q) filter.$text = { $search: q };
 
   const [businesses, total] = await Promise.all([
     Business.find(filter)
       .populate("countryId", "name flag phoneCode")
-      .populate("stateId",   "name")
-      .populate("cityId",    "name")
+      .populate("stateId", "name")
+      .populate("cityId", "name")
       .populate("pincodeId", "pincode area")
       .skip((page - 1) * limit)
       .limit(limit)
@@ -43,14 +43,17 @@ export async function POST(req: Request) {
 
   await dbConnect();
   const userId = (session.user as any).id;
-  const user   = await User.findById(userId).populate("planId");
-  if (!user)    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  const user = await User.findById(userId).populate("planId");
+  if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
   // Check plan limits
-  const plan        = user.planId as any;
+  const plan = user.planId as any;
   const currentCount = await Business.countDocuments({ userId, isActive: true });
   if (plan && currentCount >= plan.maxListings)
-    return NextResponse.json({ error: `Plan limit reached. Upgrade to add more listings.` }, { status: 403 });
+    return NextResponse.json(
+      { error: `Plan limit reached. Upgrade to add more listings.` },
+      { status: 403 }
+    );
 
   const body = await req.json();
 
@@ -60,7 +63,10 @@ export async function POST(req: Request) {
 
   // Validate HSN codes per plan
   if (plan?.maxHsnCodes && body.hsnCodes?.length > plan.maxHsnCodes)
-    return NextResponse.json({ error: `Plan allows max ${plan.maxHsnCodes} HSN codes` }, { status: 400 });
+    return NextResponse.json(
+      { error: `Plan allows max ${plan.maxHsnCodes} HSN codes` },
+      { status: 400 }
+    );
 
   const slug = slugify(body.businessName + "-" + Date.now());
   const business = await Business.create({ ...body, slug, userId });

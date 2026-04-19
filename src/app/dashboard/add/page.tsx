@@ -5,7 +5,7 @@ export const metadata = {
 
 export default function AddBusinessPage() {
   return (
-    <div className="max-w-4xl mx-auto py-8">
+    <div className="mx-auto max-w-4xl py-8">
       <BusinessCardForm />
     </div>
   );

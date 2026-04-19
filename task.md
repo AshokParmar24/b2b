@@ -79,6 +79,7 @@
 - [x] `robots.txt` configuration
 - [x] Mobile responsive polish (all pages)
 - [x] Dark/light mode
+- [x] Implement Prettier code formatting
 - [x] Lighthouse performance audit (target 90+)
 - [x] Deploy to Vercel
 

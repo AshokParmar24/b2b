@@ -13,27 +13,25 @@ export const contentType = "image/png";
 // Image generation
 export default function Icon() {
   return new ImageResponse(
-    (
-      // ImageResponse JSX element
-      <div
-        style={{
-          fontSize: 24,
-          background: "linear-gradient(135deg, #6c3fff 0%, #2563eb 100%)",
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "white",
-          borderRadius: "8px",
-          fontWeight: 900,
-          fontFamily: "sans-serif",
-          boxShadow: "inset 0 0 10px rgba(255,255,255,0.3)",
-        }}
-      >
-        V
-      </div>
-    ),
+    // ImageResponse JSX element
+    <div
+      style={{
+        fontSize: 24,
+        background: "linear-gradient(135deg, #6c3fff 0%, #2563eb 100%)",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "white",
+        borderRadius: "8px",
+        fontWeight: 900,
+        fontFamily: "sans-serif",
+        boxShadow: "inset 0 0 10px rgba(255,255,255,0.3)",
+      }}
+    >
+      V
+    </div>,
     {
       ...size,
     }

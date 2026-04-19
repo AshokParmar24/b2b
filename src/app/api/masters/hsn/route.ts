@@ -7,10 +7,16 @@ export async function GET(req: Request) {
   const q = searchParams.get("q") || "";
   await dbConnect();
   const hsns = await HsnCode.find(
-    q ? { $or: [
-      { code: { $regex: q, $options: "i" } },
-      { description: { $regex: q, $options: "i" } },
-    ]} : { isActive: true }
-  ).limit(20).lean();
+    q
+      ? {
+          $or: [
+            { code: { $regex: q, $options: "i" } },
+            { description: { $regex: q, $options: "i" } },
+          ],
+        }
+      : { isActive: true }
+  )
+    .limit(20)
+    .lean();
   return NextResponse.json(hsns);
 }
