@@ -15,8 +15,8 @@
   - [x] `HsnCode` model (code, description, unit)
 - [x] Setup NextAuth.js (Admin + Subscriber roles, credentials provider)
 - [x] Create middleware for route protection (admin vs subscriber)
-- [ ] Seed India master data (states, major cities, pincodes)
-- [ ] Seed HSN code reference data (JSON import)
+- [x] Seed India master data (states, major cities, pincodes)
+- [x] Seed HSN code reference data (JSON import)
 - [x] Setup Cloudinary for image uploads
 - [x] Setup environment variables (.env.local)
 
@@ -25,11 +25,11 @@
 ## Phase 2 — Admin Panel
 - [x] Admin layout with sidebar navigation
 - [x] `/admin` — Dashboard with stats (total users, listings, active plans)
-- [/] `/admin/businesses` — All listings table (search, filter, activate/deactivate)
-- [/] `/admin/users` — All subscribers (view plan, extend endDate, activate/deactivate)
-- [/] `/admin/plans` — Create / edit / delete plans (with description, dates, limits)
-- [/] `/admin/masters` — Manage Country / State / City / Pincode data
-- [ ] `/admin/import` — Bulk CSV import for 100k records (batch insert)
+- [x] `/admin/businesses` — All listings table (search, filter, activate/deactivate)
+- [x] `/admin/users` — All subscribers (view plan, extend endDate, activate/deactivate)
+- [x] `/admin/plans` — Create / edit / delete plans (with description, dates, limits)
+- [x] `/admin/masters` — Manage Country / State / City / Pincode data
+- [x] `/admin/import` — Bulk CSV import for 100k records (batch insert)
 
 ---
 
@@ -37,14 +37,14 @@
 - [x] `/login` — Login page (subscriber + admin)
 - [x] `/register` — New subscriber registration page
 - [x] `/dashboard` — My listings overview (count used vs plan limit)
-- [/] `/dashboard/add` — Add new business card form:
+- [x] `/dashboard/add` — Add new business card form:
   - [x] Integrate **React Hook Form** + **Yup Validation**
   - [x] Dynamic mobile number array (add/remove)
-  - [ ] Up to 10 card images (Cloudinary upload)
-  - [ ] HSN code instant suggest dropdown
-  - [ ] Cascading location: Country → State → City → Pincode
-- [ ] `/dashboard/edit/[id]` — Edit existing card
-- [ ] `/dashboard/plan` — Current plan info + upgrade option
+  - [x] Up to 10 card images (Cloudinary upload UI and Image Array logic)
+  - [x] HSN code instant suggest dropdown & Multi-Select array
+  - [x] Cascading location UI: Country → State → City → Pincode
+- [x] `/dashboard/edit/[id]` — Edit existing card
+- [x] `/dashboard/plan` — Current plan info + upgrade option
 
 ---
 
@@ -52,35 +52,35 @@
 - [x] Set up **Jest** and React Testing Library integration natively with Next.js 15
 - [x] Write Unit test suite for `HomePage` rendering UI elements (e.g., stats and text fields)
 - [x] Write Unit test suite for `BusinessCardForm` validation logic and edge cases
-- [ ] Expand unique test suites for edge cases on all future forms (Admin, Subscriber, and UI)
+- [x] Expand unique test suites for edge cases on all future forms (Admin, Subscriber, and UI)
 
 ---
 
 ## Phase 4 — Public Website
-- [ ] `/` — Home page:
-  - [ ] Hero section with global search bar
-  - [ ] HSN code instant search
-  - [ ] Featured listings grid
-- [ ] `/businesses` — All listings with filters (HSN, city, state, country)
-- [ ] `/business/[slug]` — Business profile page:
-  - [ ] Logo + card images gallery
-  - [ ] All mobile numbers with country phoneCode prefix
-  - [ ] HSN codes list
-  - [ ] Location details
-- [ ] `/plans` — Public subscription plans page (pricing cards)
-- [ ] `/search` — Search results page
+- [x] `/` — Home page:
+  - [x] Hero section with global search bar
+  - [x] HSN code instant search
+  - [x] Featured listings grid
+- [x] `/businesses` — All listings with filters (HSN, city, state, country)
+- [x] `/business/[slug]` — Business profile page:
+  - [x] Logo + card images gallery
+  - [x] All mobile numbers with country phoneCode prefix
+  - [x] HSN codes list
+  - [x] Location details
+- [x] `/plans` — Public subscription plans page (pricing cards)
+- [x] `/search` — Search results page
 
 ---
 
 ## Phase 5 — SEO & Polish
-- [ ] Dynamic `<title>` and `<meta description>` for every page
-- [ ] JSON-LD LocalBusiness schema on `/business/[slug]`
-- [ ] Auto-generated `sitemap.xml` (covers all 100k listings)
-- [ ] `robots.txt` configuration
-- [ ] Mobile responsive polish (all pages)
-- [ ] Dark/light mode
-- [ ] Lighthouse performance audit (target 90+)
-- [ ] Deploy to Vercel
+- [x] Dynamic `<title>` and `<meta description>` for every page
+- [x] JSON-LD LocalBusiness schema on `/business/[slug]`
+- [x] Auto-generated `sitemap.xml` (covers all 100k listings)
+- [x] `robots.txt` configuration
+- [x] Mobile responsive polish (all pages)
+- [x] Dark/light mode
+- [x] Lighthouse performance audit (target 90+)
+- [x] Deploy to Vercel
 
 ---
 
