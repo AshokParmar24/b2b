@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, CheckCircle } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
+import { SITE_NAME } from "@/lib/site-config";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -64,7 +65,7 @@ export default function RegisterPage() {
         <div className="mb-8 flex flex-col items-center text-center">
           <Link href="/" className="text-decoration-none inline-flex items-center gap-3">
             <Logo width={36} height={36} />
-            <span className="gradient-text text-3xl font-black tracking-tight">VyapaarBiz</span>
+            <span className="gradient-text text-3xl font-black tracking-tight">{SITE_NAME}</span>
           </Link>
           <p className="mt-3 text-sm text-gray-400">Create your free business account</p>
         </div>

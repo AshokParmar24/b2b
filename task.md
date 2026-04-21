@@ -85,6 +85,14 @@
 
 ---
 
+## Phase 6 — Config & White-labeling (Publishing prep)
+- [x] Centralize application config (name, domain, tagline) into a single file (`site-config.ts`).
+- [x] Replace all hardcoded "VyapaarBiz" references across app pages and layouts.
+- [x] Make SEO metadata and sitemap URLs dynamic based on site config.
+- [x] Prepare app to be published under any new brand name easily.
+
+---
+
 ## Best Build Approach (Recommended Order)
 
 1. **Project init first** — Get the scaffold running locally

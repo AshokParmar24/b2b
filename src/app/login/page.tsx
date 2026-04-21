@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
+import { SITE_NAME } from "@/lib/site-config";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -40,7 +41,7 @@ export default function LoginPage() {
       <div className="glass-card animate-fadeInUp relative z-10 w-full max-w-md p-8">
         <div className="mb-8 text-center">
           <Link href="/" className="gradient-text text-2xl font-black">
-            VyapaarBiz
+            {SITE_NAME}
           </Link>
           <p className="mt-2 text-sm text-gray-400">Sign in to your account</p>
         </div>

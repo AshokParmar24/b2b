@@ -8,6 +8,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ADMIN_EMAIL } from "@/lib/site-config";
 
 export default function AdminUsersPage() {
   const dummyUsers = [
@@ -34,7 +35,7 @@ export default function AdminUsersPage() {
     {
       id: 3,
       name: "Admin Setup",
-      email: "admin@vyapaarbiz.com",
+      email: ADMIN_EMAIL,
       role: "admin",
       plan: "N/A",
       status: "active",

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { CountUp } from "@/components/ui/CountUp";
 import { Logo } from "@/components/ui/Logo";
+import { SITE_NAME, SITE_TAGLINE, SITE_COPYRIGHT } from "@/lib/site-config";
 
 export default function HomePage() {
   return (
@@ -52,7 +53,7 @@ export default function HomePage() {
             style={{ fontSize: "24px", fontWeight: 900, letterSpacing: "-0.5px" }}
             className="gradient-text"
           >
-            VyapaarBiz
+            {SITE_NAME}
           </span>
         </Link>
 
@@ -158,7 +159,7 @@ export default function HomePage() {
               border: "1px solid rgba(108,63,255,0.3)",
             }}
           >
-            🌍 Global B2B Business Directory
+            🌍 {SITE_TAGLINE}
           </div>
 
           <h1
@@ -543,7 +544,7 @@ export default function HomePage() {
       {/* Features */}
       <section style={{ padding: "60px 24px", maxWidth: 1100, margin: "0 auto", width: "100%" }}>
         <h2 style={{ fontSize: 32, fontWeight: 900, textAlign: "center", marginBottom: 12 }}>
-          Why Choose <span className="gradient-text">VyapaarBiz</span>?
+          Why Choose <span className="gradient-text">{SITE_NAME}</span>?
         </h2>
         <p style={{ color: "#888", textAlign: "center", marginBottom: 48 }}>
           Everything you need to find and connect with the right business partners
@@ -625,7 +626,7 @@ export default function HomePage() {
             Ready to List Your Business?
           </h2>
           <p style={{ color: "#888", marginBottom: 32 }}>
-            Join thousands of dealers already on VyapaarBiz. Start free, upgrade anytime.
+            Join thousands of dealers already on {SITE_NAME}. Start free, upgrade anytime.
           </p>
           <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/register">
@@ -662,12 +663,9 @@ export default function HomePage() {
         }}
       >
         <p className="gradient-text" style={{ fontSize: 20, fontWeight: 900, marginBottom: 8 }}>
-          VyapaarBiz
+          {SITE_NAME}
         </p>
-        <p>
-          © {new Date().getFullYear()} VyapaarBiz. All rights reserved. | Global B2B Business
-          Directory
-        </p>
+        <p>{SITE_COPYRIGHT(new Date().getFullYear())}</p>
       </footer>
     </main>
   );

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/Logo";
+import { SITE_NAME, SITE_URL } from "@/lib/site-config";
 
 export default async function BusinessProfilePage({
   params,
@@ -59,7 +60,7 @@ export default async function BusinessProfilePage({
       >
         <Link href="/" className="text-decoration-none flex items-center gap-3">
           <Logo width={36} height={36} />
-          <span className="gradient-text text-2xl font-black">VyapaarBiz</span>
+          <span className="gradient-text text-2xl font-black">{SITE_NAME}</span>
         </Link>
         <Link href="/businesses">
           <Button variant="ghost" className="gap-2 text-gray-300">
@@ -86,8 +87,8 @@ export default async function BusinessProfilePage({
                 "@type": "LocalBusiness",
                 name: b.name,
                 image: b.images,
-                "@id": `https://vyapaarbiz.com/business/${b.slug}`,
-                url: `https://vyapaarbiz.com/business/${b.slug}`,
+                "@id": `${SITE_URL}/business/${b.slug}`,
+                url: `${SITE_URL}/business/${b.slug}`,
                 telephone: b.mobiles[0],
                 address: {
                   "@type": "PostalAddress",

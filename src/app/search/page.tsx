@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Search, MapPin, Building2, PhoneCall, Verified } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/Logo";
+import { SITE_NAME } from "@/lib/site-config";
 
 export default async function SearchResultsPage({
   searchParams,
@@ -43,7 +44,7 @@ export default async function SearchResultsPage({
       >
         <Link href="/" className="text-decoration-none flex items-center gap-3">
           <Logo width={36} height={36} />
-          <span className="gradient-text text-2xl font-black">VyapaarBiz</span>
+          <span className="gradient-text text-2xl font-black">{SITE_NAME}</span>
         </Link>
         <Link href="/businesses">
           <Button variant="ghost" className="text-purple-400">

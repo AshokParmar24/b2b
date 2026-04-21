@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { SITE_ICON_LETTER } from "@/lib/site-config";
 
 // Route segment config
 export const runtime = "edge";
@@ -30,7 +31,7 @@ export default function Icon() {
         boxShadow: "inset 0 0 10px rgba(255,255,255,0.3)",
       }}
     >
-      V
+      {SITE_ICON_LETTER}
     </div>,
     {
       ...size,

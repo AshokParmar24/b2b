@@ -3,21 +3,21 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import {
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_DESCRIPTION,
+  SITE_KEYWORDS,
+  SITE_URL,
+} from "@/lib/site-config";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: { default: "VyapaarBiz — Global B2B Business Directory", template: "%s | VyapaarBiz" },
-  description:
-    "Find and connect with verified dealers, manufacturers, and distributors across India and the world. Search by HSN codes, products, location, and more.",
-  keywords: [
-    "B2B directory",
-    "business directory",
-    "HSN code search",
-    "dealer directory",
-    "ceramic dealers",
-  ],
-  metadataBase: new URL("https://vyapaarbiz.com"),
+  title: { default: `${SITE_NAME} — ${SITE_TAGLINE}`, template: `%s | ${SITE_NAME}` },
+  description: SITE_DESCRIPTION,
+  keywords: SITE_KEYWORDS,
+  metadataBase: new URL(SITE_URL),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

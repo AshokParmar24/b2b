@@ -6,6 +6,7 @@ import Link from "next/link";
 import { LayoutDashboard, Plus, Building2, CreditCard, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/Logo";
+import { SITE_NAME } from "@/lib/site-config";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -42,7 +43,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       >
         <Link href="/" className="text-decoration-none mb-10 flex items-center gap-3 px-3">
           <Logo width={32} height={32} />
-          <span className="gradient-text text-xl font-black">VyapaarBiz</span>
+          <span className="gradient-text text-xl font-black">{SITE_NAME}</span>
         </Link>
 
         <nav className="flex-1 space-y-1">

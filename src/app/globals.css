@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
 
 :root {
   --brand-primary: #6c3fff;
@@ -11,6 +10,34 @@
   --text-primary: #f0f0ff;
   --text-muted: #8888aa;
   --border-color: #2a2a3e;
+  
+  /* Missing Shadcn UI base colors for components to render properly */
+  --background: #0a0a14;
+  --foreground: #f0f0ff;
+  --border: #2a2a3e;
+  --input: #1f1f2e;
+  --ring: #6c3fff;
+  --primary: #6c3fff;
+  --primary-foreground: #ffffff;
+  --muted: #1a1a2e;
+  --muted-foreground: #8888aa;
+  --destructive: #ff4b4b;
+  --destructive-foreground: #ffffff;
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 }
 
 * {
@@ -20,7 +47,6 @@
 }
 
 body {
-  font-family: "Inter", sans-serif;
   background: var(--bg-dark);
   color: var(--text-primary);
   min-height: 100vh;

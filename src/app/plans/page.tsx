@@ -2,13 +2,14 @@ import Link from "next/link";
 import { CheckCircle2, ChevronLeft, Crown, Zap, IndianRupee } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/Logo";
+import { SITE_NAME } from "@/lib/site-config";
 
 export default function PublicPlansPage() {
   const plans = [
     {
       name: "Free",
       price: "0",
-      desc: "Try VyapaarBiz with basic features",
+      desc: `Try ${SITE_NAME} with basic features`,
       limits: { cards: "1", images: "3", hsn: "2" },
       recommended: false,
     },
@@ -55,7 +56,7 @@ export default function PublicPlansPage() {
       >
         <Link href="/" className="text-decoration-none flex items-center gap-3">
           <Logo width={36} height={36} />
-          <span className="gradient-text text-2xl font-black">VyapaarBiz</span>
+          <span className="gradient-text text-2xl font-black">{SITE_NAME}</span>
         </Link>
         <Link href="/">
           <Button variant="ghost" className="gap-2 text-gray-300">

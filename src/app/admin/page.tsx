@@ -7,6 +7,7 @@ import User from "@/models/User";
 import Plan from "@/models/Plan";
 import Country from "@/models/Country";
 import { Building2, Users, CreditCard, Globe } from "lucide-react";
+import { SITE_NAME } from "@/lib/site-config";
 
 export default async function AdminDashboard() {
   const session = await getServerSession(authOptions);
@@ -40,7 +41,7 @@ export default async function AdminDashboard() {
   return (
     <div className="animate-fadeInUp">
       <h1 className="mb-2 text-3xl font-black">Admin Dashboard</h1>
-      <p className="mb-8 text-gray-400">VyapaarBiz control center</p>
+      <p className="mb-8 text-gray-400">{SITE_NAME} control center</p>
 
       <div className="mb-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
         {stats.map(({ label, value, icon: Icon, color }) => (

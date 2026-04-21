@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Search, MapPin, Building2, PhoneCall, Verified, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/Logo";
+import { SITE_NAME } from "@/lib/site-config";
 
 export default function PublicBusinessesPage() {
   const dummyListings = [
@@ -16,7 +17,7 @@ export default function PublicBusinessesPage() {
       <nav style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.05)", background: "rgba(10,10,20,0.6)", backdropFilter: "blur(24px)", position: "sticky", top: 0, zIndex: 50, padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "76px" }}>
         <Link href="/" className="flex items-center gap-3 text-decoration-none">
           <Logo width={36} height={36} />
-          <span className="text-2xl font-black gradient-text">VyapaarBiz</span>
+          <span className="text-2xl font-black gradient-text">{SITE_NAME}</span>
         </Link>
         <div className="flex gap-4">
           <Link href="/login"><Button variant="ghost" className="text-purple-400">Log In</Button></Link>
@@ -30,7 +31,7 @@ export default function PublicBusinessesPage() {
           <h2 className="text-xl font-black text-white mb-6 flex items-center gap-2">
             <Filter className="w-5 h-5 text-gray-400" /> Filters
           </h2>
-          
+
           <div className="space-y-6">
             <div className="p-5 rounded-xl border border-gray-800 bg-white/5">
               <h3 className="text-sm font-bold text-gray-300 mb-3">Location</h3>
@@ -52,9 +53,9 @@ export default function PublicBusinessesPage() {
         <div className="flex-1 min-w-0 flex flex-col gap-6">
           <div className="relative animate-fadeInUp">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-            <input 
-              type="text" 
-              placeholder="Search by exact business name or owner..." 
+            <input
+              type="text"
+              placeholder="Search by exact business name or owner..."
               className="w-full pl-12 pr-4 py-4 rounded-xl text-white outline-none focus:ring-2 focus:ring-purple-500 border border-gray-800 bg-black/50"
             />
           </div>
@@ -89,7 +90,7 @@ export default function PublicBusinessesPage() {
                   <div className="flex gap-2 mb-6">
                     {b.hsn.map(code => (
                       <span key={code} className="bg-purple-500/10 border border-purple-500/20 text-purple-300 px-2 py-1 flex items-center gap-1 text-xs rounded font-semibold">
-                         HSN {code}
+                        HSN {code}
                       </span>
                     ))}
                   </div>
@@ -110,6 +111,6 @@ export default function PublicBusinessesPage() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/Logo";
+import { SITE_NAME } from "@/lib/site-config";
 
 const adminNav = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -57,7 +58,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className="text-decoration-none flex items-center gap-3 transition-transform hover:scale-105"
           >
             <Logo width={28} height={28} />
-            <span className="gradient-text text-xl font-black">VyapaarBiz</span>
+            <span className="gradient-text text-xl font-black">{SITE_NAME}</span>
           </Link>
           <span className="mt-2 ml-10 text-xs font-semibold tracking-wider text-orange-400 uppercase">
             Admin Panel
