@@ -14,6 +14,8 @@ export default async function DashboardPage() {
   if (!session) redirect("/login");
 
   await dbConnect();
+  // Explicitly ensure models are registered before querying (Next.js module caching can skip them)
+  void User; void Plan; void Business;
   const userId = (session.user as any).id;
   const [user, cardCount] = await Promise.all([
     User.findById(userId).populate("planId").lean(),

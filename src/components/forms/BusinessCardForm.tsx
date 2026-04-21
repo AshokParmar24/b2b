@@ -31,12 +31,12 @@ const schema = yup.object({
   address: yup.string().required("Full address is required"),
   gstNumber: yup
     .string()
-    .nullable()
+    .optional()
     .matches(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/, {
       message: "Invalid GST Format",
       excludeEmptyString: true,
     }),
-  cardImages: yup.array().of(yup.string().required()).max(10, "Maximum 10 images allowed"),
+  cardImages: yup.array().of(yup.string().required()).optional().max(10, "Maximum 10 images allowed"),
   hsnCodes: yup
     .array()
     .of(
@@ -66,7 +66,8 @@ export default function BusinessCardForm({
     watch,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
-    resolver: yupResolver(schema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: yupResolver(schema) as any,
     defaultValues: initialData || {
       mobiles: [{ value: "" }],
       cardImages: [],
