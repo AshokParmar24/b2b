@@ -1,0 +1,216 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+/* 
+  CENTRALIZED THEME ENGINE (Elite Navy & Teal Edition)
+  Updated to match the new HETNEX professional branding.
+*/
+
+@theme inline {
+  /* OKLCH Teal & Navy Palette */
+  --color-brand-50: oklch(98.7% 0.01 170);
+  --color-brand-100: oklch(96.2% 0.03 170);
+  --color-brand-200: oklch(92.4% 0.06 170);
+  --color-brand-300: oklch(87.9% 0.09 170);
+  --color-brand-400: oklch(82.8% 0.12 170);
+  --color-brand-500: oklch(76.9% 0.15 170); /* Main Teal */
+  --color-brand-600: oklch(66.6% 0.14 170);
+  --color-brand-700: oklch(55.5% 0.13 170);
+  --color-brand-800: oklch(47.3% 0.12 170);
+  --color-brand-900: oklch(25% 0.08 240);  /* Deep Navy */
+  --color-brand-950: oklch(18% 0.06 240);  /* Ultra Navy */
+
+  /* Modern Professional Neutrals */
+  --color-background: oklch(99.4% 0.002 240);
+  --color-foreground: oklch(20% 0.04 240);
+  
+  /* Abstract Mapping */
+  --color-primary: var(--color-brand-500);
+  --color-primary-foreground: oklch(100% 0 0);
+  
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: oklch(20% 0.04 240);
+  
+  --color-muted: oklch(96.5% 0.005 240);
+  --color-muted-foreground: oklch(45% 0.02 240);
+  
+  --color-accent: var(--color-brand-900);
+  --color-accent-foreground: oklch(100% 0 0);
+  
+  --color-border: oklch(92% 0.01 240);
+  --color-input: oklch(92% 0.01 240);
+  --color-ring: var(--color-primary);
+
+  --radius-xl: 1.5rem;
+  --radius-lg: 1rem;
+
+  /* Custom Animations */
+  --animate-float: float 8s ease-in-out infinite;
+  --animate-glow: glow 4s ease-in-out infinite;
+}
+
+:root {
+  --primary: var(--color-primary);
+  --primary-400: var(--color-brand-400);
+  --primary-500: var(--color-brand-500);
+  --primary-700: var(--color-brand-700);
+  
+  /* Brand Specific Colors from Screenshot */
+  --brand-navy: #003566;
+  --brand-teal: #00b894;
+  
+  /* Global Brand Gradient (Teal to Navy) */
+  --brand-gradient: linear-gradient(135deg, var(--brand-teal), var(--brand-navy));
+}
+
+@layer base {
+  * {
+    @apply border-border/60 outline-primary/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    background-image: radial-gradient(var(--color-border) 0.8px, transparent 0.8px);
+    background-size: 24px 24px;
+  }
+}
+
+/* 🏎️ Smooth Scroll & Premium Scrollbar */
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--color-primary), transparent 80%);
+  border-radius: 100px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Abstract Utility Classes */
+.responsive-container {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+@utility custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: color-mix(in oklch, var(--color-primary), transparent 80%);
+    border-radius: 100px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
+  }
+}
+
+.section-padding {
+  @apply py-20 md:py-32 lg:py-40;
+}
+
+.gradient-text {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-gradient {
+  background: radial-gradient(circle at top center, color-mix(in oklch, var(--color-primary), transparent 96%), transparent 70%);
+}
+
+.premium-card {
+  @apply relative overflow-hidden rounded-[2.5rem] border border-border bg-card shadow-[0_8px_40px_rgba(0,0,0,0.03)] transition-all duration-700;
+}
+.premium-card:hover {
+  @apply -translate-y-4 border-primary/20 shadow-2xl shadow-primary/10;
+}
+
+/* Button Utilities (Abstracted) */
+@utility btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: 9999px;
+  font-size: 0.9375rem;
+  font-weight: 900;
+  height: 3.5rem;
+  padding-left: 2.75rem;
+  padding-right: 2.75rem;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+
+  &:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px var(--primary);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+@utility btn-primary {
+  @apply btn-base bg-primary text-primary-foreground border-none shadow-[0_12px_24px_-6px_color-mix(in_oklch,var(--primary),transparent_60%)];
+
+  &:hover {
+    filter: brightness(1.1);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 20px 40px -10px color-mix(in oklch, var(--primary), transparent 40%);
+  }
+}
+
+@utility btn-outline {
+  @apply btn-base border-2 border-foreground bg-transparent text-foreground;
+
+  &:hover {
+    @apply border-primary bg-primary/5 text-primary;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -12px color-mix(in oklch, var(--primary), transparent 80%);
+  }
+}
+
+@utility btn-lg {
+  height: 4.5rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
+  font-size: 1.25rem;
+}
+
+/* Custom Animations */
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
