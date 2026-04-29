@@ -4,9 +4,13 @@ import { useState, useRef, useEffect } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { UploadCloud, X, Image as ImageIcon } from "lucide-react";
 import { CountrySelect } from "@/components/common/CountrySelect";
+import { api } from "@/lib/api";
+import { API_ENDPOINTS } from "@/lib/api-endpoints";
+import { toast } from "react-hot-toast";
 
 // Yup Validation Schema
 const schema = yup.object({
@@ -60,11 +64,13 @@ export default function BusinessCardForm({
   initialData,
   isEditing = false,
 }: BusinessCardFormProps) {
+  const router = useRouter();
   const {
     register,
     control,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -90,44 +96,73 @@ export default function BusinessCardForm({
     name: "hsnCodes",
   });
 
-  // Cascading Location Logic
+  // Cascading Location Logic — fetched from real API
   const watchCountry = watch("countryId");
   const watchState = watch("stateId");
   const watchCity = watch("cityId");
 
+  const [loadingStates, setLoadingStates] = useState(false);
+  const [loadingCities, setLoadingCities] = useState(false);
+  const [loadingPincodes, setLoadingPincodes] = useState(false);
   const [availableStates, setAvailableStates] = useState<{ id: string; name: string }[]>([]);
   const [availableCities, setAvailableCities] = useState<{ id: string; name: string }[]>([]);
   const [availablePincodes, setAvailablePincodes] = useState<{ id: string; name: string }[]>([]);
 
-  // Reset trailing location fields when a parent field changes
+  // Fetch states when country changes
   useEffect(() => {
-    if (watchCountry)
-      setAvailableStates([
-        { id: "gj", name: "Gujarat" },
-        { id: "mh", name: "Maharashtra" },
-      ]);
-    else setAvailableStates([]);
-    // register("stateId").onChange({ target: { value: "", name: "stateId" } }); // Removed to allow typing out
+    setAvailableStates([]);
+    setAvailableCities([]);
+    setAvailablePincodes([]);
+    setValue("stateId", "");
+    setValue("cityId", "");
+    setValue("pincodeId", "");
+    if (!watchCountry) return;
+    setLoadingStates(true);
+    api
+      .get<any>(`${API_ENDPOINTS.MASTERS.STATES}?countryId=${watchCountry}&status=active&limit=500`)
+      .then((res) => {
+        const items = Array.isArray(res) ? res : res?.data || [];
+        setAvailableStates(items.map((s: any) => ({ id: s._id, name: s.name })));
+      })
+      .catch(() => toast.error("Failed to load states"))
+      .finally(() => setLoadingStates(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchCountry]);
 
+  // Fetch cities when state changes
   useEffect(() => {
-    if (watchState === "gj")
-      setAvailableCities([
-        { id: "morbi", name: "Morbi" },
-        { id: "ahmedabad", name: "Ahmedabad" },
-      ]);
-    else if (watchState === "mh") setAvailableCities([{ id: "bom", name: "Mumbai" }]);
-    else setAvailableCities([]);
+    setAvailableCities([]);
+    setAvailablePincodes([]);
+    setValue("cityId", "");
+    setValue("pincodeId", "");
+    if (!watchState) return;
+    setLoadingCities(true);
+    api
+      .get<any>(`${API_ENDPOINTS.MASTERS.CITIES}?stateId=${watchState}&status=active&limit=500`)
+      .then((res) => {
+        const items = Array.isArray(res) ? res : res?.data || [];
+        setAvailableCities(items.map((c: any) => ({ id: c._id, name: c.name })));
+      })
+      .catch(() => toast.error("Failed to load cities"))
+      .finally(() => setLoadingCities(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchState]);
 
+  // Fetch pincodes when city changes
   useEffect(() => {
-    if (watchCity === "morbi")
-      setAvailablePincodes([
-        { id: "363641", name: "363641" },
-        { id: "363642", name: "363642" },
-      ]);
-    else if (watchCity === "bom") setAvailablePincodes([{ id: "400001", name: "400001" }]);
-    else setAvailablePincodes([]);
+    setAvailablePincodes([]);
+    setValue("pincodeId", "");
+    if (!watchCity) return;
+    setLoadingPincodes(true);
+    api
+      .get<any>(`${API_ENDPOINTS.MASTERS.PINCODES}?cityId=${watchCity}&status=active&limit=500`)
+      .then((res) => {
+        const items = Array.isArray(res) ? res : res?.data || [];
+        setAvailablePincodes(items.map((p: any) => ({ id: p._id, name: p.pincode + (p.area ? " — " + p.area : "") })));
+      })
+      .catch(() => toast.error("Failed to load pincodes"))
+      .finally(() => setLoadingPincodes(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchCity]);
 
   // Image Upload Logic
@@ -157,16 +192,29 @@ export default function BusinessCardForm({
   };
 
   const onSubmit = async (data: FormData) => {
+    const loadingToast = toast.loading(isEditing ? "Saving changes..." : "Creating listing...");
     try {
       const payload = {
-        ...data,
+        businessName: data.name,
+        ownerName: data.ownerName,
+        email: data.email,
         mobiles: data.mobiles?.map((m) => m.value) || [],
+        countryId: data.countryId,
+        stateId: data.stateId,
+        cityId: data.cityId,
+        pincodeId: data.pincodeId,
+        address: data.address,
+        gstNumber: data.gstNumber || undefined,
+        cardImages: data.cardImages || [],
+        hsnCodes: data.hsnCodes || [],
+        isActive: true,
       };
-      console.log("Submitting:", payload);
-      alert("Business submitted successfully!");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to submit");
+      await api.post(API_ENDPOINTS.BUSINESSES, payload);
+      toast.success(isEditing ? "Listing updated!" : "Business listed successfully!", { id: loadingToast });
+      router.push("/dashboard");
+    } catch (err: any) {
+      const msg = err?.response?.data?.error || "Failed to submit listing";
+      toast.error(msg, { id: loadingToast });
     }
   };
 
@@ -379,11 +427,11 @@ export default function BusinessCardForm({
           <label className="mb-1 block text-sm text-gray-400">State *</label>
           <select
             {...register("stateId")}
-            disabled={!watchCountry}
+            disabled={!watchCountry || loadingStates}
             className="w-full rounded-lg px-4 py-2 text-white outline-none disabled:opacity-50"
             style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
           >
-            <option value="">Select State</option>
+            <option value="">{loadingStates ? "Loading..." : "Select State"}</option>
             {availableStates.map((st) => (
               <option key={st.id} value={st.id}>
                 {st.name}
@@ -396,11 +444,11 @@ export default function BusinessCardForm({
           <label className="mb-1 block text-sm text-gray-400">City *</label>
           <select
             {...register("cityId")}
-            disabled={!watchState}
+            disabled={!watchState || loadingCities}
             className="w-full rounded-lg px-4 py-2 text-white outline-none disabled:opacity-50"
             style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
           >
-            <option value="">Select City</option>
+            <option value="">{loadingCities ? "Loading..." : "Select City"}</option>
             {availableCities.map((city) => (
               <option key={city.id} value={city.id}>
                 {city.name}
@@ -413,11 +461,11 @@ export default function BusinessCardForm({
           <label className="mb-1 block text-sm text-gray-400">Pincode *</label>
           <select
             {...register("pincodeId")}
-            disabled={!watchCity}
+            disabled={!watchCity || loadingPincodes}
             className="w-full rounded-lg px-4 py-2 text-white outline-none disabled:opacity-50"
             style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
           >
-            <option value="">Select Pincode</option>
+            <option value="">{loadingPincodes ? "Loading..." : "Select Pincode"}</option>
             {availablePincodes.map((pin) => (
               <option key={pin.id} value={pin.id}>
                 {pin.name}

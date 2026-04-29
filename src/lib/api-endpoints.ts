@@ -4,6 +4,9 @@
  */
 
 export const API_ENDPOINTS = {
+  // 💼 Businesses
+  BUSINESSES: "/api/businesses",
+
   // 📍 Location Masters
   MASTERS: {
     COUNTRIES: "/api/masters/countries",
