@@ -14,13 +14,14 @@ import {
   EyeOff,
   Lock
 } from "lucide-react";
+import { AppRoutes } from "@/lib/routes";
+import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Logo } from "@/components/ui/Logo";
 import { BrandName } from "@/components/ui/BrandName";
 import { SITE_TAGLINE } from "@/lib/site-config";
-import { AppRoutes } from "@/lib/routes";
 
 /**
  * 🔒 LOGIN VALIDATION SCHEMA
@@ -69,7 +70,14 @@ export function LoginForm() {
       if (res?.error) {
         setError("root", { type: "manual", message: "Invalid credentials. Please check your email." });
       } else {
-        router.push(AppRoutes.DASHBOARD);
+        // Fetch session to get the role using common api service
+        const session = await api.get<any>("/api/auth/session");
+
+        if (session?.user?.role === 1) { // UserRole.ADMIN = 1
+          router.push(AppRoutes.ADMIN_DASHBOARD);
+        } else {
+          router.push(AppRoutes.DASHBOARD);
+        }
       }
     } catch (err) {
       setError("root", { type: "manual", message: "An unexpected error occurred. Please try again." });

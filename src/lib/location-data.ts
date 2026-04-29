@@ -28,32 +28,14 @@ export const STATES: Record<string, { id: string; name: string }[]> = {
   ]
 };
 
-export const DISTRICTS: Record<string, { id: string; name: string }[]> = {
-  gj: [
-    { id: "mo", name: "Morbi" },
-    { id: "ah", name: "Ahmedabad" },
-    { id: "su", name: "Surat" },
-  ],
-  mh: [
-    { id: "mu", name: "Mumbai" },
-    { id: "pu", name: "Pune" },
-  ],
-  dl: [
-    { id: "nd", name: "New Delhi" },
-  ],
-  rm: [
-    { id: "ro", name: "Roma" },
-  ],
-};
-
 export const CITIES: Record<string, string[]> = {
-  mo: ["Morbi City", "Wankaner", "Halvad"],
-  ah: ["Ahmedabad City", "Sanand", "Bavla"],
-  su: ["Surat City", "Varachha", "Adajan"],
-  mu: ["Andheri", "Bandra", "Borivali"],
-  pu: ["Kothrud", "Baner", "Hinjewadi"],
-  nd: ["Connaught Place", "Dwarka", "Saket"],
-  ro: ["Central Rome", "Vatican City"],
+  gj: ["Morbi", "Ahmedabad", "Surat", "Rajkot"],
+  mh: ["Mumbai", "Pune", "Nagpur", "Thane"],
+  dl: ["New Delhi", "Dwarka", "Saket"],
+  ca: ["Los Angeles", "San Francisco", "San Diego"],
+  ny: ["New York City", "Buffalo", "Rochester"],
+  du: ["Dubai City", "Jumeirah", "Deira"],
+  rm: ["Central Rome", "Vatican City"],
 };
 
 export const PINCODES: Record<string, string[]> = {

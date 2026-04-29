@@ -60,18 +60,6 @@ export default function PublicPlansPage() {
 
   return (
     <main className="min-h-screen bg-[#F5F7FA]">
-      <nav className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-border bg-white/90 px-8 backdrop-blur-md shadow-sm">
-        <Link href="/" className="flex items-center gap-3 no-underline group">
-          <Logo width={36} height={36} />
-          <span className="gradient-text text-2xl font-[1000] tracking-tighter uppercase">{SITE_NAME}</span>
-        </Link>
-        <Link href="/">
-          <Button variant="ghost" className="gap-2 font-bold text-slate-600 hover:bg-slate-100">
-            <ChevronLeft className="h-4 w-4" /> Back to Home
-          </Button>
-        </Link>
-      </nav>
-
       <section className="px-6 pt-20 pb-16 text-center">
         <div className="mx-auto max-w-4xl animate-in fade-in slide-in-from-top-8 duration-700">
           <h1 className="mb-4 text-4xl font-[1000] tracking-tight text-slate-900 md:text-6xl">

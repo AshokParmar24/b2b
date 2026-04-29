@@ -19,16 +19,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { SearchableSelect } from "@/components/ui/searchable-select";
+import { CountrySelect } from "@/components/common/CountrySelect";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { Logo } from "@/components/ui/Logo";
 import { BrandName } from "@/components/ui/BrandName";
 import { AppRoutes } from "@/lib/routes";
 import { SITE_TAGLINE } from "@/lib/site-config";
-import { COUNTRIES, STATES, DISTRICTS, CITIES, PINCODES } from "@/lib/location-data";
+import { COUNTRIES, STATES, CITIES, PINCODES } from "@/lib/location-data";
 import { isValidPhoneNumber } from "react-phone-number-input";
-import api from "@/lib/axios";
+import { api } from "@/lib/api";
+import { API_ENDPOINTS } from "@/lib/api-endpoints";
 import toast from "react-hot-toast";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 
 /**
  * 📝 PRODUCTION REGISTRATION SCHEMA
@@ -46,7 +48,6 @@ const registerSchema = yup.object({
     .required("Please confirm your password"),
   country: yup.string().required("Country is required"),
   state: yup.string().required("State is required"),
-  district: yup.string().required("District is required"),
   city: yup.string().required("City is required"),
   pincode: yup.string().required("Pincode is required"),
 }).required();
@@ -83,7 +84,6 @@ export function RegisterForm() {
       confirmPassword: "",
       country: "in",
       state: "",
-      district: "",
       city: "",
       pincode: "",
     }
@@ -91,16 +91,14 @@ export function RegisterForm() {
 
   const selectedCountry = watch("country");
   const selectedState = watch("state");
-  const selectedDistrict = watch("district");
   const selectedCity = watch("city");
 
   // Dynamic Options mapping
   const stateOptions = useMemo(() => STATES[selectedCountry] || [], [selectedCountry]);
-  const districtOptions = useMemo(() => DISTRICTS[selectedState] || [], [selectedState]);
   const cityOptions = useMemo(() => {
-    const rawCities = CITIES[selectedDistrict] || [];
+    const rawCities = CITIES[selectedState] || [];
     return rawCities.map(c => ({ id: c, name: c }));
-  }, [selectedDistrict]);
+  }, [selectedState]);
   const pincodeOptions = useMemo(() => {
     const rawPincodes = PINCODES[selectedCity] || [];
     return rawPincodes.map(p => ({ id: p, name: p }));
@@ -109,21 +107,14 @@ export function RegisterForm() {
   // Cascading Resets — silent, no validation triggered
   useEffect(() => {
     setValue("state", "", { shouldValidate: false, shouldTouch: false });
-    setValue("district", "", { shouldValidate: false, shouldTouch: false });
     setValue("city", "", { shouldValidate: false, shouldTouch: false });
     setValue("pincode", "", { shouldValidate: false, shouldTouch: false });
   }, [selectedCountry, setValue]);
 
   useEffect(() => {
-    setValue("district", "", { shouldValidate: false, shouldTouch: false });
     setValue("city", "", { shouldValidate: false, shouldTouch: false });
     setValue("pincode", "", { shouldValidate: false, shouldTouch: false });
   }, [selectedState, setValue]);
-
-  useEffect(() => {
-    setValue("city", "", { shouldValidate: false, shouldTouch: false });
-    setValue("pincode", "", { shouldValidate: false, shouldTouch: false });
-  }, [selectedDistrict, setValue]);
 
   useEffect(() => {
     setValue("pincode", "", { shouldValidate: false, shouldTouch: false });
@@ -132,14 +123,13 @@ export function RegisterForm() {
   async function onSubmit(data: RegisterFormValues) {
     setLoading(true);
     try {
-      await api.post("/auth/register", {
+      await api.post(API_ENDPOINTS.AUTH.REGISTER, {
         name: `${data.firstName} ${data.lastName}`,
         email: data.email,
         password: data.password,
         phoneNumber: data.phoneNumber,
         country: data.country,
         state: data.state,
-        district: data.district,
         city: data.city,
         pincode: data.pincode,
       });
@@ -251,22 +241,25 @@ export function RegisterForm() {
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <Controller name="country" control={control} render={({ field }) => (
-                <SearchableSelect label="Country" options={COUNTRIES} value={field.value} onChange={field.onChange} onBlur={field.onBlur} placeholder="Select Country" error={errors.country?.message} />
+                <CountrySelect
+                  label="Country"
+                  value={field.value}
+                  onChange={field.onChange}
+                  placeholder="Select Country"
+                  error={errors.country?.message}
+                />
               )} />
             </div>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <Controller name="state" control={control} render={({ field }) => (
                 <SearchableSelect label="State / Province" options={stateOptions} value={field.value} onChange={field.onChange} onBlur={field.onBlur} placeholder="Select State" disabled={!selectedCountry} error={errors.state?.message} />
-              )} />
-              <Controller name="district" control={control} render={({ field }) => (
-                <SearchableSelect label="District" options={districtOptions} value={field.value} onChange={field.onChange} onBlur={field.onBlur} placeholder="Select District" disabled={!selectedState} error={errors.district?.message} />
               )} />
             </div>
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <Controller name="city" control={control} render={({ field }) => (
-                <SearchableSelect label="City" options={cityOptions} value={field.value} onChange={field.onChange} onBlur={field.onBlur} placeholder="Select City" disabled={!selectedDistrict} error={errors.city?.message} />
+                <SearchableSelect label="City" options={cityOptions} value={field.value} onChange={field.onChange} onBlur={field.onBlur} placeholder="Select City" disabled={!selectedState} error={errors.city?.message} />
               )} />
               <Controller name="pincode" control={control} render={({ field }) => (
                 <SearchableSelect label="Pincode / Zip" options={pincodeOptions} value={field.value} onChange={field.onChange} onBlur={field.onBlur} placeholder="Select Pincode" disabled={!selectedCity} error={errors.pincode?.message} />

@@ -63,6 +63,8 @@ export interface Country {
   code: string;
   flag: string;
   phoneCode: string;
+  currencyCode: string;
+  currencySymbol: string;
   countryLogo: string;
   isActive: boolean;
 }

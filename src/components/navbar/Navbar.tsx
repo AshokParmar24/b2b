@@ -1,25 +1,34 @@
 "use client";
 
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
+import { useState } from "react";
+import { 
+  Menu, 
+  X, 
+  ArrowRight, 
+  LayoutDashboard,
+  LogOut
+} from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { BrandName } from "@/components/ui/BrandName";
 import { SITE_NAME } from "@/lib/site-config";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
-
-import { NavLink, NavbarProps } from "@/types";
+import { UserRole, NavLink, NavbarProps } from "@/types";
+import { AppRoutes } from "@/lib/routes";
 
 export function Navbar({ mode = "public", links }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === "authenticated";
 
   const defaultLinks: Record<string, NavLink[]> = {
     public: [
-      { label: "Browse", href: "/businesses" },
-      { label: "Plans", href: "/plans" },
+      { label: "Browse", href: AppRoutes.BUSINESSES },
+      { label: "Plans", href: AppRoutes.PLANS },
     ],
     admin: [
-      { label: "Dashboard", href: "/admin" },
-      { label: "Users", href: "/admin/users" },
+      { label: "Dashboard", href: AppRoutes.ADMIN_DASHBOARD },
+      { label: "Users", href: AppRoutes.ADMIN_USERS },
       { label: "Settings", href: "/admin/settings" },
     ],
     customer: [
@@ -30,11 +39,12 @@ export function Navbar({ mode = "public", links }: NavbarProps) {
   };
 
   const activeLinks = links || defaultLinks[mode];
+  const dashboardLink = session?.user?.role === UserRole.ADMIN ? "/admin" : "/dashboard";
 
   return (
     <nav className="sticky top-0 z-[100] border-b border-border bg-background/80 shadow-sm backdrop-blur-xl transition-all">
       <div className="responsive-container flex h-16 md:h-24 items-center justify-between">
-        {/* Logo Section - Abstracted Branding */}
+        {/* Logo Section */}
         <Link
           href="/"
           className="flex cursor-pointer items-center gap-3 no-underline transition-all hover:scale-105"
@@ -59,23 +69,36 @@ export function Navbar({ mode = "public", links }: NavbarProps) {
 
           <div className="h-6 w-[1px] bg-border mx-2" />
 
-          {mode === "public" ? (
+          {isAuthenticated ? (
+            <div className="flex items-center gap-4 animate-in fade-in slide-in-from-right-4 duration-500">
+              <div className="flex flex-col text-right">
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Welcome back</span>
+                <span className="text-xs font-bold text-foreground">{session.user?.name}</span>
+              </div>
+              <Link href={dashboardLink} className="no-underline">
+                <button className="btn-primary h-11 px-6 text-sm font-black flex items-center gap-2 group">
+                  Dashboard <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </button>
+              </Link>
+            </div>
+          ) : mode === "public" ? (
             <div className="flex items-center gap-4">
               <Link href="/login" className="no-underline px-4 py-2 text-sm font-black text-foreground hover:text-primary transition-colors cursor-pointer">
                 Log In
               </Link>
               <Link href="/register" className="no-underline">
-                <button className="btn-primary">
+                <button className="btn-primary h-11 px-6 text-sm font-black">
                   Get Started
                 </button>
               </Link>
             </div>
           ) : (
-            <Link href="/logout" className="no-underline">
-              <button className="btn-outline h-11 px-6 text-sm font-black">
-                Logout
-              </button>
-            </Link>
+            <button 
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="btn-outline h-11 px-6 text-sm font-black"
+            >
+              Logout
+            </button>
           )}
         </div>
 
@@ -102,8 +125,28 @@ export function Navbar({ mode = "public", links }: NavbarProps) {
                 {link.label}
               </Link>
             ))}
+            
             <div className="my-4 h-[1px] w-full bg-border" />
-            {mode === "public" ? (
+            
+            {isAuthenticated ? (
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col px-2">
+                  <span className="text-xs font-black uppercase tracking-widest text-muted-foreground/60">Authorized User</span>
+                  <span className="text-xl font-black text-foreground">{session.user?.name}</span>
+                </div>
+                <Link href={dashboardLink} onClick={() => setIsOpen(false)} className="no-underline">
+                  <button className="btn-primary w-full py-5 text-xl flex items-center justify-center gap-3">
+                    <LayoutDashboard className="h-6 w-6" /> Go to Dashboard
+                  </button>
+                </Link>
+                <button 
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="w-full py-4 text-sm font-black text-destructive flex items-center justify-center gap-2"
+                >
+                  <LogOut className="h-4 w-4" /> Sign Out
+                </button>
+              </div>
+            ) : mode === "public" ? (
               <div className="flex flex-col gap-4">
                 <Link href="/login" onClick={() => setIsOpen(false)} className="no-underline text-center py-3 text-lg font-black text-foreground cursor-pointer">
                   Log In
@@ -116,11 +159,8 @@ export function Navbar({ mode = "public", links }: NavbarProps) {
               </div>
             ) : (
               <button
-                onClick={() => {
-                  setIsOpen(false);
-                  window.location.href = "/logout";
-                }}
-                className="btn-outline w-full py-5 text-xl font-black text-red-500 cursor-pointer"
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="btn-outline w-full py-5 text-xl font-black text-destructive cursor-pointer"
               >
                 Logout
               </button>
