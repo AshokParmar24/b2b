@@ -76,7 +76,7 @@ export function StateManagement() {
         <div className="flex items-center gap-3">
           <CountrySelect
             value={filters.countryId || "all"}
-            onChange={(val) => setFilters({ ...filters, countryId: val === "all" ? "" : val })}
+            onChange={(val) => setFilters({ ...filters, countryId: val === "all" ? "" : val } as any)}
             variant="premium"
             subLabel="Region Filter"
             placeholder="Filter by Country"

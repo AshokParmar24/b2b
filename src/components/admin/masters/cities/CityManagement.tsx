@@ -81,8 +81,8 @@ export function CityManagement() {
           <Select
             value={filters.countryId || "all"}
             onValueChange={(val) => {
-              const countryId = val === "all" ? "" : val;
-              setFilters({ ...filters, countryId, stateId: "" });
+              const countryId = (val === "all" ? "" : val) as string;
+              setFilters({ ...filters, countryId, stateId: "" } as any);
               fetchStates(countryId);
             }}
           >
@@ -107,7 +107,7 @@ export function CityManagement() {
           {/* 🗺️ State Filter */}
           <Select
             value={filters.stateId || "all"}
-            onValueChange={(val) => setFilters({ ...filters, stateId: val === "all" ? "" : val })}
+            onValueChange={(val) => setFilters({ ...filters, stateId: val === "all" ? "" : val } as any)}
             disabled={!filters.countryId}
           >
             <SelectTrigger className="h-12 w-full sm:w-[180px] rounded-2xl bg-card/40 border-border/40 font-bold text-xs cursor-pointer hover:bg-primary/5 hover:border-primary/20 transition-all disabled:opacity-50">

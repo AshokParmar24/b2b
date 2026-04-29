@@ -57,7 +57,7 @@ export function CountryForm({ initialData, isEdit = false }: CountryFormProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<CountryFormData>({
-    resolver: yupResolver(countrySchema),
+    resolver: yupResolver(countrySchema) as any,
     defaultValues: {
       name: initialData?.name || "",
       code: initialData?.code || "",

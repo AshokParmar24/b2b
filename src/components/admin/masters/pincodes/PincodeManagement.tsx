@@ -103,8 +103,8 @@ export function PincodeManagement() {
           <Select
             value={filters.countryId || "all"}
             onValueChange={(val) => {
-              const countryId = val === "all" ? "" : val;
-              setFilters({ ...filters, countryId, stateId: "", cityId: "" });
+              const countryId = (val === "all" ? "" : val) as string;
+              setFilters({ ...filters, countryId, stateId: "", cityId: "" } as any);
               fetchStates(countryId);
             }}
           >
@@ -130,8 +130,8 @@ export function PincodeManagement() {
           <Select
             value={filters.stateId || "all"}
             onValueChange={(val) => {
-              const stateId = val === "all" ? "" : val;
-              setFilters({ ...filters, stateId, cityId: "" });
+              const stateId = (val === "all" ? "" : val) as string;
+              setFilters({ ...filters, stateId, cityId: "" } as any);
               fetchCities(stateId);
             }}
             disabled={!filters.countryId}
@@ -157,7 +157,7 @@ export function PincodeManagement() {
           {/* 🏙️ City Filter */}
           <Select
             value={filters.cityId || "all"}
-            onValueChange={(val) => setFilters({ ...filters, cityId: val === "all" ? "" : val })}
+            onValueChange={(val) => setFilters({ ...filters, cityId: val === "all" ? "" : val } as any)}
             disabled={!filters.stateId}
           >
             <SelectTrigger className="h-12 w-full sm:w-[150px] rounded-2xl bg-card/40 border-border/40 font-bold text-xs cursor-pointer hover:bg-primary/5 hover:border-primary/20 transition-all disabled:opacity-50">

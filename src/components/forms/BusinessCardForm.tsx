@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Button } from "@/components/ui/button";
 import { UploadCloud, X, Image as ImageIcon } from "lucide-react";
+import { CountrySelect } from "@/components/common/CountrySelect";
 
 // Yup Validation Schema
 const schema = yup.object({
@@ -100,7 +101,7 @@ export default function BusinessCardForm({
 
   // Reset trailing location fields when a parent field changes
   useEffect(() => {
-    if (watchCountry === "in")
+    if (watchCountry)
       setAvailableStates([
         { id: "gj", name: "Gujarat" },
         { id: "mh", name: "Maharashtra" },
@@ -361,18 +362,18 @@ export default function BusinessCardForm({
       >
         <div>
           <label className="mb-1 block text-sm text-gray-400">Country *</label>
-          <select
-            {...register("countryId")}
-            className="w-full rounded-lg px-4 py-2 text-white outline-none"
-            style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
-          >
-            <option value="">Select Country</option>
-            <option value="in">India 🇮🇳</option>
-            <option value="us">United States 🇺🇸</option>
-          </select>
-          {errors.countryId && (
-            <p className="mt-1 text-xs text-red-500">{errors.countryId.message}</p>
-          )}
+          <Controller
+            name="countryId"
+            control={control}
+            render={({ field }) => (
+              <CountrySelect
+                value={field.value}
+                onChange={field.onChange}
+                placeholder="Select Country"
+                error={errors.countryId?.message}
+              />
+            )}
+          />
         </div>
         <div>
           <label className="mb-1 block text-sm text-gray-400">State *</label>
