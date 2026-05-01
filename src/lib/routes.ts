@@ -17,6 +17,8 @@ export enum AppRoutes {
   ADMIN_DASHBOARD = "/admin",       // Admin system overview & analytics
   ADMIN_USERS = "/admin/users",     // User management & role assignment
   ADMIN_PLANS = "/admin/plans",     // Subscription plan configuration
+  ADMIN_PLANS_ADD = "/admin/plans/add",
+  ADMIN_PLANS_EDIT = "/admin/plans/edit",
   ADMIN_IMPORT = "/admin/import",   // Bulk data processing & imports
 
   // 📍 Location Masters (Admin Only)

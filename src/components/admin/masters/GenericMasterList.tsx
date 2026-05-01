@@ -152,11 +152,11 @@ export function GenericMasterList({
     const savedPrefs = localStorage.getItem(`master_prefs_${apiEndpoint.split('/').pop()}`);
     if (savedPrefs) {
       try {
-        const { pageSize: pSize, sortField: sField, sortOrder: sOrder, statusFilter: sFilter, extraFilters: eFilters } = JSON.parse(savedPrefs);
+        const { pageSize: pSize, sortField: sField, sortOrder: sOrder, extraFilters: eFilters } = JSON.parse(savedPrefs);
         if (pSize) setPageSize(pSize);
         if (sField) setSortField(sField);
         if (sOrder) setSortOrder(sOrder);
-        if (sFilter) setStatusFilter(sFilter);
+        // ⚠️ statusFilter intentionally NOT restored — always default to "all" so all records are visible
         if (eFilters) setExtraFilters(eFilters);
       } catch (e) {
         console.error("Failed to parse master preferences", e);
@@ -563,7 +563,7 @@ export function GenericMasterList({
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-muted/10 border-b border-border/40 backdrop-blur-sm">
-                <th className="px-8 py-7 w-12">
+                <th className="px-4 sm:px-6 md:px-8 py-5 sm:py-7 w-12">
                   <div
                     onClick={toggleSelectAll}
                     className={cn(
@@ -579,7 +579,7 @@ export function GenericMasterList({
                     key={col.key}
                     onClick={() => handleSort(col.key)}
                     className={cn(
-                      "px-8 py-7 text-[10px] font-black uppercase tracking-[0.25em] transition-all cursor-pointer hover:bg-primary/[0.04] hover:text-primary group/th relative",
+                      "px-4 sm:px-6 md:px-8 py-5 sm:py-7 text-[10px] font-black uppercase tracking-[0.25em] transition-all cursor-pointer hover:bg-primary/[0.04] hover:text-primary group/th relative whitespace-nowrap",
                       col.hideOnMobile ? "hidden lg:table-cell" : "",
                       sortField === col.key ? "text-primary bg-primary/[0.02]" : "text-muted-foreground/50"
                     )}
@@ -598,7 +598,7 @@ export function GenericMasterList({
                     )}
                   </th>
                 ))}
-                <th className="px-8 py-7 text-[10px] font-black uppercase tracking-[0.25em] text-muted-foreground/40 text-right">Actions</th>
+                <th className="px-4 sm:px-6 md:px-8 py-5 sm:py-7 text-[10px] font-black uppercase tracking-[0.25em] text-muted-foreground/40 text-right whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/5">
@@ -606,11 +606,11 @@ export function GenericMasterList({
                 Array.from({ length: Number(pageSize) }).map((_, i) => (
                   <tr key={i} className="animate-pulse">
                     {columns.map((_, j) => (
-                      <td key={j} className="px-8 py-6">
+                      <td key={j} className="px-4 sm:px-6 md:px-8 py-4 sm:py-6">
                         <div className="h-4 w-2/3 bg-muted/20 rounded-full" />
                       </td>
                     ))}
-                    <td className="px-8 py-6">
+                    <td className="px-4 sm:px-6 md:px-8 py-4 sm:py-6">
                       <div className="flex justify-end gap-2">
                         <div className="h-8 w-8 bg-muted/20 rounded-xl" />
                         <div className="h-8 w-8 bg-muted/20 rounded-xl" />
@@ -628,7 +628,7 @@ export function GenericMasterList({
                       selectedIds.includes(item._id) && "bg-primary/[0.02]"
                     )}
                   >
-                    <td className="px-8 py-5">
+                    <td className="px-4 sm:px-6 md:px-8 py-4 sm:py-5">
                       <div
                         onClick={() => toggleSelect(item._id)}
                         className={cn(
@@ -643,7 +643,7 @@ export function GenericMasterList({
                       <td
                         key={col.key}
                         className={cn(
-                          "px-8 py-5 relative",
+                          "px-4 sm:px-6 md:px-8 py-4 sm:py-5 relative whitespace-nowrap",
                           col.hideOnMobile ? "hidden lg:table-cell" : ""
                         )}
                       >
@@ -661,7 +661,7 @@ export function GenericMasterList({
                         )}
                       </td>
                     ))}
-                    <td className="px-8 py-6 text-right">
+                    <td className="px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-2 transition-all duration-300">
                         {item.isActive ? (
                           <>
@@ -701,7 +701,7 @@ export function GenericMasterList({
                 ))
               ) : (
                 <tr>
-                  <td colSpan={columns.length + 2} className="px-8 py-32 text-center relative overflow-hidden">
+                  <td colSpan={columns.length + 2} className="px-4 sm:px-8 py-16 sm:py-32 text-center relative overflow-hidden">
                     {/* Decorative Background for Empty State */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none opacity-[0.03]">
                       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,var(--primary)_0%,transparent_70%)]" />

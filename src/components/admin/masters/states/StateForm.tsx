@@ -90,7 +90,7 @@ export function StateForm({ initialData, isEdit = false }: StateFormProps) {
   };
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+    <div className="mx-auto max-w-5xl px-4 sm:px-6 md:px-8 space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
       <div className="flex items-center justify-between">
         <Link href={AppRoutes.ADMIN_MASTERS_STATES}>
           <Button variant="ghost" className="rounded-2xl hover:bg-primary/5 group text-muted-foreground hover:text-primary transition-colors">
@@ -104,7 +104,7 @@ export function StateForm({ initialData, isEdit = false }: StateFormProps) {
         <div className="lg:col-span-8 space-y-6">
           <Card className="rounded-[40px] border border-border/40 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)] overflow-hidden bg-card/50 backdrop-blur-xl">
             <div className="h-1.5 w-full bg-gradient-to-r from-primary via-primary/50 to-emerald-400" />
-            <CardHeader className="p-8 md:p-10 pb-4">
+            <CardHeader className="p-5 sm:p-8 md:p-10 pb-4">
               <div className="flex flex-col gap-1">
                 <CardTitle className="text-2xl md:text-3xl font-black tracking-tight text-foreground">
                   {isEdit ? "Refine Territory" : "Map New State"}
@@ -114,7 +114,7 @@ export function StateForm({ initialData, isEdit = false }: StateFormProps) {
                 </CardDescription>
               </div>
             </CardHeader>
-            <CardContent className="p-8 md:p-10 pt-4">
+            <CardContent className="p-5 sm:p-8 md:p-10 pt-4">
               <form id="state-form" onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                 <div className="grid grid-cols-1 gap-8">
                   <Controller
@@ -176,7 +176,7 @@ export function StateForm({ initialData, isEdit = false }: StateFormProps) {
         </div>
 
         <div className="lg:col-span-4 space-y-6">
-          <Card className="rounded-[32px] border-none bg-primary/5 p-8 relative overflow-hidden group">
+          <Card className="rounded-[32px] border-none bg-primary/5 p-6 sm:p-8 relative overflow-hidden group">
             <h3 className="flex items-center gap-2 font-black text-primary mb-6 uppercase tracking-tighter">
               <Info className="h-5 w-5" /> Mapping Rules
             </h3>
@@ -196,7 +196,7 @@ export function StateForm({ initialData, isEdit = false }: StateFormProps) {
             </ul>
           </Card>
 
-          <Card className="rounded-[32px] border border-emerald-500/10 bg-emerald-500/5 p-8 backdrop-blur-md">
+          <Card className="rounded-[32px] border border-emerald-500/10 bg-emerald-500/5 p-6 sm:p-8 backdrop-blur-md">
             <div className="flex items-center gap-3 text-emerald-600 mb-4">
               <ShieldCheck className="h-6 w-6" />
               <span className="font-black tracking-tight text-lg">Zod Guard</span>

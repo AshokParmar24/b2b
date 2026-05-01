@@ -98,7 +98,7 @@ export function CountryForm({ initialData, isEdit = false }: CountryFormProps) {
   };
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+    <div className="mx-auto max-w-5xl px-4 sm:px-6 md:px-8 space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
       {/* 🔙 BACK HEADER */}
       <div className="flex items-center justify-between">
         <Link href={AppRoutes.ADMIN_MASTERS_COUNTRIES}>
@@ -117,7 +117,7 @@ export function CountryForm({ initialData, isEdit = false }: CountryFormProps) {
         <div className="lg:col-span-8 space-y-6">
           <Card className="rounded-[32px] border border-border/40 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)] overflow-hidden bg-card/50 backdrop-blur-xl">
             <div className="h-1.5 w-full bg-gradient-to-r from-primary via-primary/50 to-emerald-400" />
-            <CardHeader className="p-8 md:p-10 pb-4">
+            <CardHeader className="p-5 sm:p-8 md:p-10 pb-4">
               <div className="flex flex-col gap-1">
                 <CardTitle className="text-2xl md:text-3xl font-black tracking-tight text-foreground">
                   {isEdit ? "Refine Country" : "New Country"}
@@ -127,7 +127,7 @@ export function CountryForm({ initialData, isEdit = false }: CountryFormProps) {
                 </CardDescription>
               </div>
             </CardHeader>
-            <CardContent className="p-8 md:p-10 pt-4">
+            <CardContent className="p-5 sm:p-8 md:p-10 pt-4">
               <form id="country-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid grid-cols-1 gap-6">
                   <Input 
@@ -215,7 +215,7 @@ export function CountryForm({ initialData, isEdit = false }: CountryFormProps) {
 
         {/* ℹ️ INFO PANEL */}
         <div className="lg:col-span-4 space-y-6">
-          <Card className="rounded-[32px] border-none bg-primary/5 p-8 relative overflow-hidden group">
+          <Card className="rounded-[32px] border-none bg-primary/5 p-6 sm:p-8 relative overflow-hidden group">
             <div className="absolute top-0 right-0 h-24 w-24 bg-primary/10 rounded-full -mr-12 -mt-12 blur-2xl transition-transform group-hover:scale-150 duration-700" />
             <h3 className="flex items-center gap-2 font-black text-primary mb-6">
               <Info className="h-5 w-5" /> Data Integrity
@@ -238,7 +238,7 @@ export function CountryForm({ initialData, isEdit = false }: CountryFormProps) {
             </ul>
           </Card>
 
-          <Card className="rounded-[32px] border border-emerald-500/10 bg-emerald-500/5 p-8 backdrop-blur-md">
+          <Card className="rounded-[32px] border border-emerald-500/10 bg-emerald-500/5 p-6 sm:p-8 backdrop-blur-md">
             <div className="flex items-center gap-3 text-emerald-600 mb-4">
               <div className="h-10 w-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
                 <ShieldCheck className="h-6 w-6" />

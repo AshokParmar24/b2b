@@ -5,37 +5,10 @@ import { Building2 } from "lucide-react";
 import { GenericMasterList } from "../GenericMasterList";
 import { AppRoutes } from "@/lib/routes";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from "@/components/ui/select";
-import { api } from "@/lib/api";
-import { BadgeCheck, Map } from "lucide-react";
+import { CountrySelect } from "@/components/common/CountrySelect";
+import { StateSelect } from "@/components/common/StateSelect";
 
 export function CityManagement() {
-  const [countries, setCountries] = React.useState<any[]>([]);
-  const [states, setStates] = React.useState<any[]>([]);
-
-  // Fetch Countries
-  React.useEffect(() => {
-    api.get<any[]>("/api/masters/countries?status=active").then(res => {
-      setCountries(Array.isArray(res) ? res : (res as any).data || []);
-    }).catch(() => {});
-  }, []);
-
-  // Fetch States when country changes
-  const fetchStates = (countryId: string) => {
-    if (!countryId) {
-      setStates([]);
-      return;
-    }
-    api.get<any[]>(`/api/masters/states?countryId=${countryId}&status=active`).then(res => {
-      setStates(Array.isArray(res) ? res : (res as any).data || []);
-    }).catch(() => {});
-  };
 
   const columns = [
     { 
@@ -77,56 +50,26 @@ export function CityManagement() {
       searchPlaceholder="Identify city by name or state..."
       renderExtraFilters={(filters, setFilters) => (
         <div className="flex flex-col sm:flex-row items-center gap-3">
-          {/* 🌍 Country Filter */}
-          <Select
+          <CountrySelect
             value={filters.countryId || "all"}
-            onValueChange={(val) => {
-              const countryId = (val === "all" ? "" : val) as string;
-              setFilters({ ...filters, countryId, stateId: "" } as any);
-              fetchStates(countryId);
+            onChange={(val) => {
+              setFilters({ ...filters, countryId: val === "all" ? "" : val, stateId: "" } as any);
             }}
-          >
-            <SelectTrigger className="h-12 w-full sm:w-[180px] rounded-2xl bg-card/40 border-border/40 font-bold text-xs cursor-pointer hover:bg-primary/5 hover:border-primary/20 transition-all">
-              <div className="flex items-center gap-2">
-                <BadgeCheck className="h-4 w-4 text-primary/50" />
-                <SelectValue placeholder="Filter by Country" />
-              </div>
-            </SelectTrigger>
-            <SelectContent className="rounded-3xl border-border/40 bg-card/95 backdrop-blur-3xl p-2 shadow-3xl">
-              <SelectItem value="all" className="rounded-2xl font-bold text-xs py-3 cursor-pointer">
-                All Countries
-              </SelectItem>
-              {countries.map(c => (
-                <SelectItem key={c._id} value={c._id} className="rounded-2xl font-bold text-xs py-3 cursor-pointer">
-                  {c.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            variant="premium"
+            placeholder="Filter by Country"
+            showAllOption
+            className="w-full sm:w-[200px]"
+          />
 
-          {/* 🗺️ State Filter */}
-          <Select
+          <StateSelect
+            countryId={filters.countryId}
             value={filters.stateId || "all"}
-            onValueChange={(val) => setFilters({ ...filters, stateId: val === "all" ? "" : val } as any)}
-            disabled={!filters.countryId}
-          >
-            <SelectTrigger className="h-12 w-full sm:w-[180px] rounded-2xl bg-card/40 border-border/40 font-bold text-xs cursor-pointer hover:bg-primary/5 hover:border-primary/20 transition-all disabled:opacity-50">
-              <div className="flex items-center gap-2">
-                <Map className="h-4 w-4 text-primary/50" />
-                <SelectValue placeholder="Filter by State" />
-              </div>
-            </SelectTrigger>
-            <SelectContent className="rounded-3xl border-border/40 bg-card/95 backdrop-blur-3xl p-2 shadow-3xl">
-              <SelectItem value="all" className="rounded-2xl font-bold text-xs py-3 cursor-pointer">
-                All States
-              </SelectItem>
-              {states.map(s => (
-                <SelectItem key={s._id} value={s._id} className="rounded-2xl font-bold text-xs py-3 cursor-pointer">
-                  {s.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            onChange={(val) => setFilters({ ...filters, stateId: val === "all" ? "" : val } as any)}
+            variant="premium"
+            placeholder="Filter by State"
+            showAllOption
+            className="w-full sm:w-[200px]"
+          />
         </div>
       )}
     />

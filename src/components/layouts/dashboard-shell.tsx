@@ -130,7 +130,7 @@ export function DashboardShell({
         <main className="flex-1 overflow-auto custom-scrollbar relative">
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] bg-primary/[0.03] blur-[120px] rounded-full pointer-events-none" />
 
-          <div className="mx-auto w-full max-w-[1400px] px-8 py-10 md:px-12 animate-in fade-in slide-in-from-bottom-6 duration-700">
+          <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 md:px-10 py-6 sm:py-8 md:py-10 animate-in fade-in slide-in-from-bottom-6 duration-700">
             {children}
           </div>
         </main>

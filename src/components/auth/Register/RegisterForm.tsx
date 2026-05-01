@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
@@ -25,7 +25,7 @@ import { Logo } from "@/components/ui/Logo";
 import { BrandName } from "@/components/ui/BrandName";
 import { AppRoutes } from "@/lib/routes";
 import { SITE_TAGLINE } from "@/lib/site-config";
-import { COUNTRIES, STATES, CITIES, PINCODES } from "@/lib/location-data";
+
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { api } from "@/lib/api";
 import { API_ENDPOINTS } from "@/lib/api-endpoints";
@@ -82,7 +82,7 @@ export function RegisterForm() {
       phoneNumber: "",
       password: "",
       confirmPassword: "",
-      country: "in",
+      country: "",
       state: "",
       city: "",
       pincode: "",
@@ -93,31 +93,65 @@ export function RegisterForm() {
   const selectedState = watch("state");
   const selectedCity = watch("city");
 
-  // Dynamic Options mapping
-  const stateOptions = useMemo(() => STATES[selectedCountry] || [], [selectedCountry]);
-  const cityOptions = useMemo(() => {
-    const rawCities = CITIES[selectedState] || [];
-    return rawCities.map(c => ({ id: c, name: c }));
-  }, [selectedState]);
-  const pincodeOptions = useMemo(() => {
-    const rawPincodes = PINCODES[selectedCity] || [];
-    return rawPincodes.map(p => ({ id: p, name: p }));
-  }, [selectedCity]);
+  const [loadingStates, setLoadingStates] = useState(false);
+  const [loadingCities, setLoadingCities] = useState(false);
+  const [loadingPincodes, setLoadingPincodes] = useState(false);
+  const [stateOptions, setStateOptions] = useState<{ id: string; name: string }[]>([]);
+  const [cityOptions, setCityOptions] = useState<{ id: string; name: string }[]>([]);
+  const [pincodeOptions, setPincodeOptions] = useState<{ id: string; name: string }[]>([]);
 
-  // Cascading Resets — silent, no validation triggered
+  // Fetch states when country changes
   useEffect(() => {
+    setStateOptions([]);
+    setCityOptions([]);
+    setPincodeOptions([]);
     setValue("state", "", { shouldValidate: false, shouldTouch: false });
     setValue("city", "", { shouldValidate: false, shouldTouch: false });
     setValue("pincode", "", { shouldValidate: false, shouldTouch: false });
+    if (!selectedCountry) return;
+    setLoadingStates(true);
+    api
+      .get<any>(`${API_ENDPOINTS.MASTERS.STATES}?countryId=${selectedCountry}&status=active&limit=500`)
+      .then((res) => {
+        const items = Array.isArray(res) ? res : res?.data || [];
+        setStateOptions(items.map((s: any) => ({ id: s._id, name: s.name })));
+      })
+      .catch(() => toast.error("Failed to load states"))
+      .finally(() => setLoadingStates(false));
   }, [selectedCountry, setValue]);
 
+  // Fetch cities when state changes
   useEffect(() => {
+    setCityOptions([]);
+    setPincodeOptions([]);
     setValue("city", "", { shouldValidate: false, shouldTouch: false });
     setValue("pincode", "", { shouldValidate: false, shouldTouch: false });
+    if (!selectedState) return;
+    setLoadingCities(true);
+    api
+      .get<any>(`${API_ENDPOINTS.MASTERS.CITIES}?stateId=${selectedState}&status=active&limit=500`)
+      .then((res) => {
+        const items = Array.isArray(res) ? res : res?.data || [];
+        setCityOptions(items.map((c: any) => ({ id: c._id, name: c.name })));
+      })
+      .catch(() => toast.error("Failed to load cities"))
+      .finally(() => setLoadingCities(false));
   }, [selectedState, setValue]);
 
+  // Fetch pincodes when city changes
   useEffect(() => {
+    setPincodeOptions([]);
     setValue("pincode", "", { shouldValidate: false, shouldTouch: false });
+    if (!selectedCity) return;
+    setLoadingPincodes(true);
+    api
+      .get<any>(`${API_ENDPOINTS.MASTERS.PINCODES}?cityId=${selectedCity}&status=active&limit=500`)
+      .then((res) => {
+        const items = Array.isArray(res) ? res : res?.data || [];
+        setPincodeOptions(items.map((p: any) => ({ id: p._id, name: p.pincode + (p.area ? " — " + p.area : "") })));
+      })
+      .catch(() => toast.error("Failed to load pincodes"))
+      .finally(() => setLoadingPincodes(false));
   }, [selectedCity, setValue]);
 
   async function onSubmit(data: RegisterFormValues) {
@@ -253,16 +287,16 @@ export function RegisterForm() {
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <Controller name="state" control={control} render={({ field }) => (
-                <SearchableSelect label="State / Province" options={stateOptions} value={field.value} onChange={field.onChange} onBlur={field.onBlur} placeholder="Select State" disabled={!selectedCountry} error={errors.state?.message} />
+                <SearchableSelect label="State / Province" options={stateOptions} value={field.value} onChange={field.onChange} onBlur={field.onBlur} placeholder={loadingStates ? "Loading states..." : "Select State"} disabled={!selectedCountry || loadingStates} error={errors.state?.message} />
               )} />
             </div>
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <Controller name="city" control={control} render={({ field }) => (
-                <SearchableSelect label="City" options={cityOptions} value={field.value} onChange={field.onChange} onBlur={field.onBlur} placeholder="Select City" disabled={!selectedState} error={errors.city?.message} />
+                <SearchableSelect label="City" options={cityOptions} value={field.value} onChange={field.onChange} onBlur={field.onBlur} placeholder={loadingCities ? "Loading cities..." : "Select City"} disabled={!selectedState || loadingCities} error={errors.city?.message} />
               )} />
               <Controller name="pincode" control={control} render={({ field }) => (
-                <SearchableSelect label="Pincode / Zip" options={pincodeOptions} value={field.value} onChange={field.onChange} onBlur={field.onBlur} placeholder="Select Pincode" disabled={!selectedCity} error={errors.pincode?.message} />
+                <SearchableSelect label="Pincode / Zip" options={pincodeOptions} value={field.value} onChange={field.onChange} onBlur={field.onBlur} placeholder={loadingPincodes ? "Loading pincodes..." : "Select Pincode"} disabled={!selectedCity || loadingPincodes} error={errors.pincode?.message} />
               )} />
             </div>
           </div>

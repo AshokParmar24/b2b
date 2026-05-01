@@ -30,7 +30,8 @@ export const citySchema = z.object({
 });
 
 export const pincodeSchema = z.object({
-  code: z.string().min(4, "Pincode must be at least 4 characters").regex(/^\d+$/, "Must be numbers only"),
+  pincode: z.string().min(4, "Pincode must be at least 4 characters").regex(/^\d+$/, "Must be numbers only"),
+  area: z.string().optional().default(""),
   cityId: z.string().min(1, "City reference is required"),
   isActive: z.boolean().optional().default(true),
 });
