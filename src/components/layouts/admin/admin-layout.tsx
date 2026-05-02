@@ -45,8 +45,13 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter();
 
     // 🛡️ Authorization: Ensure user is an Admin
+    React.useEffect(() => {
+        if (status === "authenticated" && (session?.user as any)?.role !== UserRole.ADMIN) {
+            router.push("/dashboard");
+        }
+    }, [status, session, router]);
+
     if (status === "authenticated" && (session?.user as any)?.role !== UserRole.ADMIN) {
-        router.push("/dashboard");
         return null;
     }
 

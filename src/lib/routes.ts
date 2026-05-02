@@ -16,6 +16,8 @@ export enum AppRoutes {
   // 🛡️ Admin Panel Routes
   ADMIN_DASHBOARD = "/admin",       // Admin system overview & analytics
   ADMIN_USERS = "/admin/users",     // User management & role assignment
+  ADMIN_USERS_ADD = "/admin/users/add",
+  ADMIN_USERS_EDIT = "/admin/users/edit",
   ADMIN_PLANS = "/admin/plans",     // Subscription plan configuration
   ADMIN_PLANS_ADD = "/admin/plans/add",
   ADMIN_PLANS_EDIT = "/admin/plans/edit",

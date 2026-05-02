@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { 
-  Loader2, 
-  ArrowLeft, 
-  Save, 
-  Crown, 
-  Plus, 
+import {
+  Loader2,
+  ArrowLeft,
+  Save,
+  Crown,
+  Plus,
   X,
   Zap,
   CheckCircle2,
@@ -63,13 +63,13 @@ export function PlanForm({ initialData, isEdit = false }: PlanFormProps) {
   const onSubmit = async (data: PlanInput) => {
     setIsSubmitting(true);
     const loadingToast = toast.loading(isEdit ? "Refining plan architecture..." : "Deploying new plan tier...");
-    
+
     try {
-      const url = isEdit 
-        ? `/api/plans/${initialData?._id}` 
+      const url = isEdit
+        ? `/api/plans/${initialData?._id}`
         : "/api/plans";
-      
-      const response = isEdit 
+
+      const response = isEdit
         ? await api.put(url, data)
         : await api.post(url, data);
 
@@ -141,9 +141,9 @@ export function PlanForm({ initialData, isEdit = false }: PlanFormProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Plan Name</label>
-                  <Input 
+                  <Input
                     {...register("name")}
-                    placeholder="e.g. Professional Elite" 
+                    placeholder="e.g. Professional Elite"
                     className={cn(
                       "h-12 rounded-2xl bg-muted/30 border-border/40 focus:ring-primary/20 transition-all font-medium",
                       errors.name && "border-destructive/50 focus:ring-destructive/20"
@@ -154,10 +154,10 @@ export function PlanForm({ initialData, isEdit = false }: PlanFormProps) {
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Monthly Price (₹)</label>
-                  <Input 
+                  <Input
                     {...register("price", { valueAsNumber: true })}
                     type="number"
-                    placeholder="999" 
+                    placeholder="999"
                     className={cn(
                       "h-12 rounded-2xl bg-muted/30 border-border/40 focus:ring-primary/20 transition-all font-medium",
                       errors.price && "border-destructive/50 focus:ring-destructive/20"
@@ -169,7 +169,7 @@ export function PlanForm({ initialData, isEdit = false }: PlanFormProps) {
 
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Detailed Description</label>
-                <textarea 
+                <textarea
                   {...register("description")}
                   placeholder="Explain the value proposition of this tier..."
                   className={cn(
@@ -199,7 +199,7 @@ export function PlanForm({ initialData, isEdit = false }: PlanFormProps) {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Max Listings</label>
-                  <Input 
+                  <Input
                     {...register("maxListings", { valueAsNumber: true })}
                     type="number"
                     className="h-12 rounded-2xl bg-muted/30 border-border/40 font-medium"
@@ -207,7 +207,7 @@ export function PlanForm({ initialData, isEdit = false }: PlanFormProps) {
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Max Images / Card</label>
-                  <Input 
+                  <Input
                     {...register("maxImages", { valueAsNumber: true })}
                     type="number"
                     className="h-12 rounded-2xl bg-muted/30 border-border/40 font-medium"
@@ -215,8 +215,8 @@ export function PlanForm({ initialData, isEdit = false }: PlanFormProps) {
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">HSN Codes (Null=∞)</label>
-                  <Input 
-                    {...register("maxHsnCodes", { 
+                  <Input
+                    {...register("maxHsnCodes", {
                       setValueAs: v => v === "" ? null : parseInt(v, 10)
                     })}
                     placeholder="Unlimited"
@@ -228,17 +228,17 @@ export function PlanForm({ initialData, isEdit = false }: PlanFormProps) {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Additional Feature Highlights</label>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={() => append("")}
                     className="h-8 rounded-xl border-primary/20 text-primary hover:bg-primary/10 font-bold px-3"
                   >
                     <Plus className="h-3 w-3 mr-1.5" /> Add Highlight
                   </Button>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {fields.map((field, index) => (
                     <div key={field.id} className="group relative">

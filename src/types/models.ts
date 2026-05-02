@@ -105,6 +105,13 @@ export interface User {
   name: string;
   email: string;
   password?: string;
+  mobile?: string;
+  mobileCode?: string;
+  mobileIso?: string;
+  countryId?: any;
+  stateId?: any;
+  cityId?: any;
+  pincodeId?: any;
   role: UserRole;
   planId?: any;
   planStartDate?: Date | null;
