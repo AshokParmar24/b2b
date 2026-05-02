@@ -14,19 +14,26 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        await dbConnect();
-        const user = await User.findOne({ email: credentials.email, isActive: true });
-        if (!user) return null;
-        const isValid = await bcrypt.compare(credentials.password, user.password);
-        if (!isValid) return null;
-        return {
-          id: user._id.toString(),
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          planId: user.planId?.toString() ?? null,
-          planEndDate: user.planEndDate?.toISOString() ?? null,
-        };
+        try {
+          await dbConnect();
+          const user = await User.findOne({ email: credentials.email, isActive: true });
+          if (!user) return null;
+          const isValid = await bcrypt.compare(credentials.password, user.password);
+          if (!isValid) return null;
+          return {
+            id: user._id.toString(),
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            planId: user.planId?.toString() ?? null,
+            planEndDate: user.planEndDate?.toISOString() ?? null,
+          };
+        } catch (error: any) {
+          console.error("Auth Error in authorize():", error);
+          // Return null to correctly show the "Invalid credentials" message on the client
+          // instead of redirecting to the ugly default NextAuth error page.
+          return null; 
+        }
       },
     }),
   ],
