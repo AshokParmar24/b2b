@@ -7,6 +7,7 @@ import { AppRoutes } from "@/lib/routes";
 import { Badge } from "@/components/ui/badge";
 import { CountrySelect } from "@/components/common/CountrySelect";
 import { StateSelect } from "@/components/common/StateSelect";
+import { cn } from "@/lib/utils";
 
 export function CityManagement() {
 
@@ -15,7 +16,17 @@ export function CityManagement() {
       key: "name", 
       label: "City Name",
       render: (value: string) => (
-        <span className="font-bold text-foreground text-sm tracking-tight">{value}</span>
+        <div className="flex items-center gap-4">
+          <div className={cn(
+            "h-12 w-12 flex-shrink-0 rounded-2xl flex items-center justify-center font-[1000] text-xl shadow-inner",
+            "bg-gradient-to-br from-primary/80 to-blue-600 text-white shadow-primary/20"
+          )}>
+            {value?.charAt(0)?.toUpperCase()}
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-black text-foreground truncate group-hover:text-primary transition-colors">{value}</p>
+          </div>
+        </div>
       )
     },
     { 
@@ -31,9 +42,15 @@ export function CityManagement() {
       key: "isActive", 
       label: "Status",
       render: (value: boolean) => (
-        <Badge variant={value ? "success" : "secondary"} className="text-[9px] px-2.5 py-1 uppercase tracking-tighter">
-          {value ? "Active" : "Archived"}
-        </Badge>
+        value ? (
+          <div className="inline-flex items-center justify-center px-3 py-1.5 rounded-full font-black text-[11px] uppercase tracking-wider transition-all duration-300 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+            Active
+          </div>
+        ) : (
+          <div className="inline-flex items-center justify-center px-3 py-1.5 rounded-full font-black text-[11px] uppercase tracking-wider transition-all duration-300 bg-destructive/10 text-destructive border border-destructive/20">
+            Archived
+          </div>
+        )
       )
     }
   ];

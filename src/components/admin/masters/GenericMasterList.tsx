@@ -557,21 +557,22 @@ export function GenericMasterList({
       )}
 
       {/* 🚀 DATA GRID */}
-      <div className="relative rounded-[48px] overflow-hidden border border-border/40 shadow-[0_40px_80px_-16px_rgba(0,0,0,0.06)] bg-card/30 backdrop-blur-3xl group/grid">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] via-transparent to-transparent opacity-0 group-hover/grid:opacity-100 transition-opacity duration-1000" />
-        <div className="overflow-x-auto overflow-y-hidden custom-scrollbar">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-muted/10 border-b border-border/40 backdrop-blur-sm">
-                <th className="px-4 sm:px-6 md:px-8 py-5 sm:py-7 w-12">
-                  <div
-                    onClick={toggleSelectAll}
-                    className={cn(
-                      "h-6 w-6 rounded-lg border-2 border-muted-foreground/20 flex items-center justify-center cursor-pointer transition-all duration-300",
-                      selectedIds.length === items.length && items.length > 0 ? "bg-primary border-primary shadow-lg shadow-primary/20" : "hover:border-primary/40 hover:bg-primary/5"
-                    )}
-                  >
-                    {selectedIds.length === items.length && items.length > 0 && <Check className="h-3.5 w-3.5 text-white" />}
+      <div className="rounded-[32px] border border-border/50 bg-card/30 backdrop-blur-xl shadow-2xl shadow-black/5 overflow-hidden relative z-10">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm whitespace-nowrap">
+            <thead className="bg-muted/30 border-b border-border/40">
+              <tr>
+                <th className="px-6 py-5 text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60 w-16">
+                  <div className="flex items-center justify-center">
+                    <div
+                      onClick={toggleSelectAll}
+                      className={cn(
+                        "h-5 w-5 rounded-md flex items-center justify-center cursor-pointer transition-all hover:scale-110",
+                        selectedIds.length === items.length && items.length > 0 ? "bg-primary border border-primary shadow-md shadow-primary/20 text-white" : "border-2 border-muted-foreground/30 bg-background"
+                      )}
+                    >
+                      {selectedIds.length === items.length && items.length > 0 && <Check className="h-3.5 w-3.5" />}
+                    </div>
                   </div>
                 </th>
                 {columns.map((col) => (
@@ -579,9 +580,9 @@ export function GenericMasterList({
                     key={col.key}
                     onClick={() => handleSort(col.key)}
                     className={cn(
-                      "px-4 sm:px-6 md:px-8 py-5 sm:py-7 text-[10px] font-black uppercase tracking-[0.25em] transition-all cursor-pointer hover:bg-primary/[0.04] hover:text-primary group/th relative whitespace-nowrap",
+                      "px-6 py-5 text-[11px] font-[900] uppercase tracking-[0.2em] transition-all cursor-pointer hover:bg-primary/[0.04] hover:text-primary group/th relative whitespace-nowrap",
                       col.hideOnMobile ? "hidden lg:table-cell" : "",
-                      sortField === col.key ? "text-primary bg-primary/[0.02]" : "text-muted-foreground/50"
+                      sortField === col.key ? "text-primary bg-primary/[0.02]" : "text-muted-foreground/60"
                     )}
                   >
                     <div className="flex items-center gap-2.5">
@@ -593,65 +594,54 @@ export function GenericMasterList({
                         {sortOrder === "asc" ? <ChevronRight className="h-3 w-3 -rotate-90" /> : <ChevronRight className="h-3 w-3 rotate-90" />}
                       </div>
                     </div>
-                    {sortField === col.key && (
-                      <div className="absolute bottom-0 left-0 h-[2px] w-full bg-primary animate-in fade-in slide-in-from-left-full duration-700" />
-                    )}
                   </th>
                 ))}
-                <th className="px-4 sm:px-6 md:px-8 py-5 sm:py-7 text-[10px] font-black uppercase tracking-[0.25em] text-muted-foreground/40 text-right whitespace-nowrap">Actions</th>
+                <th className="px-6 py-5 text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60 text-right whitespace-nowrap">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/5">
+            <tbody className="divide-y divide-border/30">
               {loading ? (
-                Array.from({ length: Number(pageSize) }).map((_, i) => (
-                  <tr key={i} className="animate-pulse">
-                    {columns.map((_, j) => (
-                      <td key={j} className="px-4 sm:px-6 md:px-8 py-4 sm:py-6">
-                        <div className="h-4 w-2/3 bg-muted/20 rounded-full" />
-                      </td>
-                    ))}
-                    <td className="px-4 sm:px-6 md:px-8 py-4 sm:py-6">
-                      <div className="flex justify-end gap-2">
-                        <div className="h-8 w-8 bg-muted/20 rounded-xl" />
-                        <div className="h-8 w-8 bg-muted/20 rounded-xl" />
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                <tr>
+                  <td colSpan={columns.length + 2} className="py-24 text-center">
+                    <Loader2 className="h-10 w-10 animate-spin mx-auto text-primary" />
+                    <p className="mt-4 text-sm font-black text-foreground">Syncing Database…</p>
+                    <p className="text-xs font-medium text-muted-foreground mt-1">Fetching latest {title.toLowerCase()} records</p>
+                  </td>
+                </tr>
               ) : filteredItems.length > 0 ? (
                 filteredItems.map((item) => (
                   <tr
                     key={item._id}
                     className={cn(
-                      "group transition-colors duration-300 hover:bg-primary/[0.04]",
+                      "group transition-all duration-300 hover:bg-background/80 relative",
                       !item.isActive && "opacity-60 bg-muted/5 grayscale-[0.5]",
-                      selectedIds.includes(item._id) && "bg-primary/[0.02]"
+                      selectedIds.includes(item._id) && "bg-primary/[0.03] hover:bg-primary/[0.05]"
                     )}
                   >
-                    <td className="px-4 sm:px-6 md:px-8 py-4 sm:py-5">
-                      <div
-                        onClick={() => toggleSelect(item._id)}
-                        className={cn(
-                          "h-5 w-5 rounded-md border-2 border-muted-foreground/30 flex items-center justify-center cursor-pointer transition-all",
-                          selectedIds.includes(item._id) ? "bg-primary border-primary" : "hover:border-primary/50"
-                        )}
-                      >
-                        {selectedIds.includes(item._id) && <Check className="h-3 w-3 text-white" />}
+                    {/* Active row indicator */}
+                    <td className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-emerald-400 scale-y-0 group-hover:scale-y-100 transition-transform origin-center duration-300 rounded-r-full" />
+                    
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-center">
+                        <div
+                          onClick={() => toggleSelect(item._id)}
+                          className={cn(
+                            "h-5 w-5 rounded-md flex items-center justify-center cursor-pointer transition-all hover:scale-110",
+                            selectedIds.includes(item._id) ? "bg-primary border border-primary text-white" : "border-2 border-muted-foreground/30 bg-background"
+                          )}
+                        >
+                          {selectedIds.includes(item._id) && <Check className="h-3.5 w-3.5" />}
+                        </div>
                       </div>
                     </td>
                     {columns.map((col, idx) => (
                       <td
                         key={col.key}
                         className={cn(
-                          "px-4 sm:px-6 md:px-8 py-4 sm:py-5 relative whitespace-nowrap",
+                          "px-6 py-4 relative whitespace-nowrap",
                           col.hideOnMobile ? "hidden lg:table-cell" : ""
                         )}
                       >
-                        {/* 🌟 ELITE HOVER INDICATOR */}
-                        {idx === 0 && (
-                          <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1.5 rounded-r-full bg-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 shadow-[2px_0_10px_rgba(var(--primary),0.3)]" />
-                        )}
-
                         {col.render ? (
                           col.render(item[col.key], item)
                         ) : (
@@ -661,35 +651,35 @@ export function GenericMasterList({
                         )}
                       </td>
                     ))}
-                    <td className="px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-right whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-2 transition-all duration-300">
+                    <td className="px-6 py-4 text-right whitespace-nowrap">
+                      <div className="flex items-center justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity duration-300">
                         {item.isActive ? (
                           <>
                             <Link href={editPath(item._id)} title="Edit Record">
                               <Button
-                                variant="ghost"
-                                size="icon-lg"
-                                className="h-10 w-10 rounded-2xl hover:bg-primary/10 hover:text-primary transition-colors"
+                                variant="outline"
+                                size="icon"
+                                className="h-9 w-9 rounded-xl border-border/50 hover:bg-blue-500 hover:text-white hover:border-blue-500 transition-all shadow-sm"
                               >
                                 <Edit2 className="h-4 w-4" />
                               </Button>
                             </Link>
                             <Button
-                              variant="ghost"
-                              size="icon-lg"
+                              variant="outline"
+                              size="icon"
                               title="Archive Record"
                               onClick={() => { setSelectedItem(item); setIsDeleteModalOpen(true); }}
-                              className="h-10 w-10 rounded-2xl hover:bg-destructive/10 hover:text-destructive transition-colors"
+                              className="h-9 w-9 rounded-xl border-border/50 hover:bg-destructive hover:text-white hover:border-destructive transition-all shadow-sm"
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </>
                         ) : (
                           <Button
-                            variant="ghost"
-                            size="icon-lg"
+                            variant="outline"
+                            size="icon"
                             onClick={() => handleToggleStatus(item)}
-                            className="h-10 w-10 rounded-2xl hover:bg-emerald-100 hover:text-emerald-600 transition-colors"
+                            className="h-9 w-9 rounded-xl border-border/50 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 transition-all shadow-sm"
                             title="Restore Record"
                           >
                             <ArchiveRestore className="h-4 w-4" />
@@ -701,47 +691,30 @@ export function GenericMasterList({
                 ))
               ) : (
                 <tr>
-                  <td colSpan={columns.length + 2} className="px-4 sm:px-8 py-16 sm:py-32 text-center relative overflow-hidden">
-                    {/* Decorative Background for Empty State */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none opacity-[0.03]">
-                      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,var(--primary)_0%,transparent_70%)]" />
+                  <td colSpan={columns.length + 2} className="py-24 text-center">
+                    <div className="mx-auto h-20 w-20 rounded-full bg-muted/50 flex items-center justify-center mb-5 ring-8 ring-background/50">
+                      <Icon className="h-8 w-8 text-muted-foreground/40" />
                     </div>
-
-                    <div className="flex flex-col items-center gap-8 relative z-10">
-                      <div className="relative">
-                        <div className="absolute -inset-10 rounded-full bg-primary/10 blur-3xl animate-pulse" />
-                        <div className="relative h-32 w-32 rounded-[40px] bg-gradient-to-br from-card to-muted/30 border border-border/40 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-700">
-                          <Icon className="h-16 w-16 text-primary/30" />
-                          <div className="absolute -right-2 -bottom-2 h-10 w-10 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center backdrop-blur-sm">
-                            <Search className="h-5 w-5 text-primary" />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="max-w-md space-y-3">
-                        <h3 className="text-2xl font-black text-foreground tracking-tight">No records discovered</h3>
-                        <p className="text-sm font-bold text-muted-foreground/60 leading-relaxed">
-                          We couldn't find any {title.toLowerCase()} matching your criteria. Try adjusting your search or filters to find what you're looking for.
-                        </p>
-                      </div>
-
-                      <div className="flex flex-col sm:flex-row items-center gap-3">
+                    <p className="text-xl font-black text-foreground">No records discovered</p>
+                    <p className="text-sm font-medium text-muted-foreground mt-2 max-w-sm mx-auto leading-relaxed">
+                      We couldn't find any {title.toLowerCase()} matching your criteria. Try adjusting your search or filters.
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
                         <Button
                           variant="outline"
                           onClick={() => { setSearchQuery(""); setExtraFilters({}); setStatusFilter("all"); }}
-                          className="rounded-2xl h-12 px-8 font-black text-xs uppercase tracking-widest border-border/40 bg-card/40 hover:bg-primary/5 transition-all"
+                          className="rounded-xl border-border/50 font-bold px-6"
                         >
-                          Reset All Filters
+                          Clear Filters
                         </Button>
                         <Link href={addPath}>
                           <Button
-                            className="rounded-2xl h-12 px-8 font-black text-xs uppercase tracking-widest bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20 transition-all hover:scale-105 active:scale-95"
+                            className="rounded-xl bg-primary hover:bg-primary/90 font-bold px-6 text-white border-0 shadow-lg shadow-primary/20"
                           >
                             <Plus className="h-4 w-4 mr-2" />
-                            Create New Entry
+                            Create Entry
                           </Button>
                         </Link>
-                      </div>
                     </div>
                   </td>
                 </tr>

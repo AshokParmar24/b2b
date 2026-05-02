@@ -137,35 +137,48 @@ export default async function AdminDashboard() {
           
           <div className="overflow-x-auto">
             <table className="w-full text-left">
-              <thead className="bg-muted/30 text-[10px] font-black uppercase tracking-widest text-muted-foreground/50">
+              <thead className="bg-muted/30 border-b border-border/40">
                 <tr>
-                  <th className="px-8 py-4">Business Name</th>
-                  <th className="px-8 py-4">Location</th>
-                  <th className="px-8 py-4">Status</th>
-                  <th className="px-8 py-4">Date</th>
+                  <th className="px-8 py-5 text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60 w-1"></th>
+                  <th className="px-4 py-5 text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60">Business Name</th>
+                  <th className="px-8 py-5 text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60">Location</th>
+                  <th className="px-8 py-5 text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">Status</th>
+                  <th className="px-8 py-5 text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60 text-right">Date</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody className="divide-y divide-border/30">
                 {recentBusinesses.map((b) => (
-                  <tr key={b._id.toString()} className="group hover:bg-primary/[0.02] transition-colors">
-                    <td className="px-8 py-5">
-                      <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-xl bg-muted flex items-center justify-center text-xs font-black text-muted-foreground group-hover:bg-primary group-hover:text-white transition-all">
-                          {b.businessName.charAt(0)}
+                  <tr key={b._id.toString()} className="group transition-all duration-300 hover:bg-background/80 relative">
+                    {/* Active row indicator */}
+                    <td className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-emerald-400 scale-y-0 group-hover:scale-y-100 transition-transform origin-center duration-300 rounded-r-full" />
+                    
+                    <td className="px-2 py-4"></td>
+                    <td className="px-4 py-4">
+                      <div className="flex items-center gap-4">
+                        <div className={cn(
+                          "h-12 w-12 flex-shrink-0 rounded-2xl flex items-center justify-center font-[1000] text-lg shadow-inner",
+                          "bg-gradient-to-br from-primary/80 to-blue-600 text-white shadow-primary/20"
+                        )}>
+                          {b.businessName.charAt(0).toUpperCase()}
                         </div>
-                        <span className="text-sm font-bold text-foreground">{b.businessName}</span>
+                        <span className="text-sm font-black text-foreground group-hover:text-primary transition-colors">{b.businessName}</span>
                       </div>
                     </td>
-                    <td className="px-8 py-5 text-sm font-medium text-muted-foreground">
-                      Morbi, India
+                    <td className="px-8 py-4 text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">
+                      <div className="flex items-center gap-2">
+                        <div className="p-1.5 rounded-lg bg-muted/50 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                          <Globe className="h-3.5 w-3.5" />
+                        </div>
+                        Morbi, India
+                      </div>
                     </td>
-                    <td className="px-8 py-5">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-[10px] font-black text-emerald-600 uppercase">
+                    <td className="px-8 py-4 text-center">
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-[11px] uppercase tracking-wider transition-all duration-300 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
                         <ShieldCheck className="h-3 w-3" /> Active
-                      </span>
+                      </div>
                     </td>
-                    <td className="px-8 py-5 text-sm font-bold text-muted-foreground/40 italic">
-                      {new Date(b.createdAt).toLocaleDateString()}
+                    <td className="px-8 py-4 text-right text-xs font-bold text-muted-foreground">
+                      {new Date(b.createdAt).toLocaleDateString("en-IN", { day: 'numeric', month: 'short' })}
                     </td>
                   </tr>
                 ))}

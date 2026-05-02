@@ -10,9 +10,9 @@ import {
     Upload,
     Globe,
     Map,
-    MapPinned,
     Milestone,
-    Hash
+    Hash,
+    BarChart3,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -24,6 +24,7 @@ import { AppRoutes } from "@/lib/routes";
 const adminNav = [
     { href: AppRoutes.ADMIN_DASHBOARD, label: "Dashboard", icon: LayoutDashboard },
     { href: AppRoutes.ADMIN_USERS, label: "Users", icon: Users },
+    { href: "/admin/businesses", label: "Businesses", icon: Building2 },
     { href: AppRoutes.ADMIN_PLANS, label: "Plans", icon: CreditCard },
     { 
         href: AppRoutes.ADMIN_MASTERS, 
@@ -32,11 +33,11 @@ const adminNav = [
         children: [
             { href: AppRoutes.ADMIN_MASTERS_COUNTRIES, label: "Countries", icon: Globe },
             { href: "/admin/masters/states", label: "States", icon: Map },
-
             { href: "/admin/masters/cities", label: "Cities", icon: Milestone },
             { href: "/admin/masters/pincodes", label: "Pincodes", icon: Hash },
         ]
     },
+    { href: "/admin/reports", label: "Reports", icon: BarChart3 },
     { href: AppRoutes.ADMIN_IMPORT, label: "Bulk Import", icon: Upload },
 ];
 

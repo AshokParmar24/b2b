@@ -14,11 +14,16 @@ export function StateManagement() {
       key: "name",
       label: "State Name",
       render: (value: string) => (
-        <div className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-            <Map className="h-4 w-4 text-primary" />
+        <div className="flex items-center gap-4">
+          <div className={cn(
+            "h-12 w-12 flex-shrink-0 rounded-2xl flex items-center justify-center font-[1000] text-xl shadow-inner",
+            "bg-gradient-to-br from-primary/80 to-blue-600 text-white shadow-primary/20"
+          )}>
+            {value?.charAt(0)?.toUpperCase()}
           </div>
-          <span className="font-bold text-foreground text-sm tracking-tight">{value}</span>
+          <div className="min-w-0">
+            <p className="text-sm font-black text-foreground truncate group-hover:text-primary transition-colors">{value}</p>
+          </div>
         </div>
       )
     },
@@ -50,14 +55,15 @@ export function StateManagement() {
       key: "isActive",
       label: "Status",
       render: (value: boolean) => (
-        <Badge variant={value ? "success" : "destructive"} className={cn(
-          "text-[10px] px-3 py-1.5 uppercase tracking-widest font-black rounded-xl border-2 transition-all",
-          value 
-            ? "bg-emerald-500/10 text-emerald-700 border-emerald-500/20" 
-            : "bg-rose-500/10 text-rose-700 border-rose-500/20"
-        )}>
-          {value ? "Active" : "Archived"}
-        </Badge>
+        value ? (
+          <div className="inline-flex items-center justify-center px-3 py-1.5 rounded-full font-black text-[11px] uppercase tracking-wider transition-all duration-300 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+            Active
+          </div>
+        ) : (
+          <div className="inline-flex items-center justify-center px-3 py-1.5 rounded-full font-black text-[11px] uppercase tracking-wider transition-all duration-300 bg-destructive/10 text-destructive border border-destructive/20">
+            Archived
+          </div>
+        )
       )
     }
   ];

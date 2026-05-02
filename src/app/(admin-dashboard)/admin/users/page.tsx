@@ -18,6 +18,9 @@ import {
   UserCheck,
   UserX,
   RefreshCw,
+  LayoutDashboard,
+  Download,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import RoleBadge from "@/components/ui/role-badge";
@@ -131,231 +134,334 @@ export default function AdminUsersPage() {
   ];
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-6">
+    <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 space-y-8 max-w-[1400px] mx-auto pb-10">
 
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-foreground flex items-center gap-2.5 tracking-tight">
-            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <Users className="h-5 w-5" />
-            </span>
-            User Management
-          </h1>
-          <p className="text-sm font-medium text-muted-foreground mt-1">
-            Manage administrators and platform users — live from database.
+      {/* 🎭 HEADER SECTION */}
+      <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-3 text-muted-foreground/40 mb-1 text-[9px] font-black uppercase tracking-[0.2em]">
+            <Link href={AppRoutes.ADMIN_DASHBOARD} className="hover:text-primary transition-colors flex items-center gap-1.5">
+              <LayoutDashboard className="h-3 w-3" />
+              Admin
+            </Link>
+            <span className="opacity-20">/</span>
+            <span className="text-primary/60">Users</span>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-black text-foreground flex items-center gap-5 tracking-tight group/title">
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover/title:opacity-100 transition-opacity duration-700" />
+              <div className="relative p-3.5 rounded-[22px] bg-primary/10 text-primary transition-transform duration-500 group-hover/title:scale-110">
+                <Users className="h-7 w-7 md:h-8 md:w-8" />
+              </div>
+            </div>
+            Users Directory
+          </h2>
+          <p className="text-sm font-semibold text-muted-foreground/80 max-w-xl leading-relaxed">
+            Manage administrators and members. Activate, suspend, or update permissions directly from the database.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" size="icon" onClick={fetchUsers}
-            className="h-10 w-10 rounded-2xl border-border/50 hover:bg-primary/5 hover:text-primary" title="Refresh">
-            <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
+
+        <div className="flex flex-wrap items-center gap-3">
+          <Button variant="outline" onClick={fetchUsers} className="h-12 w-12 rounded-[20px] font-bold p-0 border-border/40 hover:bg-foreground hover:text-background transition-all group" title="Refresh Data">
+            <RefreshCw className={cn("h-4 w-4 transition-transform group-hover:rotate-180 duration-500", loading && "animate-spin")} />
+          </Button>
+          <Button variant="outline" className="h-12 rounded-[20px] font-bold px-6 border-border/40 hover:bg-foreground hover:text-background transition-all">
+            <Download className="h-4 w-4 mr-2" />
+            Export CSV
           </Button>
           <Link href={AppRoutes.ADMIN_USERS_ADD}>
-            <Button className="h-10 rounded-2xl bg-primary font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all px-5">
-              <Plus className="h-4 w-4 mr-2" /> Add User
+            <Button className="h-12 rounded-[20px] bg-foreground text-background hover:bg-primary hover:text-primary-foreground font-black px-6 shadow-xl shadow-black/5 hover:shadow-primary/25 hover:-translate-y-1 transition-all duration-300">
+              <Plus className="h-4 w-4 mr-2" />
+              Add User
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {statCards.map(({ label, value, icon: Icon, color, bg }) => (
-          <div key={label} className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur p-4 flex items-center gap-3">
-            <div className={cn("h-10 w-10 flex-shrink-0 rounded-xl flex items-center justify-center", bg)}>
-              <Icon className={cn("h-5 w-5", color)} />
-            </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">{label}</p>
-              <p className="text-xl font-black text-foreground tabular-nums">{loading ? "—" : value}</p>
+      {/* 📊 STATS OVERVIEW */}
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+        {[
+          { label: "Total Users", value: stats.total, icon: Users, color: "text-primary", bg: "bg-primary/5", border: "border-primary/20" },
+          { label: "Admins", value: stats.admins, icon: Crown, color: "text-amber-500", bg: "bg-amber-500/5", border: "border-amber-500/20" },
+          { label: "Members", value: stats.members, icon: UserCheck, color: "text-blue-500", bg: "bg-blue-500/5", border: "border-blue-500/20" },
+          { label: "Active", value: stats.active, icon: CheckCircle2, color: "text-emerald-500", bg: "bg-emerald-500/5", border: "border-emerald-500/20" },
+        ].map((stat, i) => (
+          <div key={i} className={cn(
+            "group relative overflow-hidden rounded-[32px] border bg-card/40 p-1 backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-black/5",
+            stat.border
+          )}>
+            <div className={cn(
+              "absolute -right-12 -top-12 h-40 w-40 rounded-full blur-3xl opacity-20 transition-opacity duration-500 group-hover:opacity-40",
+              stat.bg.replace('/5', '')
+            )} />
+            <div className="relative rounded-[28px] bg-background/50 p-6 h-full border border-white/5">
+              <div className="flex items-center gap-5">
+                <div className={cn("flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] transition-transform duration-500 group-hover:scale-110", stat.bg)}>
+                  <stat.icon className={cn("h-6 w-6", stat.color)} />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50 mb-1.5">{stat.label}</p>
+                  <div className="flex items-baseline gap-2">
+                    <p className="text-3xl font-[1000] text-foreground tracking-tighter">
+                      {loading ? <Loader2 className="h-6 w-6 animate-spin text-muted-foreground/30" /> : stat.value}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-3 items-center">
-        <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      {/* 🔍 SEARCH & ACTION BAR */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <div className="relative flex-1 group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
           <input
-            type="text"
+            placeholder="Search name or email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search name or email…"
-            className="h-10 w-64 rounded-2xl bg-muted/30 border border-border/40 pl-10 pr-4 text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+            className="w-full pl-12 h-14 rounded-[20px] bg-card/40 border-border/40 border focus:bg-background focus:ring-4 focus:ring-primary/5 transition-all text-sm shadow-sm font-bold placeholder:text-muted-foreground/40 outline-none"
           />
         </div>
 
-        <div className="flex items-center gap-1 bg-muted/20 border border-border/40 rounded-2xl p-1">
-          {(["all", "1", "2"] as FilterRole[]).map((r) => (
-            <button key={r} onClick={() => setRoleFilter(r)}
-              className={cn("h-8 rounded-xl px-3 text-xs font-black transition-all",
-                roleFilter === r ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:text-foreground")}>
-              {r === "all" ? "All Roles" : r === "1" ? "Admin" : "Member"}
-            </button>
-          ))}
+        <div className="flex items-center gap-3 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0 hide-scrollbar">
+          <div className="flex items-center p-1 bg-muted/30 rounded-[20px] border border-border/40">
+            {(["all", "1", "2"] as FilterRole[]).map((r) => (
+              <button
+                key={r}
+                onClick={() => setRoleFilter(r)}
+                className={cn(
+                  "px-5 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-wider transition-all",
+                  roleFilter === r
+                    ? "bg-background text-foreground shadow-sm ring-1 ring-border/50"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                )}
+              >
+                {r === "all" ? "All Roles" : r === "1" ? "Admins" : "Members"}
+              </button>
+            ))}
+          </div>
+          
+          <div className="flex items-center p-1 bg-muted/30 rounded-[20px] border border-border/40">
+            {(["all", "active", "inactive"] as FilterStatus[]).map((s) => (
+              <button
+                key={s}
+                onClick={() => setStatusFilter(s)}
+                className={cn(
+                  "px-5 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-wider transition-all",
+                  statusFilter === s
+                    ? "bg-background text-foreground shadow-sm ring-1 ring-border/50"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                )}
+              >
+                {s === "all" ? "All Status" : s}
+              </button>
+            ))}
+          </div>
         </div>
-
-        <div className="flex items-center gap-1 bg-muted/20 border border-border/40 rounded-2xl p-1">
-          {(["all", "active", "inactive"] as FilterStatus[]).map((s) => (
-            <button key={s} onClick={() => setStatusFilter(s)}
-              className={cn("h-8 rounded-xl px-3 text-xs font-black transition-all capitalize",
-                statusFilter === s ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:text-foreground")}>
-              {s === "all" ? "All Status" : s}
-            </button>
-          ))}
-        </div>
-
-        {(search || roleFilter !== "all" || statusFilter !== "all") && (
-          <button onClick={() => { setSearch(""); setRoleFilter("all"); setStatusFilter("all"); }}
-            className="text-xs font-black text-muted-foreground hover:text-primary transition-colors underline underline-offset-2">
-            Clear filters
-          </button>
-        )}
       </div>
 
-      {/* Bulk action bar */}
+      {/* 🛠️ FLOATING BULK ACTION BAR */}
       {selectedIds.size > 0 && (
-        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-2.5 animate-in slide-in-from-top-2 duration-300">
-          <span className="text-sm font-black text-primary">{selectedIds.size} selected</span>
-          <div className="ml-auto flex flex-wrap items-center gap-2">
-            <Button size="sm" variant="outline" onClick={() => bulkAction("activate")} disabled={bulkLoading}
-              className="h-8 rounded-xl border-emerald-500/30 text-emerald-600 hover:bg-emerald-500/10 font-bold text-xs px-3">
-              <UserCheck className="h-3.5 w-3.5 mr-1.5" /> Activate
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => bulkAction("suspend")} disabled={bulkLoading}
-              className="h-8 rounded-xl border-amber-500/30 text-amber-600 hover:bg-amber-500/10 font-bold text-xs px-3">
-              <UserX className="h-3.5 w-3.5 mr-1.5" /> Suspend
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => bulkAction("delete")} disabled={bulkLoading}
-              className="h-8 rounded-xl border-destructive/30 text-destructive hover:bg-destructive/10 font-bold text-xs px-3">
-              <Trash2 className="h-3.5 w-3.5 mr-1.5" /> Delete
-            </Button>
-            <button onClick={() => setSelectedIds(new Set())} className="text-xs font-black text-muted-foreground hover:text-foreground ml-1">✕ Deselect</button>
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 duration-500">
+          <div className="flex items-center gap-6 px-8 py-4 rounded-[32px] bg-foreground text-background shadow-2xl backdrop-blur-2xl ring-1 ring-white/10">
+            <div className="flex items-center gap-3 pr-6 border-r border-background/20">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-black text-sm">
+                {selectedIds.size}
+              </div>
+              <span className="text-sm font-black tracking-wide">Selected</span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="ghost" onClick={() => bulkAction("activate")} disabled={bulkLoading}
+                className="hover:bg-emerald-500/20 hover:text-emerald-400 text-emerald-500 transition-colors rounded-xl px-4 font-bold text-xs h-10">
+                <CheckCircle2 className="h-4 w-4 mr-2" /> Activate
+              </Button>
+              <Button size="sm" variant="ghost" onClick={() => bulkAction("suspend")} disabled={bulkLoading}
+                className="hover:bg-amber-500/20 hover:text-amber-400 text-amber-500 transition-colors rounded-xl px-4 font-bold text-xs h-10">
+                <UserX className="h-4 w-4 mr-2" /> Suspend
+              </Button>
+              <Button size="sm" variant="ghost" onClick={() => bulkAction("delete")} disabled={bulkLoading}
+                className="hover:bg-destructive/20 hover:text-destructive-foreground text-destructive transition-colors rounded-xl px-4 font-bold text-xs h-10">
+                <Trash2 className="h-4 w-4 mr-2" /> Delete
+              </Button>
+            </div>
+            
+            <button onClick={() => setSelectedIds(new Set())} className="ml-4 p-2 rounded-full hover:bg-background/20 transition-colors text-muted-foreground hover:text-background">
+              <X className="h-4 w-4" />
+            </button>
           </div>
         </div>
       )}
 
-      {/* Table */}
-      <div className="rounded-[28px] border border-border/40 bg-card/40 backdrop-blur-xl shadow-xl shadow-black/5 overflow-hidden">
+      {/* ── Premium Data Table ── */}
+      <div className="rounded-[32px] border border-border/50 bg-card/30 backdrop-blur-xl shadow-2xl shadow-black/5 overflow-hidden relative z-10">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-muted/20 border-b border-border/30">
+            <thead className="bg-muted/30 border-b border-border/40">
               <tr>
-                <th className="w-12 px-4 py-4">
-                  <input type="checkbox" checked={allSelected} onChange={toggleSelectAll}
-                    className="h-4 w-4 rounded accent-primary cursor-pointer" />
+                <th className="w-16 px-6 py-5">
+                  <div className="flex items-center justify-center">
+                    <div
+                      onClick={toggleSelectAll}
+                      className={cn(
+                        "h-5 w-5 rounded-md flex items-center justify-center cursor-pointer transition-all hover:scale-110",
+                        allSelected ? "bg-primary border border-primary shadow-md shadow-primary/20 text-white" : "border-2 border-muted-foreground/30 bg-background"
+                      )}
+                    >
+                      {allSelected && <CheckCircle2 className="h-3.5 w-3.5" />}
+                    </div>
+                  </div>
                 </th>
-                <th className="px-4 py-4 text-left text-[10px] font-black uppercase tracking-widest text-muted-foreground/70">User</th>
-                <th className="px-4 py-4 text-left text-[10px] font-black uppercase tracking-widest text-muted-foreground/70 hidden md:table-cell">Contact</th>
-                <th className="px-4 py-4 text-left text-[10px] font-black uppercase tracking-widest text-muted-foreground/70 hidden lg:table-cell">Location</th>
-                <th className="px-4 py-4 text-left text-[10px] font-black uppercase tracking-widest text-muted-foreground/70">Role</th>
-                <th className="px-4 py-4 text-left text-[10px] font-black uppercase tracking-widest text-muted-foreground/70 hidden sm:table-cell">Plan</th>
-                <th className="px-4 py-4 text-center text-[10px] font-black uppercase tracking-widest text-muted-foreground/70">Status</th>
-                <th className="px-4 py-4 text-right text-[10px] font-black uppercase tracking-widest text-muted-foreground/70">Actions</th>
+                <th className="px-6 py-5 text-left text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60">User</th>
+                <th className="px-6 py-5 text-left text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60 hidden lg:table-cell">Contact</th>
+                <th className="px-6 py-5 text-left text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60 hidden xl:table-cell">Location</th>
+                <th className="px-6 py-5 text-left text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60">Role</th>
+                <th className="px-6 py-5 text-left text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60 hidden md:table-cell">Plan</th>
+                <th className="px-6 py-5 text-center text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60">Status</th>
+                <th className="px-6 py-5 text-right text-[11px] font-[900] uppercase tracking-[0.2em] text-muted-foreground/60">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/10">
+            <tbody className="divide-y divide-border/30">
               {loading ? (
                 <tr>
-                  <td colSpan={8} className="py-16 text-center">
-                    <Loader2 className="h-7 w-7 animate-spin mx-auto text-primary/40" />
-                    <p className="mt-3 text-sm font-bold text-muted-foreground/60">Loading users…</p>
+                  <td colSpan={8} className="py-24 text-center">
+                    <Loader2 className="h-10 w-10 animate-spin mx-auto text-primary" />
+                    <p className="mt-4 text-sm font-black text-foreground">Syncing Database…</p>
+                    <p className="text-xs font-medium text-muted-foreground mt-1">Fetching latest user records</p>
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-16 text-center">
-                    <div className="mx-auto h-14 w-14 rounded-2xl bg-muted/30 flex items-center justify-center mb-4">
-                      <Users className="h-7 w-7 text-muted-foreground/30" />
+                  <td colSpan={8} className="py-24 text-center">
+                    <div className="mx-auto h-20 w-20 rounded-full bg-muted/50 flex items-center justify-center mb-5 ring-8 ring-background/50">
+                      <Users className="h-8 w-8 text-muted-foreground/40" />
                     </div>
-                    <p className="text-base font-black text-foreground">No users found</p>
-                    <p className="text-xs font-medium text-muted-foreground mt-1">
+                    <p className="text-xl font-black text-foreground">No users found</p>
+                    <p className="text-sm font-medium text-muted-foreground mt-2 max-w-sm mx-auto leading-relaxed">
                       {search || roleFilter !== "all" || statusFilter !== "all"
-                        ? "No users match the current filters."
-                        : "Add your first user to get started."}
+                        ? "Try adjusting your search query or removing some filters to see more results."
+                        : "Your database is empty. Add your first user to get started."}
                     </p>
                     {(search || roleFilter !== "all" || statusFilter !== "all") && (
-                      <button onClick={() => { setSearch(""); setRoleFilter("all"); setStatusFilter("all"); }}
-                        className="mt-3 text-xs font-black text-primary hover:underline">
+                      <Button onClick={() => { setSearch(""); setRoleFilter("all"); setStatusFilter("all"); }}
+                        variant="outline" className="mt-6 rounded-xl border-border/50 font-bold px-6">
                         Clear all filters
-                      </button>
+                      </Button>
                     )}
                   </td>
                 </tr>
               ) : (
-                filtered.map((u) => (
-                  <tr key={u._id} className={cn("group transition-colors hover:bg-primary/[0.02]", selectedIds.has(u._id) && "bg-primary/5")}>
-                    <td className="px-4 py-3.5">
-                      <input type="checkbox" checked={selectedIds.has(u._id)} onChange={() => toggleSelect(u._id)}
-                        className="h-4 w-4 rounded accent-primary cursor-pointer" />
-                    </td>
-
-                    <td className="px-4 py-3.5">
-                      <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 flex-shrink-0 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black text-sm uppercase">
-                          {u.name?.charAt(0) || "?"}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-sm font-black text-foreground truncate">{u.name}</p>
-                          <p className="text-[11px] font-medium text-muted-foreground mt-0.5 truncate max-w-[180px]">{u.email}</p>
+                filtered.map((u, idx) => (
+                  <tr key={u._id} 
+                    className={cn(
+                      "group transition-all duration-300 hover:bg-background/80 relative", 
+                      selectedIds.has(u._id) && "bg-primary/[0.03] hover:bg-primary/[0.05]"
+                    )}
+                  >
+                    {/* Active row indicator */}
+                    <td className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-emerald-400 scale-y-0 group-hover:scale-y-100 transition-transform origin-center duration-300 rounded-r-full" />
+                    
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-center">
+                        <div
+                          onClick={() => toggleSelect(u._id)}
+                          className={cn(
+                            "h-5 w-5 rounded-md flex items-center justify-center cursor-pointer transition-all hover:scale-110",
+                            selectedIds.has(u._id) ? "bg-primary border border-primary text-white" : "border-2 border-muted-foreground/30 bg-background"
+                          )}
+                        >
+                          {selectedIds.has(u._id) && <CheckCircle2 className="h-3.5 w-3.5" />}
                         </div>
                       </div>
                     </td>
 
-                    <td className="px-4 py-3.5 hidden md:table-cell">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-4">
+                        <div className={cn(
+                          "h-12 w-12 flex-shrink-0 rounded-2xl flex items-center justify-center font-[1000] text-lg shadow-inner",
+                          u.role === UserRole.ADMIN 
+                            ? "bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-amber-500/20" 
+                            : "bg-gradient-to-br from-primary/80 to-emerald-500 text-white shadow-primary/20"
+                        )}>
+                          {u.name?.charAt(0)?.toUpperCase() || "?"}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-black text-foreground truncate group-hover:text-primary transition-colors">{u.name}</p>
+                          <p className="text-xs font-semibold text-muted-foreground mt-0.5 truncate max-w-[200px]">{u.email}</p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="px-6 py-4 hidden lg:table-cell">
                       {u.mobile ? (
-                        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
-                          <Phone className="h-3.5 w-3.5 text-primary/50" />
+                        <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">
+                          <div className="p-1.5 rounded-lg bg-muted/50 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                            <Phone className="h-3.5 w-3.5" />
+                          </div>
                           {u.mobileCode} {u.mobile}
-                        </span>
-                      ) : <span className="text-[11px] text-muted-foreground/30 font-bold">—</span>}
+                        </div>
+                      ) : <span className="text-xs text-muted-foreground/30 font-bold">—</span>}
                     </td>
 
-                    <td className="px-4 py-3.5 hidden lg:table-cell">
+                    <td className="px-6 py-4 hidden xl:table-cell">
                       {u.cityId?.name || u.stateId?.name ? (
-                        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
-                          <MapPin className="h-3.5 w-3.5 text-primary/50" />
-                          {[u.cityId?.name, u.stateId?.name].filter(Boolean).join(", ")}
-                        </span>
-                      ) : <span className="text-[11px] text-muted-foreground/30 font-bold">—</span>}
+                        <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">
+                          <div className="p-1.5 rounded-lg bg-muted/50 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                            <MapPin className="h-3.5 w-3.5" />
+                          </div>
+                          <span className="truncate max-w-[150px]">
+                            {[u.cityId?.name, u.stateId?.name].filter(Boolean).join(", ")}
+                          </span>
+                        </div>
+                      ) : <span className="text-xs text-muted-foreground/30 font-bold">—</span>}
                     </td>
 
-                    <td className="px-4 py-3.5"><RoleBadge role={u.role} /></td>
+                    <td className="px-6 py-4">
+                      <div className="inline-flex scale-95 origin-left">
+                        <RoleBadge role={u.role} />
+                      </div>
+                    </td>
 
-                    <td className="px-4 py-3.5 hidden sm:table-cell">
+                    <td className="px-6 py-4 hidden md:table-cell">
                       {u.planId ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-violet-500/10 text-violet-600 font-bold text-[11px]">
-                          <Crown className="h-3 w-3" />{u.planId.name}
-                        </span>
-                      ) : <span className="text-[11px] font-bold text-muted-foreground/30">No Plan</span>}
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 border border-violet-500/20 text-violet-600 dark:text-violet-400 font-bold text-xs shadow-sm shadow-violet-500/5">
+                          <Crown className="h-3.5 w-3.5" />
+                          {u.planId.name}
+                        </div>
+                      ) : <span className="text-[11px] font-bold text-muted-foreground/40 bg-muted/30 px-2.5 py-1 rounded-lg">Free / Basic</span>}
                     </td>
 
-                    <td className="px-4 py-3.5 text-center">
+                    <td className="px-6 py-4 text-center">
                       <button onClick={() => toggleStatus(u._id, u.isActive)}
                         className={cn(
-                          "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl font-bold text-[11px] transition-all hover:scale-105 cursor-pointer",
-                          u.isActive ? "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20" : "bg-red-500/10 text-red-500 hover:bg-red-500/20"
+                          "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-xs transition-all duration-300 hover:scale-105 hover:shadow-md",
+                          u.isActive 
+                            ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 hover:bg-emerald-500 hover:text-white" 
+                            : "bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white"
                         )}>
                         {u.isActive ? <><CheckCircle2 className="h-3.5 w-3.5" /> Active</> : <><Ban className="h-3.5 w-3.5" /> Suspended</>}
                       </button>
                     </td>
 
-                    <td className="px-4 py-3.5 text-right">
-                      <div className="flex items-center justify-end gap-1 opacity-50 group-hover:opacity-100 transition-opacity">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity duration-300">
                         <Link href={`${AppRoutes.ADMIN_USERS_EDIT}/${u._id}`}>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-xl hover:bg-blue-500/10 hover:text-blue-500">
-                            <Edit className="h-3.5 w-3.5" />
+                          <Button variant="outline" size="icon" className="h-9 w-9 rounded-xl border-border/50 hover:bg-blue-500 hover:text-white hover:border-blue-500 transition-all shadow-sm">
+                            <Edit className="h-4 w-4" />
                           </Button>
                         </Link>
-                        <Button variant="ghost" size="icon" onClick={() => toggleStatus(u._id, u.isActive)}
-                          className={cn("h-8 w-8 rounded-xl", u.isActive ? "hover:bg-amber-500/10 hover:text-amber-500" : "hover:bg-emerald-500/10 hover:text-emerald-500")}>
-                          {u.isActive ? <ShieldAlert className="h-3.5 w-3.5" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
+                        <Button variant="outline" size="icon" onClick={() => toggleStatus(u._id, u.isActive)}
+                          className={cn("h-9 w-9 rounded-xl border-border/50 transition-all shadow-sm", 
+                            u.isActive 
+                              ? "hover:bg-amber-500 hover:text-white hover:border-amber-500" 
+                              : "hover:bg-emerald-500 hover:text-white hover:border-emerald-500")}>
+                          {u.isActive ? <ShieldAlert className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4" />}
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => deleteUser(u._id)}
-                          className="h-8 w-8 rounded-xl hover:bg-destructive/10 hover:text-destructive">
-                          <Trash2 className="h-3.5 w-3.5" />
+                        <Button variant="outline" size="icon" onClick={() => deleteUser(u._id)}
+                          className="h-9 w-9 rounded-xl border-border/50 hover:bg-destructive hover:text-white hover:border-destructive transition-all shadow-sm">
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </td>
@@ -366,20 +472,12 @@ export default function AdminUsersPage() {
           </table>
         </div>
 
-        {/* Footer count */}
-        {!loading && (
-          <div className="border-t border-border/20 px-6 py-3 flex items-center justify-between bg-muted/10">
-            <p className="text-xs font-bold text-muted-foreground">
-              {filtered.length === allUsers.length
-                ? <><span className="text-foreground">{allUsers.length}</span> total users</>
-                : <><span className="text-foreground">{filtered.length}</span> of {allUsers.length} users</>}
-              {selectedIds.size > 0 && <> · <span className="text-primary">{selectedIds.size} selected</span></>}
+        {/* 📄 PAGINATION FOOTER */}
+        {!loading && filtered.length > 0 && (
+          <div className="border-t border-border/30 bg-muted/20 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+              Showing <span className="text-foreground font-black">{filtered.length}</span> of <span className="text-foreground font-black">{allUsers.length}</span> Results
             </p>
-            {selectedIds.size > 0 && (
-              <button onClick={() => setSelectedIds(new Set())} className="text-xs font-black text-muted-foreground hover:text-foreground">
-                Clear selection
-              </button>
-            )}
           </div>
         )}
       </div>
