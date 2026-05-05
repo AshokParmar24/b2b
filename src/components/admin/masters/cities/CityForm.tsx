@@ -17,18 +17,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CountrySelect } from "@/components/common/CountrySelect";
+import { StateSelect } from "@/components/common/StateSelect";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { AppRoutes } from "@/lib/routes";
 import { api } from "@/lib/api";
 import { API_ENDPOINTS } from "@/lib/api-endpoints";
 import { toast } from "react-hot-toast";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
 const citySchema = yup.object({
@@ -54,8 +48,6 @@ interface CityFormProps {
 export function CityForm({ initialData, isEdit = false }: CityFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [states, setStates] = useState<any[]>([]);
-  const [loadingStates, setLoadingStates] = useState(false);
 
   const {
     register,
@@ -75,21 +67,6 @@ export function CityForm({ initialData, isEdit = false }: CityFormProps) {
   });
 
   const selectedCountryId = watch("countryId");
-
-  // Fetch states when country changes
-  useEffect(() => {
-    if (!selectedCountryId) {
-      setStates([]);
-      return;
-    }
-    setLoadingStates(true);
-    api.get<any>(`/api/masters/states?countryId=${selectedCountryId}&status=active&limit=200`)
-      .then((res) => {
-        setStates(Array.isArray(res) ? res : res.data || []);
-      })
-      .catch(() => setStates([]))
-      .finally(() => setLoadingStates(false));
-  }, [selectedCountryId]);
 
   const onSubmit = async (data: CityFormData) => {
     setIsSubmitting(true);
@@ -171,57 +148,15 @@ export function CityForm({ initialData, isEdit = false }: CityFormProps) {
                     name="stateId"
                     control={control}
                     render={({ field }) => (
-                      <div className="space-y-2">
-                        <label className="text-xs font-black uppercase tracking-widest text-muted-foreground/60">
-                          Parent State <span className="text-destructive">*</span>
-                        </label>
-                        <Select
-                          value={field.value}
-                          onValueChange={field.onChange}
-                          disabled={!selectedCountryId || loadingStates}
-                        >
-                          <SelectTrigger
-                            className={cn(
-                              "h-14 rounded-2xl bg-muted/20 border-border/50 font-bold text-base transition-all",
-                              "focus:bg-background focus:ring-4 focus:ring-primary/5",
-                              !selectedCountryId && "opacity-50 cursor-not-allowed",
-                              errors.stateId && "border-destructive/60 focus:ring-destructive/5"
-                            )}
-                          >
-                            <SelectValue
-                              placeholder={
-                                loadingStates ? "Loading states..." :
-                                !selectedCountryId ? "Select a country first" :
-                                "Select parent state"
-                              }
-                            />
-                          </SelectTrigger>
-                          <SelectContent className="rounded-3xl border-border/40 bg-card/95 backdrop-blur-3xl p-2 shadow-2xl max-h-[280px]">
-                            {states.length === 0 && !loadingStates && (
-                              <div className="py-6 text-center text-xs font-bold text-muted-foreground/50">
-                                No states found for selected country
-                              </div>
-                            )}
-                            {states.map((s) => (
-                              <SelectItem
-                                key={s._id}
-                                value={s._id}
-                                className="rounded-2xl font-bold text-sm py-3 px-4 focus:bg-primary focus:text-primary-foreground transition-colors cursor-pointer"
-                              >
-                                {s.name}
-                                {s.code && (
-                                  <span className="ml-2 text-[10px] text-muted-foreground/50 font-black uppercase tracking-widest">
-                                    {s.code}
-                                  </span>
-                                )}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        {errors.stateId && (
-                          <p className="text-xs font-bold text-destructive mt-1">{errors.stateId.message}</p>
-                        )}
-                      </div>
+                      <StateSelect
+                        label="Parent State"
+                        countryId={selectedCountryId}
+                        value={field.value}
+                        onChange={field.onChange}
+                        variant="premium"
+                        placeholder="Select parent state"
+                        error={errors.stateId?.message}
+                      />
                     )}
                   />
 

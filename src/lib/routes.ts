@@ -7,6 +7,8 @@ export enum AppRoutes {
   HOME = "/",               // Main landing page & hero section
   LOGIN = "/login",         // User authentication - Sign In
   REGISTER = "/register",   // New user onboarding - Sign Up
+  FORGOT_PASSWORD = "/forgot-password",
+  RESET_PASSWORD = "/reset-password",
   PLANS = "/plans",         // Public subscription tiers & pricing
   BUSINESSES = "/businesses",// Public business directory search
 

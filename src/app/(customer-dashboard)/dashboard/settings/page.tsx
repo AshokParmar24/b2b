@@ -25,11 +25,14 @@ import {
   Building2,
   Calendar,
   Zap,
-  Bell
+  Bell,
+  FileText,
+  Download
 } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { BillingHistory } from "@/components/dashboard/settings/BillingHistory";
 
 export default async function CustomerSettingsPage() {
   const session = await getServerSession(authOptions);
@@ -227,6 +230,9 @@ export default async function CustomerSettingsPage() {
               </div>
             </div>
           </div>
+
+          {/* Billing & Invoices */}
+          <BillingHistory plan={plan} planStartDate={user?.planStartDate} />
 
           {/* Quick Platform Stats */}
           <div className="premium-card p-8 space-y-6">

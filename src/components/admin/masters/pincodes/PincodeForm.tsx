@@ -23,13 +23,8 @@ import { AppRoutes } from "@/lib/routes";
 import { api } from "@/lib/api";
 import { API_ENDPOINTS } from "@/lib/api-endpoints";
 import { toast } from "react-hot-toast";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { StateSelect } from "@/components/common/StateSelect";
+import { CitySelect } from "@/components/common/CitySelect";
 import { cn } from "@/lib/utils";
 
 const pincodeFormSchema = yup.object({
@@ -63,10 +58,6 @@ interface PincodeFormProps {
 export function PincodeForm({ initialData, isEdit = false }: PincodeFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [states, setStates] = useState<any[]>([]);
-  const [cities, setCities] = useState<any[]>([]);
-  const [loadingStates, setLoadingStates] = useState(false);
-  const [loadingCities, setLoadingCities] = useState(false);
 
   const {
     register,
@@ -89,32 +80,6 @@ export function PincodeForm({ initialData, isEdit = false }: PincodeFormProps) {
 
   const selectedCountryId = watch("countryId");
   const selectedStateId = watch("stateId");
-
-  // Fetch states when country changes
-  useEffect(() => {
-    if (!selectedCountryId) {
-      setStates([]);
-      return;
-    }
-    setLoadingStates(true);
-    api.get<any>(`/api/masters/states?countryId=${selectedCountryId}&status=active&limit=200`)
-      .then((res) => setStates(Array.isArray(res) ? res : res.data || []))
-      .catch(() => setStates([]))
-      .finally(() => setLoadingStates(false));
-  }, [selectedCountryId]);
-
-  // Fetch cities when state changes
-  useEffect(() => {
-    if (!selectedStateId) {
-      setCities([]);
-      return;
-    }
-    setLoadingCities(true);
-    api.get<any>(`/api/masters/cities?stateId=${selectedStateId}&status=active&limit=200`)
-      .then((res) => setCities(Array.isArray(res) ? res : res.data || []))
-      .catch(() => setCities([]))
-      .finally(() => setLoadingCities(false));
-  }, [selectedStateId]);
 
   const onSubmit = async (data: PincodeFormData) => {
     setIsSubmitting(true);
@@ -150,64 +115,42 @@ export function PincodeForm({ initialData, isEdit = false }: PincodeFormProps) {
   };
 
   const stateSelectContent = (
-    <div className="space-y-2">
-      <label className="text-xs font-black uppercase tracking-widest text-muted-foreground/60">
-        Parent State <span className="text-destructive">*</span>
-      </label>
-      <Select
-        value={watch("stateId")}
-        onValueChange={(val) => { setValue("stateId", val as string); setValue("cityId", ""); }}
-        disabled={!selectedCountryId || loadingStates}
-      >
-        <SelectTrigger className={cn(
-          "h-14 rounded-2xl bg-muted/20 border-border/50 font-bold text-base transition-all focus:bg-background focus:ring-4 focus:ring-primary/5",
-          (!selectedCountryId) && "opacity-50",
-          errors.stateId && "border-destructive/60"
-        )}>
-          <SelectValue placeholder={loadingStates ? "Loading states..." : !selectedCountryId ? "Select country first" : "Select parent state"} />
-        </SelectTrigger>
-        <SelectContent className="rounded-3xl border-border/40 bg-card/95 backdrop-blur-3xl p-2 shadow-2xl max-h-[280px]">
-          {states.map((s) => (
-            <SelectItem key={s._id} value={s._id} className="rounded-2xl font-bold text-sm py-3 px-4 focus:bg-primary focus:text-primary-foreground cursor-pointer">
-              {s.name} {s.code && <span className="ml-1 text-[10px] text-muted-foreground/50 font-black uppercase">{s.code}</span>}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {errors.stateId && <p className="text-xs font-bold text-destructive">{errors.stateId.message}</p>}
-    </div>
+    <Controller
+      name="stateId"
+      control={control}
+      render={({ field }) => (
+        <StateSelect
+          label="Parent State"
+          countryId={selectedCountryId}
+          value={field.value}
+          onChange={(val) => {
+            field.onChange(val);
+            setValue("cityId", "");
+          }}
+          variant="premium"
+          placeholder="Select parent state"
+          error={errors.stateId?.message}
+        />
+      )}
+    />
   );
 
   const citySelectContent = (
-    <div className="space-y-2">
-      <label className="text-xs font-black uppercase tracking-widest text-muted-foreground/60">
-        Parent City <span className="text-destructive">*</span>
-      </label>
-      <Select
-        value={watch("cityId")}
-        onValueChange={(val) => setValue("cityId", val as string)}
-        disabled={!selectedStateId || loadingCities}
-      >
-        <SelectTrigger className={cn(
-          "h-14 rounded-2xl bg-muted/20 border-border/50 font-bold text-base transition-all focus:bg-background focus:ring-4 focus:ring-primary/5",
-          (!selectedStateId) && "opacity-50",
-          errors.cityId && "border-destructive/60"
-        )}>
-          <SelectValue placeholder={loadingCities ? "Loading cities..." : !selectedStateId ? "Select state first" : "Select parent city"} />
-        </SelectTrigger>
-        <SelectContent className="rounded-3xl border-border/40 bg-card/95 backdrop-blur-3xl p-2 shadow-2xl max-h-[280px]">
-          {cities.length === 0 && !loadingCities && (
-            <div className="py-6 text-center text-xs font-bold text-muted-foreground/50">No cities found</div>
-          )}
-          {cities.map((c) => (
-            <SelectItem key={c._id} value={c._id} className="rounded-2xl font-bold text-sm py-3 px-4 focus:bg-primary focus:text-primary-foreground cursor-pointer">
-              {c.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {errors.cityId && <p className="text-xs font-bold text-destructive">{errors.cityId.message}</p>}
-    </div>
+    <Controller
+      name="cityId"
+      control={control}
+      render={({ field }) => (
+        <CitySelect
+          label="Parent City"
+          stateId={selectedStateId}
+          value={field.value}
+          onChange={field.onChange}
+          variant="premium"
+          placeholder="Select parent city"
+          error={errors.cityId?.message}
+        />
+      )}
+    />
   );
 
   return (

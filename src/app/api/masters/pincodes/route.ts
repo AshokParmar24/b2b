@@ -67,8 +67,8 @@ export async function GET(req: Request) {
       .limit(limit)
       .lean(),
     Pincode.countDocuments(query),
-    Pincode.countDocuments({ isActive: true, ...(cityId ? { cityId } : {}) }),
-    Pincode.countDocuments({ isActive: false, ...(cityId ? { cityId } : {}) })
+    Pincode.countDocuments({ ...query, isActive: true }),
+    Pincode.countDocuments({ ...query, isActive: false })
   ]);
     
   const formattedPincodes = pincodes.map((p: any) => ({

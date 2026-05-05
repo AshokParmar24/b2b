@@ -618,10 +618,9 @@ export function GenericMasterList({
                       selectedIds.includes(item._id) && "bg-primary/[0.03] hover:bg-primary/[0.05]"
                     )}
                   >
-                    {/* Active row indicator */}
-                    <td className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-emerald-400 scale-y-0 group-hover:scale-y-100 transition-transform origin-center duration-300 rounded-r-full" />
-                    
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 relative">
+                      {/* Active row indicator */}
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-emerald-400 scale-y-0 group-hover:scale-y-100 transition-transform origin-center duration-300 rounded-r-full" />
                       <div className="flex items-center justify-center">
                         <div
                           onClick={() => toggleSelect(item._id)}

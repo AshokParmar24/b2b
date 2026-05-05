@@ -18,6 +18,8 @@ const UserSchema = new Schema<User & Document>(
     planStartDate: { type: Date, default: null },
     planEndDate: { type: Date, default: null },
     isActive: { type: Boolean, default: true },
+    resetPasswordToken: { type: String, default: null },
+    resetPasswordExpires: { type: Date, default: null },
   },
   { timestamps: true }
 );
