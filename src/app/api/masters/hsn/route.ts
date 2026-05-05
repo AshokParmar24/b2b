@@ -6,17 +6,25 @@ import { hsnSchema } from "@/lib/validations/masters";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const q = searchParams.get("q") || "";
+  const search = searchParams.get("search") || searchParams.get("q") || "";
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "20");
   const isExport = searchParams.get("export") === "true";
+  const statusParam = searchParams.get("status");
 
   await dbConnect();
 
-  const query: any = q ? {
-    $or: [
-      { code: { $regex: q, $options: "i" } },
-      { description: { $regex: q, $options: "i" } },
-    ],
-  } : { isActive: true };
+  const query: any = {};
+
+  if (search) {
+    query.$or = [
+      { code: { $regex: search, $options: "i" } },
+      { description: { $regex: search, $options: "i" } },
+    ];
+  }
+
+  if (statusParam === "active") query.isActive = true;
+  else if (statusParam === "archived") query.isActive = false;
 
   // If export mode, fetch all
   if (isExport) {
@@ -24,10 +32,26 @@ export async function GET(req: Request) {
     return NextResponse.json(allRecords);
   }
 
-  const hsns = await HsnCode.find(query)
-    .limit(20)
-    .lean();
-  return NextResponse.json({ data: hsns });
+  const [hsns, total] = await Promise.all([
+    HsnCode.find(query)
+      .sort({ code: 1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean(),
+    HsnCode.countDocuments(query)
+  ]);
+
+  const activeCount = await HsnCode.countDocuments({ ...query, isActive: true });
+  const archivedCount = total - activeCount;
+
+  return NextResponse.json({ 
+    data: hsns,
+    total,
+    page,
+    totalPages: Math.ceil(total / limit),
+    activeCount,
+    archivedCount
+  });
 }
 
 export async function POST(req: Request) {

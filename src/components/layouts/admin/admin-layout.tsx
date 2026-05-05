@@ -14,6 +14,7 @@ import {
     Milestone,
     Hash,
     BarChart3,
+    Tag,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -37,6 +38,7 @@ const adminNav = [
             { href: "/admin/masters/states", label: "States", icon: Map },
             { href: "/admin/masters/cities", label: "Cities", icon: Milestone },
             { href: "/admin/masters/pincodes", label: "Pincodes", icon: Hash },
+            { href: AppRoutes.ADMIN_MASTERS_HSN, label: "HSN Codes", icon: Tag },
         ]
     },
     { href: "/admin/reports", label: "Reports", icon: BarChart3 },

@@ -44,4 +44,8 @@ export enum AppRoutes {
   ADMIN_MASTERS_PINCODES = "/admin/masters/pincodes",
   ADMIN_MASTERS_PINCODES_ADD = "/admin/masters/pincodes/add",
   ADMIN_MASTERS_PINCODES_EDIT = "/admin/masters/pincodes/edit",
+
+  ADMIN_MASTERS_HSN = "/admin/masters/hsn",
+  ADMIN_MASTERS_HSN_ADD = "/admin/masters/hsn/add",
+  ADMIN_MASTERS_HSN_EDIT = "/admin/masters/hsn/edit",
 }

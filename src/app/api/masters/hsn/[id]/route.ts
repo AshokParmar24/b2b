@@ -29,6 +29,12 @@ export async function PUT(
     const { id } = await params;
     const body = await req.json();
 
+    // Partial update for isActive toggle
+    if (Object.keys(body).length === 1 && body.isActive !== undefined) {
+      const hsn = await HsnCode.findByIdAndUpdate(id, { isActive: body.isActive }, { new: true });
+      return NextResponse.json(hsn);
+    }
+
     const validation = hsnSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json({ error: "Validation failed", details: validation.error.format() }, { status: 400 });
