@@ -34,7 +34,7 @@ export async function GET(req: Request) {
     Business.countDocuments(filter),
   ]);
 
-  return NextResponse.json({ businesses, total, page, totalPages: Math.ceil(total / limit) });
+  return NextResponse.json({ data: businesses, total, page, totalPages: Math.ceil(total / limit) });
 }
 
 export async function POST(req: Request) {
@@ -72,4 +72,33 @@ export async function POST(req: Request) {
   const business = await Business.create({ ...body, slug, userId });
 
   return NextResponse.json(business, { status: 201 });
+}
+
+export async function PATCH(req: Request) {
+  try {
+    await dbConnect();
+    const body = await req.json();
+    const { ids, isActive, action } = body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return NextResponse.json({ error: "No businesses selected" }, { status: 400 });
+    }
+
+    if (isActive !== undefined) {
+      await Business.updateMany({ _id: { $in: ids } }, { $set: { isActive } });
+    } else if (action === 'archive') {
+      await Business.updateMany({ _id: { $in: ids } }, { $set: { isActive: false } });
+    } else if (action === 'restore') {
+      await Business.updateMany({ _id: { $in: ids } }, { $set: { isActive: true } });
+    } else if (action === 'delete') {
+      await Business.deleteMany({ _id: { $in: ids } });
+    } else {
+      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+    }
+
+    return NextResponse.json({ message: `Successfully processed ${ids.length} businesses` });
+  } catch (error: any) {
+    console.error("[PATCH /api/businesses] Error:", error.message);
+    return NextResponse.json({ error: "Failed to process bulk action" }, { status: 500 });
+  }
 }
