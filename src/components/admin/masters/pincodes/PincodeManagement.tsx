@@ -32,6 +32,7 @@ export function PincodeManagement() {
     { 
       key: "area", 
       label: "Area Name",
+      hideOnMobile: true,
       render: (value: string) => (
         <span className="font-bold text-foreground text-sm tracking-tight">{value}</span>
       )
@@ -48,6 +49,7 @@ export function PincodeManagement() {
     { 
       key: "isActive", 
       label: "Status",
+      hideOnMobile: true,
       render: (value: boolean) => (
         value ? (
           <div className="inline-flex items-center justify-center px-3 py-1.5 rounded-full font-black text-[11px] uppercase tracking-wider transition-all duration-300 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">

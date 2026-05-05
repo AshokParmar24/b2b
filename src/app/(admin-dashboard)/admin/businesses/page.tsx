@@ -88,79 +88,52 @@ export default async function AdminBusinessesPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* SIDEBAR FILTER */}
-        <aside className="w-full lg:w-72 shrink-0">
-          <div className="sticky top-24 rounded-[32px] border border-border/50 bg-card/40 backdrop-blur-xl p-6 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)]">
-            <div className="flex items-center gap-2 mb-6 text-foreground font-black">
-              <SlidersHorizontal className="h-5 w-5 text-primary" />
-              Refine Results
-            </div>
-            
-            <form method="GET" action="/admin/businesses" className="space-y-5">
-              <div>
-                <label className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-2 block ml-1">
-                  Search Keyword
-                </label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <input 
-                    name="q" 
-                    defaultValue={q} 
-                    placeholder="Name, GST, Owner..." 
-                    className="w-full pl-9 pr-4 py-3 rounded-2xl bg-muted/30 border-border/50 text-sm font-semibold focus:bg-background transition-colors outline-none focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-              </div>
+      <form method="GET" action="/admin/businesses" className="flex flex-col sm:flex-row flex-wrap gap-4 mb-8 bg-card/40 backdrop-blur-xl p-4 rounded-[28px] border border-border/50 shadow-sm">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <input 
+            name="q" 
+            defaultValue={q} 
+            placeholder="Name, GST, Owner..." 
+            className="w-full pl-11 pr-4 py-3 rounded-2xl bg-muted/30 border-border/50 text-sm font-semibold focus:bg-background transition-colors outline-none focus:ring-2 focus:ring-primary/20"
+          />
+        </div>
+        
+        <div className="relative w-full sm:w-48">
+          <Tag className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <input 
+            name="hsn" 
+            defaultValue={hsn} 
+            placeholder="HSN Code (e.g. 6908)" 
+            className="w-full pl-11 pr-4 py-3 rounded-2xl bg-muted/30 border-border/50 text-sm font-semibold focus:bg-background transition-colors outline-none focus:ring-2 focus:ring-primary/20"
+          />
+        </div>
 
-              <div>
-                <label className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-2 block ml-1">
-                  HSN Code
-                </label>
-                <div className="relative">
-                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <input 
-                    name="hsn" 
-                    defaultValue={hsn} 
-                    placeholder="e.g. 6908" 
-                    className="w-full pl-9 pr-4 py-3 rounded-2xl bg-muted/30 border-border/50 text-sm font-semibold focus:bg-background transition-colors outline-none focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-              </div>
+        <select 
+          name="status" 
+          defaultValue={status}
+          className="w-full sm:w-48 px-4 py-3 rounded-2xl bg-muted/30 border-border/50 text-sm font-semibold focus:bg-background transition-colors outline-none focus:ring-2 focus:ring-primary/20 appearance-none"
+        >
+          <option value="all">All Status</option>
+          <option value="active">Active</option>
+          <option value="archived">Archived</option>
+        </select>
 
-              <div>
-                <label className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-2 block ml-1">
-                  Status
-                </label>
-                <select 
-                  name="status" 
-                  defaultValue={status}
-                  className="w-full px-4 py-3 rounded-2xl bg-muted/30 border-border/50 text-sm font-semibold focus:bg-background transition-colors outline-none focus:ring-2 focus:ring-primary/20 appearance-none"
-                >
-                  <option value="all">All Listings</option>
-                  <option value="active">Active Only</option>
-                  <option value="archived">Archived</option>
-                </select>
-              </div>
+        <Button type="submit" className="h-12 px-8 rounded-2xl bg-primary text-primary-foreground font-black shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+          Search
+        </Button>
+        
+        {hasFilter && (
+          <Link href="/admin/businesses" className="flex items-center justify-center px-4">
+            <span className="text-xs font-bold text-muted-foreground hover:text-destructive transition-colors cursor-pointer flex items-center gap-1">
+              <XCircle className="h-4 w-4" /> Clear
+            </span>
+          </Link>
+        )}
+      </form>
 
-              <div className="pt-4 border-t border-border/30">
-                <Button type="submit" className="w-full h-12 rounded-2xl bg-primary text-primary-foreground font-black shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
-                  Apply Filters
-                </Button>
-                {hasFilter && (
-                  <Link href="/admin/businesses" className="block mt-3 text-center">
-                    <span className="text-xs font-bold text-muted-foreground hover:text-foreground transition-colors cursor-pointer flex items-center justify-center gap-1">
-                      <XCircle className="h-3.5 w-3.5" /> Clear All Filters
-                    </span>
-                  </Link>
-                )}
-              </div>
-            </form>
-          </div>
-        </aside>
-
-        {/* MAIN CONTENT - PRODUCT LIKE CARDS */}
-        <div className="flex-1 min-w-0">
+      {/* MAIN CONTENT - PRODUCT LIKE CARDS */}
+      <div className="w-full pb-10">
           {total > 0 && (
             <div className="mb-6 flex items-center justify-between text-sm font-bold text-muted-foreground">
               <p>Showing <span className="text-foreground">{total}</span> total records</p>
@@ -178,7 +151,7 @@ export default async function AdminBusinessesPage({ searchParams }: PageProps) {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="flex flex-col gap-5">
               {businesses.map((b: any, idx: number) => {
                 const firstImage = b.cardImages?.[0] || b.logoUrl || null;
                 const location = [b.cityId?.name, b.stateId?.name].filter(Boolean).join(", ");
@@ -187,15 +160,15 @@ export default async function AdminBusinessesPage({ searchParams }: PageProps) {
                 return (
                   <div 
                     key={b._id.toString()}
-                    className="group rounded-[28px] border border-border/40 bg-card/40 backdrop-blur-xl overflow-hidden hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 flex flex-col"
-                    style={{ animationDelay: `${idx * 50}ms` }}
+                    className="group rounded-[28px] border border-border/40 bg-card/40 backdrop-blur-xl overflow-hidden hover:bg-card/60 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 flex flex-col sm:flex-row"
+                    style={{ animationDelay: `${idx * 40}ms` }}
                   >
-                    {/* Header Image Area */}
-                    <div className="relative h-48 bg-muted/30 overflow-hidden flex items-center justify-center">
+                    {/* Left Image Area */}
+                    <div className="relative w-full sm:w-64 lg:w-72 h-56 sm:h-auto shrink-0 bg-muted/30 overflow-hidden flex items-center justify-center">
                       {firstImage ? (
                         <>
                           <img src={firstImage} alt={b.businessName} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent sm:bg-gradient-to-r sm:from-transparent sm:to-black/40" />
                         </>
                       ) : (
                         <Building2 className="h-16 w-16 text-muted-foreground/20" />
@@ -206,68 +179,71 @@ export default async function AdminBusinessesPage({ searchParams }: PageProps) {
                         <div className={cn(
                           "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md shadow-lg",
                           b.isActive 
-                            ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                            : "bg-destructive/20 text-red-300 border border-destructive/30"
+                            ? "bg-emerald-500 text-white shadow-emerald-500/20"
+                            : "bg-destructive text-white shadow-destructive/20"
                         )}>
                           {b.isActive ? <CheckCircle2 className="h-3 w-3" /> : <XCircle className="h-3 w-3" />}
                           {b.isActive ? "Active" : "Archived"}
                         </div>
                       </div>
+                    </div>
 
-                      {/* HSN Count Over Image */}
-                      <div className="absolute top-4 right-4">
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white text-[10px] font-black uppercase tracking-wider shadow-lg">
-                          <Tag className="h-3 w-3 text-primary" />
-                          {b.hsnCodes?.length || 0} HSN
-                        </div>
-                      </div>
-
-                      {/* Business Name Over Image */}
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <h3 className="text-xl font-black text-white truncate shadow-black/50 drop-shadow-md">
+                    {/* Middle: Details Area */}
+                    <div className="p-5 sm:p-6 lg:p-8 flex-1 flex flex-col justify-center border-b sm:border-b-0 sm:border-r border-border/30">
+                      <div className="mb-2">
+                        <h3 className="text-xl sm:text-2xl font-black text-foreground truncate group-hover:text-primary transition-colors">
                           {b.businessName}
                         </h3>
                         {b.gstNumber && (
-                          <p className="text-[10px] font-bold text-white/70 uppercase tracking-widest mt-0.5">
+                          <p className="text-[10px] font-bold text-muted-foreground/80 uppercase tracking-widest mt-1">
                             GST: {b.gstNumber}
                           </p>
                         )}
                       </div>
+
+                      <div className="space-y-2.5 mb-4">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground font-medium">
+                          <MapPin className="h-4 w-4 text-orange-400" />
+                          <span className="truncate">{location || "Global Business"}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground font-medium">
+                          <ShieldCheck className="h-4 w-4 text-primary" />
+                          <span className="truncate">{owner || "Unclaimed"}</span>
+                        </div>
+                      </div>
+                      
+                      {/* HSN Tags */}
+                      {b.hsnCodes?.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-auto">
+                          {b.hsnCodes.slice(0, 4).map((h: any) => (
+                            <span key={h.code} className="inline-flex items-center px-2.5 py-1 rounded-md bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-wider">
+                              <Tag className="h-3 w-3 mr-1 opacity-50" /> {h.code}
+                            </span>
+                          ))}
+                          {b.hsnCodes.length > 4 && (
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-muted border border-border/50 text-muted-foreground text-[10px] font-black uppercase tracking-wider">
+                              +{b.hsnCodes.length - 4} More
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
-
-                    {/* Card Body */}
-                    <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                          <div className="h-8 w-8 rounded-xl bg-muted/50 flex items-center justify-center shrink-0 text-primary">
-                            <MapPin className="h-4 w-4" />
-                          </div>
-                          <span className="font-semibold truncate">{location || "Global Business"}</span>
-                        </div>
-                        <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                          <div className="h-8 w-8 rounded-xl bg-muted/50 flex items-center justify-center shrink-0 text-primary">
-                            <ShieldCheck className="h-4 w-4" />
-                          </div>
-                          <span className="font-semibold truncate">{owner || "Unclaimed"}</span>
-                        </div>
+                    
+                    {/* Right: Actions Area */}
+                    <div className="p-5 sm:p-6 lg:p-8 w-full sm:w-56 lg:w-64 shrink-0 flex flex-col justify-center gap-3 bg-card/20">
+                      <div className="hidden sm:block mb-2 text-center">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 mb-1">Created</p>
+                        <p className="text-foreground font-bold text-sm">{new Date(b.createdAt).toLocaleDateString()}</p>
                       </div>
 
-                      {/* Card Footer Actions */}
-                      <div className="pt-4 border-t border-border/40 flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
-                          {new Date(b.createdAt).toLocaleDateString()}
-                        </span>
-                        <div className="flex gap-2">
-                          <Link href={`/admin/businesses/${b._id}`}>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-xl hover:bg-primary/10 hover:text-primary transition-colors">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                          </Link>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-xl hover:bg-destructive/10 hover:text-destructive transition-colors">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
+                      <Link href={`/admin/businesses/${b._id}`} className="w-full">
+                        <Button className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-black hover:scale-[1.02] transition-transform shadow-lg shadow-primary/20">
+                          <Edit className="h-4 w-4 mr-2" /> Edit Profile
+                        </Button>
+                      </Link>
+                      <Button variant="outline" className="w-full h-12 rounded-xl border-destructive/30 text-destructive hover:bg-destructive/10 hover:border-destructive hover:text-destructive font-black transition-all">
+                        <Trash2 className="h-4 w-4 mr-2" /> Delete
+                      </Button>
                     </div>
                   </div>
                 );

@@ -41,8 +41,8 @@ export default async function PublicBusinessesPage({ searchParams }: PageProps) 
   void Country; void State; void City; void Pincode;
 
   const filter: Record<string, any> = { isActive: true };
-  if (q)    filter.$text = { $search: q };
-  if (hsn)  filter["hsnCodes.code"] = { $regex: hsn, $options: "i" };
+  if (q) filter.$text = { $search: q };
+  if (hsn) filter["hsnCodes.code"] = { $regex: hsn, $options: "i" };
   if (city) filter.cityId = city;
 
   const [businesses, total] = await Promise.all([
@@ -171,65 +171,8 @@ export default async function PublicBusinessesPage({ searchParams }: PageProps) 
           )}
         </div>
 
-        {/* ── Content layout: sidebar + grid ── */}
-        <div className="flex gap-6 lg:gap-8 pb-20">
-
-          {/* ── Sidebar (desktop only) ── */}
-          <aside className="hidden lg:flex flex-col gap-4 w-64 xl:w-72 flex-shrink-0">
-            <div className="glass-card p-5 sticky top-24">
-              <h2 className="flex items-center gap-2 text-sm font-bold text-white mb-4">
-                <SlidersHorizontal className="w-4 h-4 text-purple-400" />
-                Refine Results
-              </h2>
-
-              <form method="GET" action="/businesses" className="flex flex-col gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
-                    Keyword
-                  </label>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
-                    <input
-                      name="q"
-                      defaultValue={q}
-                      placeholder="Business or owner name"
-                      className="input-dark w-full pl-9 pr-3 py-2.5 text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
-                    HSN Code
-                  </label>
-                  <input
-                    name="hsn"
-                    defaultValue={hsn}
-                    placeholder="e.g. 6908, 8484"
-                    className="input-dark w-full px-3 py-2.5 text-sm"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="btn-glow w-full py-2.5 rounded-xl text-sm font-bold mt-1"
-                >
-                  Apply Filters
-                </button>
-
-                {hasFilter && (
-                  <Link
-                    href="/businesses"
-                    className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl text-xs font-semibold text-slate-400 border border-slate-700 hover:border-slate-500 hover:text-slate-200 transition-all"
-                  >
-                    <X className="w-3.5 h-3.5" /> Reset All
-                  </Link>
-                )}
-              </form>
-            </div>
-          </aside>
-
-          {/* ── Main Grid ── */}
+        {/* ── Content layout: List ── */}
+        <div className="w-full pb-20">
           <div className="flex-1 min-w-0">
             {/* Result count + sort */}
             {total > 0 && (
@@ -269,9 +212,9 @@ export default async function PublicBusinessesPage({ searchParams }: PageProps) 
               </div>
             )}
 
-            {/* Cards grid */}
+            {/* Product List */}
             {businesses.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
+              <div className="flex flex-col gap-5">
                 {businesses.map((b: any, idx) => {
                   const city = b.cityId?.name || "";
                   const state = b.stateId?.name || "";
@@ -282,86 +225,93 @@ export default async function PublicBusinessesPage({ searchParams }: PageProps) 
                   return (
                     <article
                       key={b._id.toString()}
-                      className="glass-card overflow-hidden flex flex-col group animate-fadeInUp"
+                      className="glass-card overflow-hidden flex flex-col sm:flex-row group animate-fadeInUp hover:bg-white/5 transition-colors"
                       style={{ animationDelay: `${(idx % 12) * 40}ms`, animationFillMode: "both" }}
                     >
-                      {/* Banner image */}
-                      <div className="relative h-44 sm:h-40 overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800">
+                      {/* Left: Product Image */}
+                      <div className="relative w-full sm:w-64 lg:w-72 h-56 sm:h-auto shrink-0 overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800">
                         {firstImage ? (
                           <>
                             <img
                               src={firstImage}
                               alt={b.businessName}
-                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent sm:bg-gradient-to-r sm:from-transparent sm:to-black/40" />
                           </>
                         ) : (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <Building2 className="w-14 h-14 text-slate-700" />
+                          <div className="absolute inset-0 flex items-center justify-center bg-slate-800/50">
+                            <Building2 className="w-16 h-16 text-slate-600" />
                           </div>
                         )}
 
-                        {/* Verified badge */}
-                        <div className="absolute top-3 left-3">
-                          <span className="badge-verified flex items-center gap-1 bg-emerald-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-md">
+                        <div className="absolute top-4 left-4">
+                          <span className="flex items-center gap-1.5 bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md shadow-lg shadow-emerald-500/20">
                             <ShieldCheck className="w-3 h-3" /> Verified
                           </span>
                         </div>
 
-                        {/* Logo overlay */}
                         {b.logoUrl && b.cardImages?.[0] && (
-                          <div className="absolute bottom-3 right-3 w-10 h-10 rounded-lg overflow-hidden bg-black/60 border border-white/10">
-                            <img src={b.logoUrl} alt="logo" className="w-full h-full object-contain p-0.5" />
+                          <div className="absolute bottom-4 left-4 sm:bottom-auto sm:top-4 sm:right-4 sm:left-auto w-12 h-12 rounded-xl overflow-hidden bg-black/80 backdrop-blur-md border border-white/10 shadow-xl">
+                            <img src={b.logoUrl} alt="logo" className="w-full h-full object-contain p-1" />
                           </div>
                         )}
                       </div>
 
-                      {/* Card body */}
-                      <div className="p-4 sm:p-5 flex flex-col flex-1">
-                        <h3 className="text-base font-black text-white leading-snug mb-0.5 line-clamp-1">
-                          {b.businessName}
-                        </h3>
-                        <p className="text-xs text-slate-500 mb-2.5">{b.ownerName}</p>
+                      {/* Middle: Details */}
+                      <div className="p-5 sm:p-6 lg:p-8 flex flex-col flex-1 justify-center border-b sm:border-b-0 sm:border-r border-white/5">
+                        <div className="mb-1 flex items-center gap-2">
+                          <h3 className="text-xl sm:text-2xl font-black text-white leading-tight line-clamp-1 group-hover:text-purple-400 transition-colors">
+                            {b.businessName}
+                          </h3>
+                        </div>
+                        <p className="text-sm font-semibold text-slate-400 mb-4">{b.ownerName}</p>
 
                         {location && (
-                          <p className="flex items-center gap-1.5 text-xs text-slate-400 mb-3">
-                            <MapPin className="w-3.5 h-3.5 text-orange-400 flex-shrink-0" />
-                            <span className="line-clamp-1">{location}</span>
+                          <p className="flex items-center gap-2 text-sm font-medium text-slate-300 mb-5">
+                            <MapPin className="w-4 h-4 text-orange-400" />
+                            {location}
                           </p>
                         )}
 
-                        {/* HSN tags */}
+                        {/* HSN Tags */}
                         {b.hsnCodes?.length > 0 && (
-                          <div className="flex flex-wrap gap-1.5 mb-4">
-                            {b.hsnCodes.slice(0, 3).map((h: any) => (
-                              <span key={h.code} className="hsn-tag">
+                          <div className="flex flex-wrap gap-2 mt-auto">
+                            {b.hsnCodes.slice(0, 5).map((h: any) => (
+                              <span key={h.code} className="inline-flex items-center px-2.5 py-1 rounded-md bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[10px] font-black uppercase tracking-wider">
                                 {h.code}
                               </span>
                             ))}
-                            {b.hsnCodes.length > 3 && (
-                              <span className="hsn-tag">+{b.hsnCodes.length - 3}</span>
+                            {b.hsnCodes.length > 5 && (
+                              <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-slate-300 text-[10px] font-black uppercase tracking-wider">
+                                +{b.hsnCodes.length - 5} More
+                              </span>
                             )}
                           </div>
                         )}
+                      </div>
 
-                        {/* Actions */}
-                        <div className="mt-auto flex gap-2.5 pt-3 border-t border-white/5">
-                          <Link href={`/business/${b.slug}`} className="flex-1">
-                            <button className="w-full flex items-center justify-center gap-1.5 bg-white/8 hover:bg-white/14 border border-white/8 hover:border-purple-500/40 text-white text-xs font-bold py-2.5 rounded-xl transition-all duration-200">
-                              <Building2 className="w-3.5 h-3.5" /> View Profile
-                            </button>
-                          </Link>
-                          {phone && (
-                            <a
-                              href={`tel:${phone}`}
-                              title="Call Now"
-                              className="flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/25 hover:border-emerald-500/60 text-emerald-400 transition-all duration-200 flex-shrink-0"
-                            >
-                              <PhoneCall className="w-4 h-4" />
-                            </a>
-                          )}
+                      {/* Right: Actions */}
+                      <div className="p-5 sm:p-6 lg:p-8 w-full sm:w-56 lg:w-64 shrink-0 flex flex-col justify-center gap-3 bg-white/[0.02]">
+                        <div className="hidden sm:block mb-4 text-center">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">Status</p>
+                          <p className="text-emerald-400 font-bold text-sm flex items-center justify-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Active Listing</p>
                         </div>
+
+                        <Link href={`/business/${b.slug}`} className="w-full">
+                          <button className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-purple-500/20 active:scale-95 group/btn">
+                            <Building2 className="w-4 h-4" /> View Profile
+                          </button>
+                        </Link>
+
+                        {phone && (
+                          <a
+                            href={`tel:${phone}`}
+                            className="w-full flex items-center justify-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 text-sm font-bold py-3.5 rounded-xl transition-all active:scale-95"
+                          >
+                            <PhoneCall className="w-4 h-4" /> Contact Direct
+                          </a>
+                        )}
                       </div>
                     </article>
                   );
@@ -400,11 +350,10 @@ export default async function PublicBusinessesPage({ searchParams }: PageProps) 
                         <Link
                           key={item}
                           href={`/businesses?q=${q}&hsn=${hsn}&city=${city}&page=${item}`}
-                          className={`min-w-[40px] px-3 py-2.5 rounded-xl text-sm font-bold text-center transition-all ${
-                            item === page
+                          className={`min-w-[40px] px-3 py-2.5 rounded-xl text-sm font-bold text-center transition-all ${item === page
                               ? "btn-glow"
                               : "text-slate-300 bg-white/6 border border-white/8 hover:bg-white/12 hover:border-purple-500/30"
-                          }`}
+                            }`}
                         >
                           {item}
                         </Link>
