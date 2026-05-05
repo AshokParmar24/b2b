@@ -26,11 +26,11 @@ export default async function HomePage() {
     Business.countDocuments({ isActive: true }), // Assuming all active for now, or add isVerified if available
   ]);
 
-  const homeStats: StatItem[] = [
-    { value: businessCount, suffix: "+", label: "Business Cards", icon: Users },
-    { value: countryCount, suffix: "+", label: "Countries", icon: Globe },
-    { value: hsnCount, suffix: "+", label: "HSN Codes", icon: FileText },
-    { value: verifiedCount, suffix: "+", label: "Verified Dealers", icon: ShieldCheck },
+  const homeStats: any[] = [
+    { value: businessCount, suffix: "+", label: "Business Cards", iconName: "users" },
+    { value: countryCount, suffix: "+", label: "Countries", iconName: "globe" },
+    { value: hsnCount, suffix: "+", label: "HSN Codes", iconName: "fileText" },
+    { value: verifiedCount, suffix: "+", label: "Verified Dealers", iconName: "shieldCheck" },
   ];
 
   // Fetch featured businesses (latest 6 active ones)

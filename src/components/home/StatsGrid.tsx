@@ -1,11 +1,18 @@
 "use client";
 
 import { CountUp } from "@/components/ui/CountUp";
-import { StatItem } from "@/types";
+import { Users, Globe, FileText, ShieldCheck } from "lucide-react";
 
 interface StatsGridProps {
-  stats: StatItem[];
+  stats: any[];
 }
+
+const ICON_MAP: Record<string, any> = {
+  users: Users,
+  globe: Globe,
+  fileText: FileText,
+  shieldCheck: ShieldCheck
+};
 
 export function StatsGrid({ stats }: StatsGridProps) {
   return (
@@ -17,7 +24,7 @@ export function StatsGrid({ stats }: StatsGridProps) {
       */}
       <div className="mx-auto grid grid-cols-1 overflow-hidden rounded-[32px] bg-background shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-border/50 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, idx) => {
-          const Icon = stat.icon;
+          const Icon = ICON_MAP[stat.iconName];
           return (
             <div 
               key={stat.label} 
