@@ -32,6 +32,7 @@ export interface BusinessProfile {
   hsnCode: string;
   imageUrl: string;
   isVerified?: boolean;
+  slug?: string;
 }
 
 export interface StatItem {

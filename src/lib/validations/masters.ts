@@ -39,7 +39,7 @@ export const pincodeSchema = z.object({
 export const hsnSchema = z.object({
   code: z.string().min(4, "HSN Code must be at least 4 digits").max(8).regex(/^\d+$/, "Must be numbers only"),
   description: z.string().min(5, "Description is required"),
-  gstRate: z.number().min(0).max(100),
+  unit: z.string().optional().default("PCS"),
   isActive: z.boolean().optional().default(true),
 });
 

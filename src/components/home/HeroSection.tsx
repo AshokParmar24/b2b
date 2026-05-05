@@ -3,15 +3,15 @@
 import { Sparkles, Rocket, Globe2, Search, TrendingUp, Users, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { SITE_TAGLINE } from "@/lib/site-config";
 
-export function HeroSection() {
+export function HeroSection({ businessCount = 50000 }: { businessCount?: number }) {
+  const formattedCount = businessCount >= 1000 ? `${Math.floor(businessCount / 1000)}k+` : `${businessCount}+`;
+
   return (
     <section className="section-padding relative text-center hero-gradient overflow-hidden pb-40">
-      {/* 🎭 Visual Spectacle: Animated Background Layers */}
       <div className="absolute top-0 left-1/2 -z-10 h-[1000px] w-full -translate-x-1/2 bg-primary/5 blur-[140px] rounded-full animate-glow" />
       <div className="absolute -top-24 right-0 -z-10 h-[500px] w-[500px] bg-primary/10 blur-[120px] rounded-full animate-pulse" />
       <div className="absolute bottom-0 left-0 -z-10 h-[400px] w-full bg-gradient-to-t from-background to-transparent" />
       
-      {/* ✨ Floating "Market Intelligence" Cards */}
       <div className="absolute top-24 left-[8%] -z-10 hidden 2xl:block animate-float opacity-30">
         <div className="rounded-3xl bg-white/80 backdrop-blur-md p-6 shadow-2xl border border-primary/10">
           <div className="flex items-center gap-3 mb-2">
@@ -38,7 +38,7 @@ export function HeroSection() {
           <Sparkles className="h-5 w-5 text-primary animate-pulse" />
           <span>{SITE_TAGLINE}</span>
           <div className="h-4 w-[1px] bg-primary/20 mx-1" />
-          <span className="text-primary/60 italic font-medium underline underline-offset-4">Join 50k+ Businesses</span>
+          <span className="text-primary/60 italic font-medium underline underline-offset-4">Join {formattedCount} Businesses</span>
         </div>
 
         <h1 className="mb-8 text-[clamp(52px,10vw,100px)] font-[1000] tracking-tighter leading-[0.85] text-foreground animate-in fade-in slide-in-from-top-16 duration-1000 ease-out">

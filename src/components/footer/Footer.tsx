@@ -16,7 +16,14 @@ import {
   type LucideIcon
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
-import { SITE_NAME, SITE_TAGLINE, SITE_COPYRIGHT } from "@/lib/site-config";
+import { 
+  SITE_NAME, 
+  SITE_TAGLINE, 
+  SITE_COPYRIGHT,
+  SUPPORT_EMAIL,
+  SUPPORT_PHONE,
+  OFFICE_LOCATION
+} from "@/lib/site-config";
 
 /**
  * 🎨 PREMIUM MULTI-COLUMN FOOTER
@@ -155,7 +162,7 @@ export function Footer() {
             </div>
             <div>
               <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Email Support</div>
-              <div className="font-bold text-foreground">hello@hetnex.com</div>
+              <div className="font-bold text-foreground">{SUPPORT_EMAIL}</div>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -164,7 +171,7 @@ export function Footer() {
             </div>
             <div>
               <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Call Center</div>
-              <div className="font-bold text-foreground">+1 (800) HETNEX</div>
+              <div className="font-bold text-foreground">{SUPPORT_PHONE}</div>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -173,7 +180,7 @@ export function Footer() {
             </div>
             <div>
               <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Global Office</div>
-              <div className="font-bold text-foreground">Dubai, UAE</div>
+              <div className="font-bold text-foreground">{OFFICE_LOCATION}</div>
             </div>
           </div>
         </div>

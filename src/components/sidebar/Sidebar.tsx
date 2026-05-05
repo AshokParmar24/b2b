@@ -148,7 +148,7 @@ export function Sidebar({ links, role = "User", isCollapsed = false, onToggle }:
                   <div className="flex items-center gap-4 relative z-10">
                     <div className={cn(
                       "flex h-6 w-6 items-center justify-center transition-transform group-hover:scale-120",
-                      isActive ? "text-primary" : "text-muted-foreground/60 group-hover:text-primary"
+                      isActive && !children ? "text-primary-foreground" : isActive ? "text-primary" : "text-muted-foreground/60 group-hover:text-primary"
                     )}>
                       <Icon className="h-5 w-5" />
                     </div>

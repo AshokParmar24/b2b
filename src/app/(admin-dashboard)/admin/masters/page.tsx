@@ -48,6 +48,16 @@ export default function MastersPage() {
       bg: "bg-violet-500/10",
       border: "border-violet-500/20",
     },
+    {
+      title: "HSN Codes Master",
+      description: "Manage harmonized system nomenclature for standardized product classification.",
+      href: "/admin/masters/hsn",
+      icon: Hash,
+      color: "from-purple-500/20 to-purple-500/5",
+      iconColor: "text-purple-500",
+      bg: "bg-purple-500/10",
+      border: "border-purple-500/20",
+    },
   ];
 
   return (

@@ -30,9 +30,10 @@ export function FeaturedBusinesses({ businesses }: FeaturedBusinessesProps) {
 
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {businesses.map((item, idx) => (
-            <div 
+            <Link 
               key={idx} 
-              className="premium-card group cursor-pointer animate-in fade-in zoom-in-95 duration-1000 fill-mode-both"
+              href={`/business/${item.slug || ""}`}
+              className="premium-card group cursor-pointer animate-in fade-in zoom-in-95 duration-1000 fill-mode-both no-underline block"
               style={{ animationDelay: `${300 + idx * 150}ms` }}
             >
               <div className="relative h-64 overflow-hidden">
@@ -58,12 +59,12 @@ export function FeaturedBusinesses({ businesses }: FeaturedBusinessesProps) {
                   <span className="text-xs font-black text-primary uppercase tracking-tighter bg-primary/10 px-3 py-1.5 rounded">
                     HSN {item.hsnCode}
                   </span>
-                  <button className="text-sm font-black text-foreground hover:text-primary transition-all flex items-center gap-1 group/btn cursor-pointer">
+                  <div className="text-sm font-black text-foreground group-hover:text-primary transition-all flex items-center gap-1 group/btn">
                     Profile <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                  </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

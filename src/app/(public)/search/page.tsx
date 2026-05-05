@@ -44,7 +44,6 @@ export default async function SearchResultsPage({
       </div>
 
       {/* ── Nav ── */}
-      <PublicNav backHref="/businesses" backLabel="Directory" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
 

@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
     DISTRICTS: "/api/masters/districts",
     CITIES: "/api/masters/cities",
     PINCODES: "/api/masters/pincodes",
+    HSN: "/api/masters/hsn",
   },
 
   // 👤 Auth & User

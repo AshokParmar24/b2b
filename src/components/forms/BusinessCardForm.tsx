@@ -221,71 +221,73 @@ export default function BusinessCardForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 rounded-xl p-8"
-      style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
+      className="premium-card p-8 sm:p-10 space-y-8"
     >
-      <h2 className="mb-6 text-2xl font-bold text-white">
-        {isEditing ? "Edit Business Listing" : "Add Business Listing"}
-      </h2>
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="flex items-center gap-4 mb-8">
+        <div className="p-3 rounded-2xl bg-primary/10 text-primary">
+          <Building2 className="h-6 w-6" />
+        </div>
         <div>
-          <label className="mb-1 block text-sm text-gray-400">Business Name *</label>
+          <h2 className="text-2xl font-[1000] text-foreground tracking-tight">
+            {isEditing ? "Update Business" : "List New Business"}
+          </h2>
+          <p className="text-xs font-medium text-muted-foreground mt-0.5">
+            Fill in the details to {isEditing ? "edit your" : "create a"} professional business card.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Business Name *</label>
           <input
             {...register("name")}
-            className="w-full rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500"
-            style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
+            className="w-full h-12 rounded-xl bg-muted/30 border border-border/40 px-4 text-sm font-semibold outline-none focus:bg-background focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all"
             placeholder="e.g. Acme Corp"
           />
-          {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
+          {errors.name && <p className="mt-1 text-xs font-bold text-red-500 ml-1">{errors.name.message}</p>}
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm text-gray-400">Owner Name *</label>
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Owner Name *</label>
           <input
             {...register("ownerName")}
-            className="w-full rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500"
-            style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
+            className="w-full h-12 rounded-xl bg-muted/30 border border-border/40 px-4 text-sm font-semibold outline-none focus:bg-background focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all"
             placeholder="e.g. John Doe"
           />
           {errors.ownerName && (
-            <p className="mt-1 text-xs text-red-500">{errors.ownerName.message}</p>
+            <p className="mt-1 text-xs font-bold text-red-500 ml-1">{errors.ownerName.message}</p>
           )}
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm text-gray-400">Company Email *</label>
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Company Email *</label>
           <input
             {...register("email")}
             type="email"
-            className="w-full rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500"
-            style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
+            className="w-full h-12 rounded-xl bg-muted/30 border border-border/40 px-4 text-sm font-semibold outline-none focus:bg-background focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all"
             placeholder="contact@acme.com"
           />
-          {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
+          {errors.email && <p className="mt-1 text-xs font-bold text-red-500 ml-1">{errors.email.message}</p>}
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm text-gray-400">GST Number (Optional)</label>
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">GST Number (Optional)</label>
           <input
             {...register("gstNumber")}
-            className="w-full rounded-lg px-4 py-2 text-white uppercase outline-none focus:border-blue-500"
-            style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
+            className="w-full h-12 rounded-xl bg-muted/30 border border-border/40 px-4 text-sm font-semibold uppercase outline-none focus:bg-background focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all"
             placeholder="22AAAAA0000A1Z5"
           />
           {errors.gstNumber && (
-            <p className="mt-1 text-xs text-red-500">{errors.gstNumber.message}</p>
+            <p className="mt-1 text-xs font-bold text-red-500 ml-1">{errors.gstNumber.message}</p>
           )}
         </div>
       </div>
 
       {/* Dynamic Mobiles Array */}
-      <div
-        className="rounded-lg p-4"
-        style={{ background: "rgba(0,0,0,0.2)", border: "1px solid var(--border-color)" }}
-      >
+      <div className="rounded-2xl p-6 bg-muted/20 border border-border/40">
         <div className="mb-4 flex items-center justify-between">
-          <label className="block text-sm font-medium text-gray-300">Mobile Numbers</label>
+          <label className="text-[10px] font-[1000] uppercase tracking-widest text-primary">Mobile Numbers</label>
           <Button
             type="button"
             variant="outline"
@@ -294,8 +296,7 @@ export default function BusinessCardForm({
               if (fields.length < 5) append({ value: "" });
             }}
             disabled={fields.length >= 5}
-            className="h-8"
-            style={{ borderColor: "var(--border-color)", color: "#d1d5db" }}
+            className="h-8 rounded-lg font-bold text-[10px] uppercase tracking-wider hover:bg-primary hover:text-primary-foreground border-border/40"
           >
             + Add Number
           </Button>
@@ -308,11 +309,10 @@ export default function BusinessCardForm({
                 <input
                   {...register(`mobiles.${index}.value`)}
                   placeholder="e.g. 9876543210"
-                  className="w-full rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500"
-                  style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
+                  className="w-full h-11 rounded-xl bg-background border border-border/40 px-4 text-sm font-semibold outline-none focus:border-primary transition-all"
                 />
                 {errors.mobiles?.[index]?.value && (
-                  <p className="mt-1 text-xs text-red-500">
+                  <p className="mt-1 text-[10px] font-bold text-red-500 ml-1">
                     {errors.mobiles[index]?.value?.message}
                   </p>
                 )}
@@ -323,9 +323,9 @@ export default function BusinessCardForm({
                   variant="destructive"
                   size="icon"
                   onClick={() => remove(index)}
-                  className="h-10 w-10 shrink-0 bg-red-900/50 text-red-500 hover:bg-red-800"
+                  className="h-11 w-11 shrink-0 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/20 transition-all rounded-xl"
                 >
-                  X
+                  <X className="h-4 w-4" />
                 </Button>
               )}
             </div>
@@ -335,25 +335,22 @@ export default function BusinessCardForm({
       </div>
 
       {/* HSN Code Multi-Select UI */}
-      <div
-        className="rounded-lg p-4"
-        style={{ background: "rgba(0,0,0,0.2)", border: "1px solid var(--border-color)" }}
-      >
+      <div className="rounded-2xl p-6 bg-muted/20 border border-border/40">
         <div className="mb-4 flex items-center justify-between">
-          <label className="block text-sm font-medium text-gray-300">HSN Codes *</label>
+          <label className="text-[10px] font-[1000] uppercase tracking-widest text-primary">HSN Codes *</label>
         </div>
 
         {/* Selected HSN Codes Badges */}
-        <div className="mb-3 flex flex-wrap gap-2">
+        <div className="mb-4 flex flex-wrap gap-2">
           {hsnFields.map((field, index) => (
             <div
               key={field.id}
-              className="flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-900/40 px-3 py-1.5 text-xs font-semibold text-purple-200"
+              className="flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-bold text-primary shadow-sm"
             >
-              <span>
-                {field.code} - {field.description.substring(0, 20)}...
+              <span className="truncate max-w-[150px]">
+                {field.code} - {field.description}
               </span>
-              <button type="button" onClick={() => removeHsn(index)} className="hover:text-red-400">
+              <button type="button" onClick={() => removeHsn(index)} className="hover:text-red-500 transition-colors">
                 <X className="h-3 w-3" />
               </button>
             </div>
@@ -364,15 +361,14 @@ export default function BusinessCardForm({
         <div className="flex gap-2">
           <input
             type="text"
-            placeholder="Type HSN code or product name to search..."
-            className="flex-1 rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500"
-            style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
+            placeholder="Type HSN code or product name..."
+            className="flex-1 h-11 rounded-xl bg-background border border-border/40 px-4 text-sm font-semibold outline-none focus:border-primary transition-all"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
                 const val = e.currentTarget.value;
                 if (val) {
-                  appendHsn({ code: val, description: "Custom Product" });
+                  appendHsn({ code: val, description: "Product Category" });
                   e.currentTarget.value = "";
                 }
               }
@@ -381,21 +377,20 @@ export default function BusinessCardForm({
           <Button
             type="button"
             variant="outline"
-            className="h-10"
-            style={{ borderColor: "var(--border-color)", color: "#d1d5db" }}
+            className="h-11 rounded-xl font-bold text-xs border-border/40 hover:bg-primary hover:text-primary-foreground"
             onClick={() => {
               const input = document.activeElement as HTMLInputElement;
               if (input && input.value) {
-                appendHsn({ code: input.value, description: "Custom Product" });
+                appendHsn({ code: input.value, description: "Product Category" });
                 input.value = "";
               }
             }}
           >
-            Add Quick HSN
+            Add HSN
           </Button>
         </div>
-        <p className="mt-2 text-xs text-gray-500">
-          Press enter to quick-add an HSN if the dropdown fails.
+        <p className="mt-2 text-[10px] font-bold text-muted-foreground/50 uppercase tracking-wider ml-1">
+          Add the HSN codes relevant to your business listing.
         </p>
 
         {errors.hsnCodes && (
@@ -404,12 +399,9 @@ export default function BusinessCardForm({
       </div>
 
       {/* Cascading Location */}
-      <div
-        className="grid grid-cols-2 gap-4 pb-2 md:grid-cols-4"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
-      >
-        <div>
-          <label className="mb-1 block text-sm text-gray-400">Country *</label>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 pt-4">
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Country *</label>
           <Controller
             name="countryId"
             control={control}
@@ -423,13 +415,12 @@ export default function BusinessCardForm({
             )}
           />
         </div>
-        <div>
-          <label className="mb-1 block text-sm text-gray-400">State *</label>
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">State *</label>
           <select
             {...register("stateId")}
             disabled={!watchCountry || loadingStates}
-            className="w-full rounded-lg px-4 py-2 text-white outline-none disabled:opacity-50"
-            style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
+            className="w-full h-11 rounded-xl bg-muted/30 border border-border/40 px-3 text-sm font-semibold outline-none focus:bg-background focus:border-primary disabled:opacity-40 transition-all"
           >
             <option value="">{loadingStates ? "Loading..." : "Select State"}</option>
             {availableStates.map((st) => (
@@ -438,15 +429,14 @@ export default function BusinessCardForm({
               </option>
             ))}
           </select>
-          {errors.stateId && <p className="mt-1 text-xs text-red-500">{errors.stateId.message}</p>}
+          {errors.stateId && <p className="mt-1 text-[10px] font-bold text-red-500 ml-1">{errors.stateId.message}</p>}
         </div>
-        <div>
-          <label className="mb-1 block text-sm text-gray-400">City *</label>
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">City *</label>
           <select
             {...register("cityId")}
             disabled={!watchState || loadingCities}
-            className="w-full rounded-lg px-4 py-2 text-white outline-none disabled:opacity-50"
-            style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
+            className="w-full h-11 rounded-xl bg-muted/30 border border-border/40 px-3 text-sm font-semibold outline-none focus:bg-background focus:border-primary disabled:opacity-40 transition-all"
           >
             <option value="">{loadingCities ? "Loading..." : "Select City"}</option>
             {availableCities.map((city) => (
@@ -455,15 +445,14 @@ export default function BusinessCardForm({
               </option>
             ))}
           </select>
-          {errors.cityId && <p className="mt-1 text-xs text-red-500">{errors.cityId.message}</p>}
+          {errors.cityId && <p className="mt-1 text-[10px] font-bold text-red-500 ml-1">{errors.cityId.message}</p>}
         </div>
-        <div>
-          <label className="mb-1 block text-sm text-gray-400">Pincode *</label>
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Pincode *</label>
           <select
             {...register("pincodeId")}
             disabled={!watchCity || loadingPincodes}
-            className="w-full rounded-lg px-4 py-2 text-white outline-none disabled:opacity-50"
-            style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
+            className="w-full h-11 rounded-xl bg-muted/30 border border-border/40 px-3 text-sm font-semibold outline-none focus:bg-background focus:border-primary disabled:opacity-40 transition-all"
           >
             <option value="">{loadingPincodes ? "Loading..." : "Select Pincode"}</option>
             {availablePincodes.map((pin) => (
@@ -473,38 +462,31 @@ export default function BusinessCardForm({
             ))}
           </select>
           {errors.pincodeId && (
-            <p className="mt-1 text-xs text-red-500">{errors.pincodeId.message}</p>
+            <p className="mt-1 text-[10px] font-bold text-red-500 ml-1">{errors.pincodeId.message}</p>
           )}
         </div>
       </div>
 
-      <div>
-        <label className="mb-1 block text-sm text-gray-400">Full Address *</label>
+      <div className="space-y-1.5">
+        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Full Address *</label>
         <textarea
           {...register("address")}
           rows={3}
-          className="w-full rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500"
-          style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border-color)" }}
-          placeholder="Shop No, Building..."
+          className="w-full rounded-xl bg-muted/30 border border-border/40 px-4 py-3 text-sm font-semibold outline-none focus:bg-background focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all"
+          placeholder="Shop No, Building, Street Name..."
         />
-        {errors.address && <p className="mt-1 text-xs text-red-500">{errors.address.message}</p>}
+        {errors.address && <p className="mt-1 text-[10px] font-bold text-red-500 ml-1">{errors.address.message}</p>}
       </div>
 
-      {/* Cloudinary Image Upload UI */}
-      <div
-        className="rounded-lg border border-dashed p-5"
-        style={{ background: "rgba(0,0,0,0.2)", borderColor: "var(--border-color)" }}
-      >
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <label className="block text-sm font-medium text-gray-300">
-              Product / Catalog Images
-            </label>
-            <p className="mt-1 text-xs text-gray-500">
-              Upload exactly up to 10 high-quality images of your products.
-            </p>
+      <div className="rounded-2xl border border-dashed border-border/60 bg-muted/20 p-8 flex flex-col items-center text-center group/upload hover:bg-muted/30 transition-all duration-300">
+        <div className="mb-6">
+          <div className="h-20 w-20 rounded-[28px] bg-primary/10 text-primary flex items-center justify-center mb-4 mx-auto group-hover/upload:scale-110 transition-transform duration-500 shadow-xl shadow-primary/5">
+            <UploadCloud className="h-10 w-10" />
           </div>
-          <p className="text-xs font-black text-purple-400">{currentImages.length} / 10</p>
+          <h4 className="text-sm font-black text-foreground">Product & Catalog Images</h4>
+          <p className="text-xs font-medium text-muted-foreground mt-1 max-w-xs">
+            Upload up to 10 high-quality images to showcase your business.
+          </p>
         </div>
 
         <input
@@ -516,16 +498,15 @@ export default function BusinessCardForm({
           onChange={handleImageUpload}
         />
 
-        {currentImages.length > 0 ? (
-          <div className="mb-4 grid grid-cols-2 gap-4 md:grid-cols-5">
+        {currentImages.length > 0 && (
+          <div className="w-full mt-6 grid grid-cols-2 gap-4 md:grid-cols-5">
             {currentImages.map((src, index) => (
               <div
                 key={index}
-                className="group relative aspect-square overflow-hidden rounded-lg border border-gray-800"
+                className="group relative aspect-square overflow-hidden rounded-2xl border border-border/40 shadow-sm"
               >
-                {/* Image Mockup */}
-                <div className="flex h-full w-full items-center justify-center bg-black/40">
-                  <ImageIcon className="h-8 w-8 text-gray-600" />
+                <div className="flex h-full w-full items-center justify-center bg-muted/40 backdrop-blur-sm">
+                  <ImageIcon className="h-8 w-8 text-muted-foreground/40" />
                 </div>
                 <button
                   type="button"
@@ -535,7 +516,7 @@ export default function BusinessCardForm({
                       target: { value: newImgs, name: "cardImages" },
                     });
                   }}
-                  className="absolute top-1 right-1 rounded-md bg-red-500 p-1 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-600"
+                  className="absolute top-2 right-2 h-8 w-8 rounded-xl bg-destructive text-white flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100 shadow-lg"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -545,39 +526,57 @@ export default function BusinessCardForm({
               <button
                 type="button"
                 onClick={() => imageInputRef.current?.click()}
-                className="flex aspect-square flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-700 transition-all hover:border-purple-500 hover:bg-white/5"
+                className="flex aspect-square flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border/60 bg-muted/20 hover:bg-primary/5 hover:border-primary/40 transition-all group"
               >
-                <UploadCloud className="mb-2 h-6 w-6 text-gray-400" />
-                <span className="text-xs font-medium text-gray-500">Add More</span>
+                <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                  <Plus className="h-5 w-5" />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Add More</span>
               </button>
             )}
           </div>
-        ) : (
-          <div
+        )}
+
+        {currentImages.length === 0 && (
+          <button
+            type="button"
             onClick={() => imageInputRef.current?.click()}
-            className="flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-800 py-12 transition-all hover:border-purple-500 hover:bg-white/5"
+            className="px-8 py-3 rounded-xl bg-foreground text-background font-black text-xs hover:bg-primary hover:text-primary-foreground transition-all shadow-xl shadow-black/5"
           >
-            <UploadCloud className="mb-3 h-10 w-10 text-gray-400" />
-            <p className="text-sm font-medium tracking-wide text-gray-300">
-              Click to browse your device
-            </p>
-            <p className="mt-1 text-xs text-gray-500">PNG, JPG, WEBP up to 5MB each</p>
-          </div>
+            Browse Files
+          </button>
         )}
 
         {errors.cardImages && (
-          <p className="mt-2 text-xs font-bold text-red-500">{errors.cardImages.message}</p>
+          <p className="mt-4 text-xs font-bold text-red-500">{errors.cardImages.message}</p>
         )}
       </div>
 
-      <div className="pt-4">
-        <Button
+      <div className="pt-8 flex flex-col sm:flex-row gap-4">
+        <button
           disabled={isSubmitting}
           type="submit"
-          className="h-12 w-full rounded-lg bg-blue-600 px-8 font-semibold text-white hover:bg-blue-700 md:w-auto"
+          className="h-14 flex-1 rounded-2xl bg-primary text-primary-foreground font-[1000] text-sm shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
         >
-          {isSubmitting ? "Submitting..." : "Save Business Listing"}
-        </Button>
+          {isSubmitting ? (
+            <>
+              <Loader2 className="h-5 w-5 animate-spin" />
+              Processing...
+            </>
+          ) : (
+            <>
+              <ShieldCheck className="h-5 w-5" />
+              {isEditing ? "Update Business Listing" : "Create Business Card"}
+            </>
+          )}
+        </button>
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="h-14 px-8 rounded-2xl border border-border/50 text-muted-foreground font-black text-sm hover:bg-muted/50 transition-all"
+        >
+          Cancel
+        </button>
       </div>
     </form>
   );

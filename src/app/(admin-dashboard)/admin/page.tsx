@@ -31,7 +31,12 @@ export default async function AdminDashboard() {
     User.countDocuments({ role: UserRole.USER }),
     Plan.countDocuments({ isActive: true }),
     Country.countDocuments({ isActive: true }),
-    Business.find().sort({ createdAt: -1 }).limit(5),
+    Business.find()
+      .populate("cityId", "name")
+      .populate("stateId", "name")
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .lean(),
   ]);
 
   const stats = [
@@ -169,7 +174,7 @@ export default async function AdminDashboard() {
                         <div className="p-1.5 rounded-lg bg-muted/50 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
                           <Globe className="h-3.5 w-3.5" />
                         </div>
-                        Morbi, India
+                        {[(b as any).cityId?.name, (b as any).stateId?.name].filter(Boolean).join(", ") || "N/A"}
                       </div>
                     </td>
                     <td className="px-8 py-4 text-center">

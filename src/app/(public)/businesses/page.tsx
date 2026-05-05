@@ -70,9 +70,6 @@ export default async function PublicBusinessesPage({ searchParams }: PageProps) 
         <div className="blob-float absolute top-1/2 left-1/2 w-[400px] h-[400px] rounded-full bg-teal-600/4 blur-3xl" style={{ animationDelay: "8s" }} />
       </div>
 
-      {/* ── Nav ── */}
-      <PublicNav />
-
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
 
         {/* ── Page Header ── */}

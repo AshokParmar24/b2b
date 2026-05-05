@@ -42,6 +42,11 @@ export const ADMIN_EMAIL = `admin@${SITE_DOMAIN}`;
 /** Favicon / icon letter (used in generated icon.tsx) */
 export const SITE_ICON_LETTER = SITE_NAME.charAt(0).toUpperCase();
 
+/** Support contact info */
+export const SUPPORT_EMAIL = "hello@hetnex.com";
+export const SUPPORT_PHONE = "+1 (800) HETNEX";
+export const OFFICE_LOCATION = "Morbi, India";
+
 /** Copyright text */
 export const SITE_COPYRIGHT = (year: number) =>
   `© ${year} ${SITE_NAME}. All rights reserved. | ${SITE_TAGLINE}`;

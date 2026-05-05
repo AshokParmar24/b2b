@@ -4,6 +4,7 @@ import React from "react";
 import {
     LayoutDashboard,
     Building2,
+    MessageSquare,
     Users,
     CreditCard,
     MapPin,
@@ -25,6 +26,7 @@ const adminNav = [
     { href: AppRoutes.ADMIN_DASHBOARD, label: "Dashboard", icon: LayoutDashboard },
     { href: AppRoutes.ADMIN_USERS, label: "Users", icon: Users },
     { href: "/admin/businesses", label: "Businesses", icon: Building2 },
+    { href: "/admin/inquiries", label: "Inquiries", icon: MessageSquare },
     { href: AppRoutes.ADMIN_PLANS, label: "Plans", icon: CreditCard },
     { 
         href: AppRoutes.ADMIN_MASTERS, 

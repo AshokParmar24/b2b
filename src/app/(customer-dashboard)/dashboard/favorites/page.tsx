@@ -1,110 +1,122 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
-import { Star, Heart, Clock, Search, Building2, ArrowRight } from "lucide-react";
+import dbConnect from "@/lib/dbConnect";
+import Favorite from "@/models/Favorite";
+import Business from "@/models/Business";
+import { Star, MapPin, Building2, ExternalLink, Trash2, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+
+export const dynamic = "force-dynamic";
 
 export default async function CustomerFavoritesPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
 
-  const comingSoonFeatures = [
-    {
-      icon: Heart,
-      title: "Save Businesses",
-      desc: "Bookmark any business listing from the directory with one click.",
-    },
-    {
-      icon: Star,
-      title: "Quick Access",
-      desc: "All your saved businesses in one place — no more searching again.",
-    },
-    {
-      icon: Search,
-      title: "Smart Collections",
-      desc: "Organize favorites into custom collections by category or region.",
-    },
-    {
-      icon: Building2,
-      title: "Compare Businesses",
-      desc: "Side-by-side comparison of saved listings across HSN codes and plans.",
-    },
-  ];
+  await dbConnect();
+  // Ensure models are registered
+  void Business;
+  
+  const userId = (session.user as any).id;
+  
+  const favorites = await Favorite.find({ userId })
+    .populate({
+      path: "businessId",
+      populate: [
+        { path: "cityId", select: "name" },
+        { path: "stateId", select: "name" }
+      ]
+    })
+    .sort({ createdAt: -1 })
+    .lean();
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
       {/* Header */}
       <div className="mb-10">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2.5 rounded-xl bg-amber-500/10">
-            <Star className="h-6 w-6 text-amber-500" />
-          </div>
-          <h1 className="text-3xl font-black tracking-tighter text-foreground">Favorites</h1>
-        </div>
-        <p className="text-muted-foreground font-medium ml-14">
-          Save and organize your favorite business listings for quick access.
-        </p>
-      </div>
-
-      {/* Coming Soon Banner */}
-      <div className="premium-card p-10 mb-8 relative overflow-hidden">
-        <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-amber-500/5 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-amber-500/5 blur-3xl" />
-
-        <div className="relative text-center py-6">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-amber-500/10 ring-1 ring-amber-500/20">
-            <Star className="h-10 w-10 text-amber-500" />
-          </div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/5 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-amber-600 mb-4">
-            <Clock className="h-3 w-3 animate-pulse" />
-            Coming Soon
-          </div>
-          <h2 className="text-2xl font-black tracking-tight text-foreground mb-3">
-            Saved Favorites
-          </h2>
-          <p className="text-muted-foreground font-medium max-w-md mx-auto">
-            Quickly bookmark businesses you&apos;re interested in. Your saved listings will appear
-            here for instant access — no need to search again.
-          </p>
-        </div>
-      </div>
-
-      {/* Feature Preview Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-        {comingSoonFeatures.map(({ icon: Icon, title, desc }, idx) => (
-          <div
-            key={title}
-            className="premium-card p-6 group animate-in fade-in zoom-in-95 duration-700"
-            style={{ animationDelay: `${idx * 80}ms` }}
-          >
-            <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-foreground/5 group-hover:bg-amber-500/10 transition-colors">
-                <Icon className="h-5 w-5 text-muted-foreground group-hover:text-amber-500 transition-colors" />
-              </div>
-              <div>
-                <p className="font-black text-sm text-foreground mb-1">{title}</p>
-                <p className="text-xs font-medium text-muted-foreground leading-relaxed">{desc}</p>
-              </div>
+        <div className="flex items-center gap-4 mb-2">
+          <div className="relative">
+            <div className="absolute inset-0 bg-amber-500/20 blur-xl rounded-full" />
+            <div className="relative p-3.5 rounded-[22px] bg-amber-500/10 text-amber-500">
+              <Star className="h-7 w-7" />
             </div>
           </div>
-        ))}
+          <div>
+            <h1 className="text-3xl font-[1000] tracking-tight text-foreground">My Favorites</h1>
+            <p className="text-sm font-medium text-muted-foreground mt-1">
+              Your bookmarked business listings for quick access.
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* CTA */}
-      <div className="premium-card p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-        <div>
-          <p className="font-black text-foreground mb-1">Discover businesses to save</p>
-          <p className="text-sm text-muted-foreground font-medium">
-            Browse the public directory and bookmark the ones you like.
+      {favorites.length === 0 ? (
+        <div className="premium-card p-20 text-center">
+          <div className="mx-auto h-24 w-24 rounded-[32px] bg-muted/30 flex items-center justify-center mb-6 ring-8 ring-background/50">
+            <Star className="h-10 w-10 text-muted-foreground/30" />
+          </div>
+          <h2 className="text-2xl font-black text-foreground">No favorites yet</h2>
+          <p className="text-sm font-medium text-muted-foreground mt-3 max-w-sm mx-auto leading-relaxed">
+            Browse the public directory and bookmark businesses you&apos;re interested in to see them here.
           </p>
+          <Link href="/businesses">
+            <button className="mt-8 inline-flex items-center gap-2 h-12 px-8 rounded-2xl bg-primary text-primary-foreground font-black text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+              Browse Directory
+            </button>
+          </Link>
         </div>
-        <Link
-          href="/businesses"
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-foreground text-background font-black text-sm hover:opacity-90 transition-opacity whitespace-nowrap"
-        >
-          Browse Directory <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {favorites.map((fav: any) => {
+            const b = fav.businessId;
+            if (!b) return null;
+            return (
+              <div key={fav._id.toString()} className="group premium-card p-6 hover:border-amber-500/30 transition-all duration-500">
+                <div className="flex items-start justify-between mb-4">
+                  <div className={cn(
+                    "h-14 w-14 rounded-2xl flex items-center justify-center font-[1000] text-xl shadow-inner",
+                    "bg-gradient-to-br from-primary/80 to-blue-600 text-white shadow-primary/20"
+                  )}>
+                    {b.businessName?.charAt(0)?.toUpperCase()}
+                  </div>
+                  <div className="flex gap-2">
+                    <Link href={`/business/${b.slug}`} target="_blank">
+                      <button className="h-10 w-10 rounded-xl bg-muted/30 flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-white transition-all">
+                        <ExternalLink className="h-4 w-4" />
+                      </button>
+                    </Link>
+                    {/* Add un-favorite logic client-side if needed, for now just UI */}
+                    <button className="h-10 w-10 rounded-xl bg-destructive/5 flex items-center justify-center text-destructive hover:bg-destructive hover:text-white transition-all">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+                
+                <h3 className="text-lg font-black text-foreground truncate group-hover:text-primary transition-colors">
+                  {b.businessName}
+                </h3>
+                
+                <div className="flex items-center gap-2 mt-2 text-xs font-bold text-muted-foreground">
+                  <MapPin className="h-3.5 w-3.5 text-primary/60" />
+                  <span className="truncate">
+                    {[b.cityId?.name, b.stateId?.name].filter(Boolean).join(", ")}
+                  </span>
+                </div>
+
+                <div className="mt-6 pt-5 border-t border-border/30 flex items-center justify-between">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 text-[10px] font-black uppercase tracking-wider">
+                    {b.isActive ? "Active" : "Inactive"}
+                  </div>
+                  <span className="text-[10px] font-bold text-muted-foreground/50">
+                    Saved {new Date(fav.createdAt).toLocaleDateString("en-IN")}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

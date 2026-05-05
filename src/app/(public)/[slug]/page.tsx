@@ -120,7 +120,6 @@ export default async function BusinessProfilePage({
       </div>
 
       {/* ── Nav ── */}
-      <PublicNav backHref="/businesses" backLabel="Directory" />
 
       {/* ── Hero Banner ── */}
       <div className="relative h-52 sm:h-64 md:h-80 w-full overflow-hidden">
