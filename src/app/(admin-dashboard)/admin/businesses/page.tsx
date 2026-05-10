@@ -19,9 +19,11 @@ import Business from "@/models/Business";
 import Country from "@/models/Country";
 import State from "@/models/State";
 import City from "@/models/City";
+import Pincode from "@/models/Pincode";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { BusinessFilterBar } from "@/components/admin/businesses/BusinessFilterBar";
 
 export const dynamic = "force-dynamic";
 
@@ -29,24 +31,41 @@ interface PageProps {
   searchParams: Promise<{
     q?: string;
     hsn?: string;
-    city?: string;
     status?: string;
+    country?: string;
+    state?: string;
+    city?: string;
+    pincode?: string;
     page?: string;
   }>;
 }
 
 export default async function AdminBusinessesPage({ searchParams }: PageProps) {
-  const { q = "", hsn = "", city = "", status = "all", page: pageStr = "1" } = await searchParams;
+  const { 
+    q = "", 
+    hsn = "", 
+    status = "all", 
+    country = "", 
+    state = "", 
+    city = "", 
+    pincode = "", 
+    page: pageStr = "1" 
+  } = await searchParams;
+  
   const page = Math.max(1, parseInt(pageStr));
   const limit = 12;
 
   await dbConnect();
-  void Country; void State; void City;
+  void Country; void State; void City; void Pincode;
 
   const filter: Record<string, any> = {};
   if (q) filter.$or = [{ businessName: { $regex: q, $options: "i" } }, { gstNumber: { $regex: q, $options: "i" } }];
   if (hsn) filter["hsnCodes.code"] = { $regex: hsn, $options: "i" };
+  if (country) filter.countryId = country;
+  if (state) filter.stateId = state;
   if (city) filter.cityId = city;
+  if (pincode) filter.pincodeId = pincode;
+  
   if (status === "active") filter.isActive = true;
   if (status === "archived") filter.isActive = false;
 
@@ -62,7 +81,7 @@ export default async function AdminBusinessesPage({ searchParams }: PageProps) {
     Business.countDocuments(filter),
   ]);
 
-  const hasFilter = !!(q || hsn || city || status !== "all");
+  const hasFilter = !!(q || hsn || country || state || city || pincode || status !== "all");
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 max-w-[1400px] mx-auto pb-10">
@@ -88,49 +107,15 @@ export default async function AdminBusinessesPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      <form method="GET" action="/admin/businesses" className="flex flex-col sm:flex-row flex-wrap gap-4 mb-8 bg-card/40 backdrop-blur-xl p-4 rounded-[28px] border border-border/50 shadow-sm">
-        <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input 
-            name="q" 
-            defaultValue={q} 
-            placeholder="Name, GST, Owner..." 
-            className="w-full pl-11 pr-4 py-3 rounded-2xl bg-muted/30 border-border/50 text-sm font-semibold focus:bg-background transition-colors outline-none focus:ring-2 focus:ring-primary/20"
-          />
-        </div>
-        
-        <div className="relative w-full sm:w-48">
-          <Tag className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input 
-            name="hsn" 
-            defaultValue={hsn} 
-            placeholder="HSN Code (e.g. 6908)" 
-            className="w-full pl-11 pr-4 py-3 rounded-2xl bg-muted/30 border-border/50 text-sm font-semibold focus:bg-background transition-colors outline-none focus:ring-2 focus:ring-primary/20"
-          />
-        </div>
-
-        <select 
-          name="status" 
-          defaultValue={status}
-          className="w-full sm:w-48 px-4 py-3 rounded-2xl bg-muted/30 border-border/50 text-sm font-semibold focus:bg-background transition-colors outline-none focus:ring-2 focus:ring-primary/20 appearance-none"
-        >
-          <option value="all">All Status</option>
-          <option value="active">Active</option>
-          <option value="archived">Archived</option>
-        </select>
-
-        <Button type="submit" className="h-12 px-8 rounded-2xl bg-primary text-primary-foreground font-black shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
-          Search
-        </Button>
-        
-        {hasFilter && (
-          <Link href="/admin/businesses" className="flex items-center justify-center px-4">
-            <span className="text-xs font-bold text-muted-foreground hover:text-destructive transition-colors cursor-pointer flex items-center gap-1">
-              <XCircle className="h-4 w-4" /> Clear
-            </span>
-          </Link>
-        )}
-      </form>
+      <BusinessFilterBar 
+        initialQ={q}
+        initialHsn={hsn}
+        initialStatus={status}
+        initialCountry={country}
+        initialState={state}
+        initialCity={city}
+        initialPincode={pincode}
+      />
 
       {/* MAIN CONTENT - PRODUCT LIKE CARDS */}
       <div className="w-full pb-10">
@@ -254,17 +239,16 @@ export default async function AdminBusinessesPage({ searchParams }: PageProps) {
           {/* Pagination Controls */}
           {total > limit && (
             <div className="mt-8 flex justify-center gap-2">
-              <Link href={`/admin/businesses?q=${q}&hsn=${hsn}&city=${city}&status=${status}&page=${Math.max(1, page - 1)}`}>
+              <Link href={`/admin/businesses?q=${q}&hsn=${hsn}&status=${status}&country=${country}&state=${state}&city=${city}&pincode=${pincode}&page=${Math.max(1, page - 1)}`}>
                 <Button variant="outline" disabled={page === 1} className="rounded-xl font-bold">Prev</Button>
               </Link>
               <span className="flex items-center px-4 font-black text-sm">{page} / {Math.ceil(total / limit)}</span>
-              <Link href={`/admin/businesses?q=${q}&hsn=${hsn}&city=${city}&status=${status}&page=${page + 1}`}>
+              <Link href={`/admin/businesses?q=${q}&hsn=${hsn}&status=${status}&country=${country}&state=${state}&city=${city}&pincode=${pincode}&page=${page + 1}`}>
                 <Button variant="outline" disabled={page * limit >= total} className="rounded-xl font-bold">Next</Button>
               </Link>
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 }

@@ -699,21 +699,21 @@ export function GenericMasterList({
                       We couldn't find any {title.toLowerCase()} matching your criteria. Try adjusting your search or filters.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
+                      <Button
+                        variant="outline"
+                        onClick={() => { setSearchQuery(""); setExtraFilters({}); setStatusFilter("all"); }}
+                        className="rounded-xl border-border/50 font-bold px-6"
+                      >
+                        Clear Filters
+                      </Button>
+                      <Link href={addPath}>
                         <Button
-                          variant="outline"
-                          onClick={() => { setSearchQuery(""); setExtraFilters({}); setStatusFilter("all"); }}
-                          className="rounded-xl border-border/50 font-bold px-6"
+                          className="rounded-xl bg-primary hover:bg-primary/90 font-bold px-6 text-white border-0 shadow-lg shadow-primary/20"
                         >
-                          Clear Filters
+                          <Plus className="h-4 w-4 mr-2" />
+                          Create Entry
                         </Button>
-                        <Link href={addPath}>
-                          <Button
-                            className="rounded-xl bg-primary hover:bg-primary/90 font-bold px-6 text-white border-0 shadow-lg shadow-primary/20"
-                          >
-                            <Plus className="h-4 w-4 mr-2" />
-                            Create Entry
-                          </Button>
-                        </Link>
+                      </Link>
                     </div>
                   </td>
                 </tr>
