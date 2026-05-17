@@ -12,7 +12,8 @@ import {
   Settings,
   ShieldCheck,
   User as UserIcon,
-  Sparkles
+  Sparkles,
+  X
 } from "lucide-react";
 import { BrandName } from "@/components/ui/BrandName";
 import { Logo } from "@/components/ui/Logo";
@@ -90,6 +91,17 @@ export function Sidebar({ links, role = "User", isCollapsed = false, onToggle }:
           "relative flex flex-col gap-6 pt-10 pb-8 transition-all",
           isCollapsed ? "items-center px-4" : "px-8"
         )}>
+          {/* ❌ Mobile Close Button - Forced Refresh: 2026-05-16 */}
+          {!isCollapsed && (
+            <button
+              onClick={onToggle}
+              className="absolute top-8 right-6 lg:hidden h-10 w-10 flex items-center justify-center rounded-full bg-muted/50 text-foreground/50 hover:bg-destructive/10 hover:text-destructive transition-all active:scale-90"
+              aria-label="Close Sidebar"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
+
           {/* Decorative background glow */}
           <div className="absolute top-0 left-0 -z-10 h-40 w-full bg-gradient-to-b from-primary/10 via-primary/5 to-transparent blur-2xl" />
           

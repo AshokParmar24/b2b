@@ -1,21 +1,48 @@
 "use client";
 
 import { LoginForm } from "@/components/auth/Login/LoginForm";
-
+import { Sparkles, ShieldCheck, Globe } from "lucide-react";
 
 export default function LoginPage() {
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-[#FDFDFD] px-6 py-12 selection:bg-primary/10">
-      {/* 🎭 Minimal Background Decor */}
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(#f1f5f9_1px,transparent_1px)] [background-size:24px_24px] opacity-50" />
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-[#fcfcfd] px-4 py-12 md:px-6 lg:py-20 selection:bg-primary/10 overflow-hidden">
+      
+      {/* 🎭 HIGH-FIDELITY BACKGROUND DECOR */}
+      {/* Primary Glow */}
+      <div className="absolute -top-[10%] -right-[10%] w-[60%] h-[60%] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none" />
+      
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] [background-size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-100" />
 
       {/* 🔐 High-Fidelity Login Core */}
-      <LoginForm />
+      <div className="relative w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-1000">
+        <LoginForm />
+      </div>
 
-      {/* 🛡️ Static Trust Signal */}
-      <p className="mt-8 text-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">
-        Secure • Global • Verified
-      </p>
+      {/* 🛡️ Premium Trust Footer */}
+      <div className="mt-12 flex flex-col items-center gap-6 animate-in fade-in duration-1000 delay-500">
+        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-8 opacity-40">
+          <TrustIcon icon={ShieldCheck} label="Bank-Grade Security" />
+          <div className="h-4 w-px bg-slate-300 hidden sm:block" />
+          <TrustIcon icon={Globe} label="Global Network" />
+          <div className="h-4 w-px bg-slate-300 hidden sm:block" />
+          <TrustIcon icon={Sparkles} label="Premium Experience" />
+        </div>
+        
+        <p className="text-center text-[9px] font-black uppercase tracking-[0.4em] text-slate-300">
+          HETNEX Secure Authentication Protocol v2.0
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function TrustIcon({ icon: Icon, label }: { icon: any; label: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Icon className="h-3.5 w-3.5" />
+      <span className="text-[10px] font-black uppercase tracking-widest">{label}</span>
     </div>
   );
 }

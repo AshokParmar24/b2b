@@ -60,12 +60,16 @@ export function SearchableSelect({
   React.useEffect(() => {
     setIsSearching(true);
     const handler = setTimeout(() => {
-      const filtered = options.filter((option) =>
-        option.name.toLowerCase().includes(search.toLowerCase())
-      );
+      // Force rebuild and add ultra-safe filtering
+      const safeOptions = options || [];
+      const filtered = safeOptions.filter((option) => {
+        const name = option?.name || "";
+        const searchTerm = search || "";
+        return name.toLowerCase().includes(searchTerm.toLowerCase());
+      });
       setFilteredOptions(filtered);
       setIsSearching(false);
-    }, 300); // 300ms Debounce
+    }, 300);
 
     return () => clearTimeout(handler);
   }, [search, options]);

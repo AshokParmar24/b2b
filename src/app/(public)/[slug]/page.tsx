@@ -14,9 +14,11 @@ import {
   Clock,
   Tag,
   ExternalLink,
-  Copy,
+  Share2,
+  Calendar,
+  Building,
+  ArrowRight
 } from "lucide-react";
-import { PublicNav } from "@/components/layouts/public/PublicNav";
 import { SITE_NAME, SITE_URL } from "@/lib/site-config";
 import dbConnect from "@/lib/dbConnect";
 import Business from "@/models/Business";
@@ -54,13 +56,8 @@ export async function generateMetadata({
   const location = [city, state].filter(Boolean).join(", ");
 
   return {
-    title: `${b.businessName} — ${SITE_NAME}`,
-    description: `Contact ${b.businessName} (${b.ownerName}) in ${location}. View HSN codes, phone numbers & business details on ${SITE_NAME}.`,
-    openGraph: {
-      title: `${b.businessName} | ${SITE_NAME}`,
-      description: `Verified business listing of ${b.businessName}.`,
-      images: b.cardImages?.[0] ? [b.cardImages[0]] : [],
-    },
+    title: `${b.businessName} — Verified Partner on ${SITE_NAME}`,
+    description: `Official profile of ${b.businessName}. Verified GST and HSN listed business in ${location}. Contact now for inquiries.`,
   };
 }
 
@@ -87,371 +84,210 @@ export default async function BusinessProfilePage({
   const cleanWebsite = b.website?.replace(/^https?:\/\//, "") || "";
 
   return (
-    <main className="pub-dark">
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "LocalBusiness",
-            name: b.businessName,
-            image: b.cardImages,
-            "@id": `${SITE_URL}/business/${b.slug}`,
-            url: `${SITE_URL}/business/${b.slug}`,
-            telephone: b.mobiles?.[0],
-            email: b.email || undefined,
-            address: {
-              "@type": "PostalAddress",
-              streetAddress: b.address,
-              addressLocality: city,
-              addressRegion: state,
-              postalCode: pincode,
-              addressCountry: country,
-            },
-          }),
-        }}
-      />
-
-      {/* Ambient blobs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-0">
-        <div className="blob-float absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-purple-600/6 blur-3xl" />
-        <div className="blob-float absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full bg-indigo-600/5 blur-3xl" style={{ animationDelay: "6s" }} />
-      </div>
-
-      {/* ── Nav ── */}
-
-      {/* ── Hero Banner ── */}
-      <div className="relative h-52 sm:h-64 md:h-80 w-full overflow-hidden">
-        {/* bg layer */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-purple-950/20 to-indigo-950" />
-
-        {/* hero image */}
+    <main className="min-h-screen bg-[#f8fafc] pb-20">
+      
+      {/* ── 🎭 PREMIUM HERO SECTION ── */}
+      <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] w-full bg-slate-900 overflow-hidden">
         {heroImage && (
           <img
             src={heroImage}
             alt={b.businessName}
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
+            className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay"
           />
         )}
-
-        {/* gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#04050f] via-black/40 to-transparent" />
-
-        {/* Back button on mobile */}
-        <Link
-          href="/businesses"
-          className="absolute top-4 left-4 sm:hidden flex items-center gap-1.5 text-xs font-semibold text-slate-300 bg-black/40 backdrop-blur-sm border border-white/10 px-3 py-2 rounded-full hover:bg-white/10 transition-all"
-        >
-          <ChevronLeft className="w-3.5 h-3.5" /> Back
-        </Link>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#f8fafc] via-slate-900/60 to-slate-900/20" />
+        
+        <div className="absolute top-8 left-8">
+          <Link
+            href="/businesses"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold hover:bg-white/20 transition-all"
+          >
+            <ChevronLeft className="h-4 w-4" /> Back to Directory
+          </Link>
+        </div>
       </div>
 
-      {/* ── Identity bar (overlaps hero) ── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-        <div className="-mt-16 sm:-mt-20 md:-mt-24 mb-8 sm:mb-10 flex flex-col sm:flex-row items-start sm:items-end gap-4 sm:gap-6 animate-fadeInUp">
-          {/* Logo avatar */}
-          <div className="relative flex-shrink-0">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden bg-slate-900 border-4 border-slate-800 shadow-2xl">
-              {b.logoUrl ? (
-                <img
-                  src={b.logoUrl}
-                  alt={`${b.businessName} logo`}
-                  className="w-full h-full object-contain p-2"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <Building2 className="w-12 h-12 text-slate-600" />
-                </div>
-              )}
+      {/* ── 🚀 IDENTITY CARD (Overlapping) ── */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="-mt-32 relative z-10">
+          <div className="bg-white rounded-[40px] border border-slate-200 shadow-2xl shadow-slate-200/60 p-6 sm:p-10 flex flex-col md:flex-row items-center md:items-end gap-8">
+            
+            {/* Logo Wrapper */}
+            <div className="relative shrink-0 group">
+              <div className="absolute -inset-2 bg-primary/10 rounded-[36px] blur-2xl group-hover:bg-primary/20 transition-all" />
+              <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-[32px] bg-white border-2 border-slate-50 overflow-hidden shadow-xl flex items-center justify-center p-4">
+                {b.logoUrl ? (
+                  <img src={b.logoUrl} alt="Logo" className="w-full h-full object-contain" />
+                ) : (
+                  <Building2 className="h-16 w-16 text-slate-100" />
+                )}
+              </div>
+              <div className="absolute -bottom-2 -right-2 h-10 w-10 rounded-2xl bg-emerald-500 border-4 border-white flex items-center justify-center text-white shadow-lg">
+                <ShieldCheck className="h-5 w-5" />
+              </div>
             </div>
-            {/* Verified dot */}
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-slate-900 flex items-center justify-center">
-              <ShieldCheck className="w-3.5 h-3.5 text-white" />
-            </div>
-          </div>
 
-          {/* Name + location */}
-          <div className="flex-1 min-w-0 pb-1">
-            <div className="badge-verified stat-pill w-fit mb-2.5 text-emerald-400 border-emerald-500/20 bg-emerald-500/10">
-              <ShieldCheck className="w-3 h-3" /> GST Verified Business
+            {/* Name and Basic Info */}
+            <div className="flex-1 text-center md:text-left space-y-3 pb-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 text-[10px] font-black uppercase tracking-widest">
+                <ShieldCheck className="h-3 w-3" /> Verified Partner
+              </div>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+                {b.businessName}
+              </h1>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-slate-500 font-bold text-sm">
+                <div className="flex items-center gap-1.5">
+                  <MapPin className="h-4 w-4 text-orange-400" />
+                  {location}
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="h-4 w-4 text-primary" />
+                  Since {new Date(b.createdAt).getFullYear()}
+                </div>
+              </div>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight leading-tight line-clamp-2">
-              {b.businessName}
-            </h1>
-            {location && (
-              <p className="flex items-center gap-1.5 text-sm text-slate-400 mt-1.5">
-                <MapPin className="w-4 h-4 text-orange-400 flex-shrink-0" />
-                {location}
-              </p>
-            )}
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col gap-3 shrink-0 w-full md:w-auto">
+              <a href={`tel:${b.mobiles?.[0]}`} className="h-14 px-8 rounded-2xl bg-primary text-white font-black text-sm uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3">
+                <PhoneCall className="h-5 w-5" /> Call Now
+              </a>
+              <button className="h-14 px-8 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-600 font-black text-xs uppercase tracking-widest hover:bg-white hover:border-primary/20 hover:text-primary transition-all flex items-center justify-center gap-3">
+                <Share2 className="h-4 w-4" /> Share Profile
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* ── Main content + sidebar ── */}
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 pb-20">
-
-          {/* ── Left: Details ── */}
-          <div className="flex-1 min-w-0 space-y-5">
-
-            {/* Quick stats bar */}
-            <div className="glass-card p-4 sm:p-5">
-              <div className="flex flex-wrap gap-4 sm:gap-6 divide-x divide-white/6">
-                {b.ownerName && (
-                  <div className="flex-1 min-w-[120px]">
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Contact Person</p>
-                    <p className="text-sm font-bold text-white">{b.ownerName}</p>
-                  </div>
-                )}
-                {b.gstNumber && (
-                  <div className="flex-1 min-w-[140px] pl-4 sm:pl-6">
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">GST Number</p>
-                    <p className="text-sm font-mono font-bold text-white tracking-wider">{b.gstNumber}</p>
-                  </div>
-                )}
-                {b.hsnCodes?.length > 0 && (
-                  <div className="flex-1 min-w-[100px] pl-4 sm:pl-6">
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">HSN Codes</p>
-                    <p className="text-sm font-bold text-white">{b.hsnCodes.length} listed</p>
-                  </div>
-                )}
-                {b.mobiles?.length > 0 && (
-                  <div className="flex-1 min-w-[100px] pl-4 sm:pl-6">
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Phone Numbers</p>
-                    <p className="text-sm font-bold text-white">{b.mobiles.length} contact{b.mobiles.length !== 1 ? "s" : ""}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Business information */}
-            <section className="glass-card p-5 sm:p-6">
-              <h2 className="flex items-center gap-2 text-base font-bold text-white mb-5 pb-3 border-b border-white/6">
-                <Building2 className="w-4 h-4 text-purple-400" />
-                Business Information
+        {/* ── 📚 MAIN CONTENT GRID ── */}
+        <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          {/* LEFT: Business Details (Read-Only) */}
+          <div className="lg:col-span-2 space-y-8">
+            
+            {/* Business Info Section */}
+            <section className="bg-white rounded-[32px] border border-slate-200 p-8 shadow-sm">
+              <h2 className="text-lg font-black text-slate-900 mb-6 flex items-center gap-3">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                  <Building className="h-4 w-4" />
+                </div>
+                Company Credentials
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {b.ownerName && (
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Contact Person</p>
-                    <p className="text-sm font-semibold text-white">{b.ownerName}</p>
-                  </div>
-                )}
-                {b.gstNumber && (
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">GST Number</p>
-                    <div className="inline-flex items-center gap-2 bg-white/5 border border-white/8 rounded-lg px-3 py-1.5">
-                      <span className="text-sm font-mono font-bold text-white tracking-wider">{b.gstNumber}</span>
-                    </div>
-                  </div>
-                )}
-                {fullAddress && (
-                  <div className="sm:col-span-2">
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Address</p>
-                    <p className="text-sm text-slate-300 leading-relaxed">{fullAddress}</p>
-                  </div>
-                )}
-                {b.email && (
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Email</p>
-                    <a href={`mailto:${b.email}`} className="text-sm text-purple-400 hover:text-purple-300 transition-colors">
-                      {b.email}
-                    </a>
-                  </div>
-                )}
-                {b.website && (
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Website</p>
-                    <a
-                      href={b.website.startsWith("http") ? b.website : `https://${b.website}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 text-sm text-purple-400 hover:text-purple-300 transition-colors"
-                    >
-                      {cleanWebsite} <ExternalLink className="w-3 h-3" />
-                    </a>
-                  </div>
-                )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <InfoItem label="Owner/Representative" value={b.ownerName} icon={Globe} />
+                <InfoItem label="GST Registration" value={b.gstNumber} icon={ShieldCheck} isMono />
+                <InfoItem label="Operational Address" value={fullAddress} icon={MapPin} isFullWidth />
+                <InfoItem label="Official Website" value={cleanWebsite} icon={ExternalLink} isLink href={b.website} />
+                <InfoItem label="Email Correspondence" value={b.email} icon={Mail} isLink href={`mailto:${b.email}`} />
               </div>
             </section>
 
-            {/* HSN Codes */}
+            {/* HSN Codes Section */}
             {b.hsnCodes?.length > 0 && (
-              <section className="glass-card p-5 sm:p-6">
-                <h2 className="flex items-center gap-2 text-base font-bold text-white mb-5 pb-3 border-b border-white/6">
-                  <Tag className="w-4 h-4 text-purple-400" />
-                  Authorized HSN Codes
-                  <span className="ml-auto text-xs font-semibold text-slate-500 bg-white/5 px-2.5 py-1 rounded-full">
-                    {b.hsnCodes.length} codes
+              <section className="bg-white rounded-[32px] border border-slate-200 p-8 shadow-sm">
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-lg font-black text-slate-900 flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-lg bg-orange-100 flex items-center justify-center text-orange-500">
+                      <Tag className="h-4 w-4" />
+                    </div>
+                    Market Segments (HSN)
+                  </h2>
+                  <span className="px-3 py-1 rounded-full bg-slate-50 border border-slate-100 text-[10px] font-black uppercase text-slate-400">
+                    {b.hsnCodes.length} Categories
                   </span>
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                </div>
+                <div className="grid grid-cols-1 gap-4">
                   {b.hsnCodes.map((h: any) => (
-                    <div
-                      key={h.code}
-                      className="flex gap-3.5 p-3.5 rounded-xl bg-white/4 border border-white/6 hover:border-purple-500/30 hover:bg-purple-500/5 transition-all duration-200"
-                    >
-                      <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-purple-500/15 border border-purple-500/20 flex items-center justify-center">
-                        <Box className="w-4.5 h-4.5 text-purple-400" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-black text-white tracking-wide">{h.code}</p>
-                        {h.productName && (
-                          <p className="text-xs font-semibold text-purple-300 mt-0.5 line-clamp-1">{h.productName}</p>
-                        )}
-                        {h.description && (
-                          <p className="text-xs text-slate-500 mt-1 line-clamp-2">{h.description}</p>
-                        )}
-                        {h.unit && (
-                          <span className="inline-block mt-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 bg-white/5 px-2 py-0.5 rounded">
-                            {h.unit}
-                          </span>
-                        )}
+                    <div key={h.code} className="group p-5 rounded-2xl bg-slate-50 border border-transparent hover:border-primary/20 hover:bg-white transition-all">
+                      <div className="flex items-start gap-4">
+                        <div className="h-10 w-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-primary shadow-sm group-hover:scale-110 transition-transform">
+                          <Box className="h-5 w-5" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-black text-slate-900 tracking-tight">{h.code}</p>
+                          {h.productName && <p className="text-xs font-bold text-primary mt-0.5">{h.productName}</p>}
+                          {h.description && <p className="text-xs text-slate-500 mt-2 leading-relaxed">{h.description}</p>}
+                        </div>
+                        <ArrowRight className="h-4 w-4 text-slate-300 opacity-0 group-hover:opacity-100 transition-all" />
                       </div>
                     </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Gallery */}
-            {b.cardImages?.length > 0 && (
-              <section className="glass-card p-5 sm:p-6">
-                <h2 className="flex items-center gap-2 text-base font-bold text-white mb-5 pb-3 border-b border-white/6">
-                  <Building2 className="w-4 h-4 text-purple-400" />
-                  Product Catalog &amp; Business Cards
-                  <span className="ml-auto text-xs font-semibold text-slate-500 bg-white/5 px-2.5 py-1 rounded-full">
-                    {b.cardImages.length} image{b.cardImages.length !== 1 ? "s" : ""}
-                  </span>
-                </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {b.cardImages.map((img: string, idx: number) => (
-                    <a
-                      key={idx}
-                      href={img}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group relative aspect-[4/3] block rounded-xl overflow-hidden bg-slate-900 border border-white/6 hover:border-purple-500/40 transition-all"
-                    >
-                      <img
-                        src={img}
-                        alt={`Card ${idx + 1}`}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-center justify-center">
-                        <span className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 text-xs font-bold text-white bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                          <ExternalLink className="w-3 h-3" /> View
-                        </span>
-                      </div>
-                    </a>
                   ))}
                 </div>
               </section>
             )}
           </div>
 
-          {/* ── Right: Contact Card (sticky) ── */}
-          <aside className="w-full lg:w-72 xl:w-80 flex-shrink-0">
-            <div className="glass-card p-5 sm:p-6 sticky top-24">
-              <h3 className="flex items-center gap-2 text-sm font-bold text-white mb-5 pb-3 border-b border-white/6">
-                <PhoneCall className="w-4 h-4 text-emerald-400" />
-                Contact Business
-              </h3>
-
-              {/* Phone numbers */}
-              {b.mobiles?.length > 0 && (
-                <div className="space-y-2.5 mb-4">
-                  {b.mobiles.map((mobile: string, i: number) => (
-                    <a
-                      key={mobile}
-                      href={`tel:${mobile}`}
-                      className="group flex items-center justify-between p-3 rounded-xl bg-emerald-500/8 border border-emerald-500/15 hover:bg-emerald-500/15 hover:border-emerald-500/35 transition-all"
-                    >
-                      <div>
-                        {i === 0 && (
-                          <p className="text-[10px] uppercase tracking-wider text-emerald-500/70 font-bold mb-0.5">Primary</p>
-                        )}
-                        <span className="text-sm font-bold text-emerald-400 tracking-wide">{mobile}</span>
-                      </div>
-                      <PhoneCall className="w-4 h-4 text-emerald-500 transition-transform group-hover:scale-110 flex-shrink-0" />
-                    </a>
-                  ))}
+          {/* RIGHT: High-End Contact Widget */}
+          <div className="space-y-8">
+            <section className="bg-slate-900 rounded-[32px] p-8 text-white shadow-2xl shadow-slate-900/20 sticky top-10">
+              <h3 className="text-lg font-black mb-8 flex items-center gap-3">
+                <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center text-primary">
+                  <PhoneCall className="h-4 w-4" />
                 </div>
-              )}
+                Contact Desk
+              </h3>
+              
+              <div className="space-y-4">
+                {b.mobiles?.map((m: string, i: number) => (
+                  <a key={m} href={`tel:${m}`} className="group block p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/50 transition-all">
+                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1.5">{i === 0 ? "Primary Mobile" : "Secondary Contact"}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-lg font-black tracking-tight">{m}</span>
+                      <div className="h-8 w-8 rounded-lg bg-primary text-white flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <PhoneCall className="h-4 w-4" />
+                      </div>
+                    </div>
+                  </a>
+                ))}
 
-              {/* WhatsApp */}
-              {b.whatsapp && (
-                <a
-                  href={`https://wa.me/${b.whatsapp.replace(/[^0-9]/g, "")}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-3 p-3 rounded-xl bg-green-500/8 border border-green-500/15 hover:bg-green-500/15 hover:border-green-500/35 transition-all mb-4"
-                >
-                  <MessageCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
-                  <div>
-                    <p className="text-[10px] uppercase tracking-wider text-green-500/70 font-bold mb-0.5">WhatsApp</p>
-                    <span className="text-sm font-bold text-green-400">{b.whatsapp}</span>
-                  </div>
-                </a>
-              )}
+                {b.whatsapp && (
+                  <a href={`https://wa.me/${b.whatsapp.replace(/[^0-9]/g, "")}`} className="group block p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 hover:border-emerald-500 transition-all">
+                    <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1.5">WhatsApp Inquiry</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-lg font-black text-emerald-400 tracking-tight">{b.whatsapp}</span>
+                      <div className="h-8 w-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <MessageCircle className="h-4 w-4" />
+                      </div>
+                    </div>
+                  </a>
+                )}
+              </div>
 
-              {/* Email */}
-              {b.email && (
-                <a
-                  href={`mailto:${b.email}`}
-                  className="flex items-center gap-3 p-3 rounded-xl border border-white/6 hover:bg-white/5 hover:border-white/12 transition-all mb-2.5"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-3.5 h-3.5 text-slate-400" />
-                  </div>
-                  <span className="text-sm text-slate-300 truncate">{b.email}</span>
-                </a>
-              )}
+              <div className="mt-10 p-6 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent border border-white/5 text-center">
+                <p className="text-xs font-bold text-slate-400 mb-2">Need bulk pricing?</p>
+                <button className="w-full py-3 rounded-xl bg-white text-slate-900 font-black text-[11px] uppercase tracking-widest hover:bg-slate-100 transition-all">
+                  Request A Quote
+                </button>
+              </div>
 
-              {/* Website */}
-              {b.website && (
-                <a
-                  href={b.website.startsWith("http") ? b.website : `https://${b.website}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-3 p-3 rounded-xl border border-white/6 hover:bg-white/5 hover:border-white/12 transition-all mb-4"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
-                    <Globe className="w-3.5 h-3.5 text-slate-400" />
-                  </div>
-                  <span className="text-sm text-slate-300 truncate">{cleanWebsite}</span>
-                  <ExternalLink className="w-3 h-3 text-slate-600 flex-shrink-0" />
-                </a>
-              )}
-
-              {/* Primary CTA */}
-              {b.mobiles?.[0] && (
-                <a
-                  href={`tel:${b.mobiles[0]}`}
-                  className="btn-glow flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-sm"
-                >
-                  <PhoneCall className="w-4 h-4" /> Call Now
-                </a>
-              )}
-
-              {b.whatsapp && (
-                <a
-                  href={`https://wa.me/${b.whatsapp.replace(/[^0-9]/g, "")}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-3 mt-2.5 rounded-xl font-bold text-sm bg-green-600/20 hover:bg-green-600/35 border border-green-500/25 hover:border-green-500/50 text-green-400 transition-all"
-                >
-                  <MessageCircle className="w-4 h-4" /> WhatsApp
-                </a>
-              )}
-
-              <p className="mt-4 text-center text-[10px] text-slate-600">
-                Listed on {SITE_NAME} · Verified Business
+              <p className="mt-6 text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                Protected by {SITE_NAME}
               </p>
-            </div>
-          </aside>
+            </section>
+          </div>
         </div>
       </div>
     </main>
   );
+}
+
+function InfoItem({ label, value, icon: Icon, isMono = false, isFullWidth = false, isLink = false, href = "" }: { label: string; value: string; icon: any; isMono?: boolean; isFullWidth?: boolean; isLink?: boolean; href?: string }) {
+  if (!value) return null;
+  const content = (
+    <div className={cn("space-y-1.5", isFullWidth ? "sm:col-span-2" : "")}>
+      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+        <Icon className="h-3 w-3 text-primary/60" /> {label}
+      </p>
+      {isLink ? (
+        <a href={href} target="_blank" rel="noreferrer" className="text-sm font-bold text-primary hover:underline flex items-center gap-1">
+          {value} <ExternalLink className="h-3 w-3" />
+        </a>
+      ) : (
+        <p className={cn("text-sm font-bold text-slate-700", isMono ? "font-mono tracking-wider" : "")}>
+          {value}
+        </p>
+      )}
+    </div>
+  );
+  return content;
 }
