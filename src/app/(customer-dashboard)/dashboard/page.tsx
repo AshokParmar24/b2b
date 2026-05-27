@@ -5,6 +5,8 @@ import dbConnect from "@/lib/dbConnect";
 import Business from "@/models/Business";
 import Plan from "@/models/Plan";
 import User from "@/models/User";
+import State from "@/models/State";
+import City from "@/models/City";
 import Link from "next/link";
 import {
   Plus,
@@ -32,7 +34,7 @@ export default async function DashboardPage() {
   if (!session) redirect("/login");
 
   await dbConnect();
-  void User; void Plan;
+  void User; void Plan; void State; void City;
 
   const userId = (session.user as any).id;
 

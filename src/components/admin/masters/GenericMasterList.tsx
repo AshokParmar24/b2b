@@ -651,14 +651,14 @@ export function GenericMasterList({
                       </td>
                     ))}
                     <td className="px-6 py-4 text-right whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="flex items-center justify-end gap-2 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
                         {item.isActive ? (
                           <>
                             <Link href={editPath(item._id)} title="Edit Record">
                               <Button
                                 variant="outline"
                                 size="icon"
-                                className="h-9 w-9 rounded-xl border-border/50 hover:bg-blue-500 hover:text-white hover:border-blue-500 transition-all shadow-sm"
+                                className="h-9 w-9 rounded-xl border-border/50 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all shadow-sm"
                               >
                                 <Edit2 className="h-4 w-4" />
                               </Button>
@@ -668,7 +668,7 @@ export function GenericMasterList({
                               size="icon"
                               title="Archive Record"
                               onClick={() => { setSelectedItem(item); setIsDeleteModalOpen(true); }}
-                              className="h-9 w-9 rounded-xl border-border/50 hover:bg-destructive hover:text-white hover:border-destructive transition-all shadow-sm"
+                              className="h-9 w-9 rounded-xl border-border/50 text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 transition-all shadow-sm"
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
@@ -678,7 +678,7 @@ export function GenericMasterList({
                             variant="outline"
                             size="icon"
                             onClick={() => handleToggleStatus(item)}
-                            className="h-9 w-9 rounded-xl border-border/50 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 transition-all shadow-sm"
+                            className="h-9 w-9 rounded-xl border-border/50 text-muted-foreground hover:bg-emerald-500/10 hover:text-emerald-500 hover:border-emerald-500/30 transition-all shadow-sm"
                             title="Restore Record"
                           >
                             <ArchiveRestore className="h-4 w-4" />

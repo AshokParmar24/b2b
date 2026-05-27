@@ -38,7 +38,7 @@ export function HsnSelect({
     const fetchHsnCodes = async () => {
       try {
         setLoading(true);
-        const response = await api.get(API_ENDPOINTS.MASTERS.HSN);
+        const response = await api.get<any>(API_ENDPOINTS.MASTERS.HSN);
         // API might return { data: [...] } or just [...]
         const data = response.data || response;
         if (Array.isArray(data)) {
@@ -55,16 +55,16 @@ export function HsnSelect({
   }, []);
 
   const options = hsnCodes.map((h) => ({
-    value: h.code, // We filter by code string in the URL
-    label: `${h.code}${h.description ? ` - ${h.description}` : ""}`,
-    icon: <Tag className="w-3.5 h-3.5" />,
+    id: h.code, // We filter by code string in the URL
+    name: `${h.code}${h.description ? ` - ${h.description}` : ""}`,
+    icon: Tag,
   }));
 
   if (showAllOption) {
     options.unshift({
-      value: "all",
-      label: "All HSN Codes",
-      icon: <Tag className="w-3.5 h-3.5" />,
+      id: "all",
+      name: "All HSN Codes",
+      icon: Tag,
     });
   }
 

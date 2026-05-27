@@ -23,6 +23,12 @@ export const API_ENDPOINTS = {
     REGISTER: "/api/auth/register",
     ME: "/api/auth/me",
   },
+  
+  // 🔔 Notifications
+  NOTIFICATIONS: {
+    BASE: "/api/notifications",
+    MARK_ALL_READ: "/api/notifications/mark-all-read",
+  },
 
   // 🛡️ Admin
   ADMIN: {

@@ -9,6 +9,8 @@ import {
 import dbConnect from "@/lib/dbConnect";
 import Business from "@/models/Business";
 import Country from "@/models/Country";
+import State from "@/models/State";
+import City from "@/models/City";
 import HsnCode from "@/models/HsnCode";
 import { StatItem } from "@/types";
 
@@ -17,6 +19,7 @@ export const revalidate = 0;
 
 export default async function HomePage() {
   await dbConnect();
+  void Country; void State; void City; void HsnCode;
 
   // Fetch dynamic stats
   const [businessCount, countryCount, hsnCount, verifiedCount] = await Promise.all([

@@ -1,0 +1,36 @@
+import mongoose, { Schema, Document } from "mongoose";
+
+export interface INotification extends Document {
+  userId: mongoose.Types.ObjectId;
+  title: string;
+  message: string;
+  type: "info" | "success" | "warning" | "alert";
+  isRead: boolean;
+  link?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const notificationSchema = new Schema<INotification>(
+  {
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    title: { type: String, required: true },
+    message: { type: String, required: true },
+    type: { 
+      type: String, 
+      enum: ["info", "success", "warning", "alert"], 
+      default: "info" 
+    },
+    isRead: { type: Boolean, default: false },
+    link: { type: String },
+  },
+  { timestamps: true }
+);
+
+// Indexes for faster querying
+notificationSchema.index({ userId: 1, createdAt: -1 });
+notificationSchema.index({ userId: 1, isRead: 1 });
+
+const Notification = mongoose.models.Notification || mongoose.model<INotification>("Notification", notificationSchema);
+
+export default Notification;

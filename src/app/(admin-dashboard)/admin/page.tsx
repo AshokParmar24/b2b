@@ -6,6 +6,8 @@ import Business from "@/models/Business";
 import User from "@/models/User";
 import Plan from "@/models/Plan";
 import Country from "@/models/Country";
+import State from "@/models/State";
+import City from "@/models/City";
 import { 
   Building2, 
   Users, 
@@ -26,6 +28,7 @@ export default async function AdminDashboard() {
   if (!session || (session.user as any).role !== UserRole.ADMIN) redirect("/login");
 
   await dbConnect();
+  void Country; void State; void City;
   const [totalBusinesses, totalUsers, totalPlans, totalCountries, recentBusinesses] = await Promise.all([
     Business.countDocuments(),
     User.countDocuments({ role: UserRole.USER }),

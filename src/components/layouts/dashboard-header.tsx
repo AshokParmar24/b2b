@@ -4,6 +4,7 @@ import React from "react";
 import { Search, Bell, User, Menu, X, Sparkles } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { BrandName } from "@/components/ui/BrandName";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { cn } from "@/lib/utils";
 
 interface DashboardHeaderProps {
@@ -50,11 +51,7 @@ export function DashboardHeader({ userDisplayName, role, onMenuClick }: Dashboar
 
       {/* 🔔 Notifications & Profile */}
       <div className="flex items-center gap-3 md:gap-4">
-        <button className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-muted/30 transition-all hover:bg-background hover:shadow-sm active:scale-90 group">
-          <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-          <Bell className="h-5 w-5 text-muted-foreground/60 group-hover:text-primary transition-colors" />
-          <span className="absolute top-3 right-3 h-2 w-2 rounded-full bg-primary ring-2 ring-background animate-pulse" />
-        </button>
+        <NotificationBell />
         
         <div className="h-8 w-[1px] bg-border/50 mx-1 hidden sm:block" />
 

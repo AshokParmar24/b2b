@@ -20,6 +20,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { SITE_NAME, SITE_URL } from "@/lib/site-config";
+import { cn } from "@/lib/utils";
 import dbConnect from "@/lib/dbConnect";
 import Business from "@/models/Business";
 import Country from "@/models/Country";
