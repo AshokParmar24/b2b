@@ -117,6 +117,7 @@ export interface User {
   planStartDate?: Date | null;
   planEndDate?: Date | null;
   isActive?: boolean;
+  dataCredits?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

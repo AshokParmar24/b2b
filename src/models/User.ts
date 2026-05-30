@@ -20,6 +20,7 @@ const UserSchema = new Schema<User & Document>(
     isActive: { type: Boolean, default: true },
     resetPasswordToken: { type: String, default: null },
     resetPasswordExpires: { type: Date, default: null },
+    dataCredits: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
