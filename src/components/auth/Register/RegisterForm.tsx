@@ -154,28 +154,28 @@ export function RegisterForm() {
   }
 
   return (
-    <Card className="w-full max-w-[980px] border border-slate-200 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.12)] rounded-[32px] sm:rounded-[48px] overflow-hidden transition-all duration-500">
-      <CardHeader className="space-y-6 px-6 pt-12 pb-8 sm:px-12 sm:pt-16 lg:px-20 text-center">
-        <div className="flex flex-col items-center gap-5">
-          <Link href={AppRoutes.HOME} className="flex items-center justify-center gap-3 sm:gap-4 group transition-all active:scale-95">
+    <Card className="w-full max-w-[980px] border border-slate-200 bg-white shadow-[0_40px_100px_-20px_rgba(0,0,0,0.12)] rounded-2xl sm:rounded-[48px] overflow-hidden transition-all duration-500">
+      <CardHeader className="space-y-4 px-4 pt-8 pb-4 sm:space-y-6 sm:px-12 sm:pt-16 lg:px-20 text-center">
+        <div className="flex flex-col items-center gap-4 sm:gap-5">
+          <Link href={AppRoutes.HOME} className="flex items-center justify-center gap-2.5 sm:gap-4 group transition-all active:scale-95">
             <div className="relative">
               <div className="absolute -inset-2 bg-primary/10 rounded-full blur-xl group-hover:bg-primary/20 transition-all" />
-              <Logo width={42} height={42} className="sm:w-[52px] sm:h-[52px] relative" />
+              <Logo width={32} height={32} className="sm:w-[52px] sm:h-[52px] relative" />
             </div>
-            <BrandName className="text-3xl sm:text-5xl tracking-tight" />
+            <BrandName className="text-2xl sm:text-5xl tracking-tight" />
           </Link>
-          <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-slate-300">
+          <p className="text-[9px] sm:text-xs font-black uppercase tracking-[0.3em] text-slate-300">
             {SITE_TAGLINE}
           </p>
         </div>
       </CardHeader>
 
-      <CardContent className="px-6 pb-12 sm:px-12 lg:px-20">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-10 sm:space-y-12">
+      <CardContent className="px-4 pb-8 sm:px-12 lg:px-20">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 sm:space-y-12">
           
           {/* 👤 Section 1: Personal Info */}
           <FormSection title="Identity & Contact" icon={Contact}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <Input
                 label="First Name"
                 autoFocus
@@ -183,14 +183,14 @@ export function RegisterForm() {
                 {...register("firstName")}
                 placeholder="John"
                 error={errors.firstName?.message}
-                className="h-14 sm:h-16 rounded-2xl border-slate-200 bg-slate-50/30 pl-11 pr-5 font-bold shadow-sm transition-all focus:bg-white"
+                className="h-12 sm:h-16 rounded-xl sm:rounded-2xl border-slate-200 bg-slate-50/30 pl-11 pr-5 font-bold shadow-sm transition-all focus:bg-white text-xs sm:text-base"
               />
               <Input
                 label="Last Name"
                 {...register("lastName")}
                 placeholder="Doe"
                 error={errors.lastName?.message}
-                className="h-14 sm:h-16 rounded-2xl border-slate-200 bg-slate-50/30 px-5 font-bold shadow-sm transition-all focus:bg-white"
+                className="h-12 sm:h-16 rounded-xl sm:rounded-2xl border-slate-200 bg-slate-50/30 px-5 font-bold shadow-sm transition-all focus:bg-white text-xs sm:text-base"
               />
               <Input
                 label="Professional Email"
@@ -198,7 +198,7 @@ export function RegisterForm() {
                 {...register("email")}
                 placeholder="name@company.com"
                 error={errors.email?.message}
-                className="h-14 sm:h-16 rounded-2xl border-slate-200 bg-slate-50/30 pl-11 pr-5 font-bold shadow-sm transition-all focus:bg-white"
+                className="h-12 sm:h-16 rounded-xl sm:rounded-2xl border-slate-200 bg-slate-50/30 pl-11 pr-5 font-bold shadow-sm transition-all focus:bg-white text-xs sm:text-base"
               />
               <Controller
                 name="phoneNumber"
@@ -221,7 +221,7 @@ export function RegisterForm() {
 
           {/* 📍 Section 2: Location */}
           <FormSection title="Business Location" icon={MapPin}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <Controller name="country" control={control} render={({ field }) => (
                 <CountrySelect label="Country" value={field.value} onChange={field.onChange} placeholder="Select Country" error={errors.country?.message} />
               )} />
@@ -239,7 +239,7 @@ export function RegisterForm() {
 
           {/* 🔐 Section 3: Security */}
           <FormSection title="Account Security" icon={Fingerprint}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <Input
                 label="Create Password"
                 icon={<Lock className="h-4 w-4" />}
@@ -247,10 +247,10 @@ export function RegisterForm() {
                 {...register("password")}
                 placeholder="••••••••"
                 error={errors.password?.message}
-                className="h-14 sm:h-16 rounded-2xl border-slate-200 bg-slate-50/30 pl-11 pr-14 font-bold shadow-sm transition-all"
+                className="h-12 sm:h-16 rounded-xl sm:rounded-2xl border-slate-200 bg-slate-50/30 pl-11 pr-12 font-bold shadow-sm transition-all text-xs sm:text-base"
                 suffix={
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="text-slate-300 hover:text-primary transition-colors cursor-pointer p-1">
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
                   </button>
                 }
               />
@@ -261,10 +261,10 @@ export function RegisterForm() {
                 {...register("confirmPassword")}
                 placeholder="••••••••"
                 error={errors.confirmPassword?.message}
-                className="h-14 sm:h-16 rounded-2xl border-slate-200 bg-slate-50/30 pl-11 pr-14 font-bold shadow-sm transition-all"
+                className="h-12 sm:h-16 rounded-xl sm:rounded-2xl border-slate-200 bg-slate-50/30 pl-11 pr-12 font-bold shadow-sm transition-all text-xs sm:text-base"
                 suffix={
                   <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="text-slate-300 hover:text-primary transition-colors cursor-pointer p-1">
-                    {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showConfirmPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
                   </button>
                 }
               />
@@ -272,23 +272,23 @@ export function RegisterForm() {
           </FormSection>
 
           {errors.root?.message && (
-            <div className="animate-in fade-in slide-in-from-top-1 rounded-2xl border border-rose-100 bg-rose-50/50 p-5 text-center">
+            <div className="animate-in fade-in slide-in-from-top-1 rounded-xl sm:rounded-2xl border border-rose-100 bg-rose-50/50 p-4 text-center">
               <p className="text-xs font-black text-rose-600 uppercase tracking-widest">
                 {errors.root.message}
               </p>
             </div>
           )}
 
-          <Button type="submit" disabled={loading} className="h-16 sm:h-20 w-full rounded-[24px] text-lg sm:text-xl font-black shadow-[0_20px_50px_-10px_rgba(var(--primary-rgb),0.3)] transition-all hover:scale-[1.01] active:scale-[0.98] group relative overflow-hidden">
+          <Button type="submit" disabled={loading} className="h-14 sm:h-20 w-full rounded-xl sm:rounded-[24px] text-sm sm:text-xl font-black shadow-[0_20px_50px_-10px_rgba(var(--primary-rgb),0.3)] transition-all hover:scale-[1.01] active:scale-[0.98] group relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-primary to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative flex items-center justify-center gap-3">
+            <div className="relative flex items-center justify-center gap-2.5 sm:gap-3">
               {loading ? (
-                <Loader2 className="h-8 w-8 animate-spin" />
+                <Loader2 className="h-6 w-6 animate-spin" />
               ) : (
                 <>
-                  <UserPlus className="h-6 w-6" />
+                  <UserPlus className="h-5 w-5 sm:h-6 sm:w-6" />
                   Initialize Profile
-                  <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 transition-transform group-hover:translate-x-1" />
                 </>
               )}
             </div>
@@ -296,17 +296,17 @@ export function RegisterForm() {
         </form>
       </CardContent>
 
-      <CardFooter className="flex flex-col gap-8 px-6 sm:px-12 pb-12 pt-8 sm:pb-16 text-center bg-slate-50/50">
-        <div className="flex flex-col gap-1.5">
-          <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">
+      <CardFooter className="flex flex-col gap-6 px-4 pb-8 pt-6 sm:px-12 sm:pb-16 sm:pt-8 text-center bg-slate-50/50">
+        <div className="flex flex-col gap-1">
+          <p className="text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-widest">
             Already registered?
           </p>
           <Link 
             href={AppRoutes.LOGIN} 
-            className="group inline-flex items-center justify-center gap-2 text-sm font-black text-primary hover:text-indigo-600 transition-colors"
+            className="group inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-black text-primary hover:text-indigo-600 transition-colors"
           >
             Sign in to Existing Account
-            <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
       </CardFooter>
@@ -316,12 +316,12 @@ export function RegisterForm() {
 
 function FormSection({ title, icon: Icon, children }: { title: string; icon: any; children: React.ReactNode }) {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <div className="h-10 w-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary">
-          <Icon className="h-5 w-5" />
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex items-center gap-3 sm:gap-4">
+        <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary shrink-0">
+          <Icon className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
         </div>
-        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">{title}</h3>
+        <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-slate-400">{title}</h3>
         <div className="h-px flex-1 bg-slate-100" />
       </div>
       {children}
