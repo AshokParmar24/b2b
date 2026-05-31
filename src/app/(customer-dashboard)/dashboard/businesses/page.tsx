@@ -124,9 +124,11 @@ export default async function CustomerBusinessesPage() {
                         <Edit className="h-4 w-4" />
                       </button>
                     </Link>
-                    <button className="h-10 w-10 rounded-xl bg-background border border-border/50 text-muted-foreground hover:text-primary hover:border-primary flex items-center justify-center transition-all">
-                      <ExternalLink className="h-4 w-4" />
-                    </button>
+                    <Link href={`/${b.slug}`} target="_blank">
+                      <button className="h-10 w-10 rounded-xl bg-background border border-border/50 text-muted-foreground hover:text-primary hover:border-primary flex items-center justify-center transition-all">
+                        <ExternalLink className="h-4 w-4" />
+                      </button>
+                    </Link>
                   </div>
                 </div>
 
@@ -158,9 +160,9 @@ export default async function CustomerBusinessesPage() {
                   </div>
                 </div>
 
-                <Link href={`/dashboard/businesses/${b._id}`} className="w-full">
+                <Link href={`/${b.slug}`} target="_blank" className="w-full">
                   <button className="w-full h-12 rounded-xl bg-foreground text-background font-black text-xs uppercase tracking-widest hover:bg-primary hover:text-primary-foreground transition-all flex items-center justify-center gap-2">
-                    Card Analytics <ChevronRight className="h-4 w-4" />
+                    View Public Card <ChevronRight className="h-4 w-4" />
                   </button>
                 </Link>
               </div>

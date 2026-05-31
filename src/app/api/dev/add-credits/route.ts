@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     await CreditTransaction.create({
       userId: user._id,
       amount: 100,
-      description: "Added 100 Free Test Credits for Volza Trade Intelligence"
+      description: "Added 100 Free Test Credits for HETNEX Trade Intelligence"
     });
 
     return NextResponse.json({
