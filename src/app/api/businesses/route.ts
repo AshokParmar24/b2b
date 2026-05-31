@@ -46,8 +46,34 @@ export async function POST(req: Request) {
   const user = await User.findById(userId).populate("planId");
   if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-  // Check plan limits
+  const body = await req.json();
+  const { businessId, ...data } = body;
   const plan = user.planId as any;
+
+  if (businessId) {
+    const existingBusiness = await Business.findOne({ _id: businessId, userId });
+    if (!existingBusiness) {
+      return NextResponse.json({ error: "Business listing not found or unauthorized" }, { status: 404 });
+    }
+
+    if (data.cardImages && data.cardImages.length > 10)
+      return NextResponse.json({ error: "Maximum 10 card images allowed" }, { status: 400 });
+
+    if (plan?.maxHsnCodes && data.hsnCodes?.length > plan.maxHsnCodes)
+      return NextResponse.json(
+        { error: `Plan allows max ${plan.maxHsnCodes} HSN codes` },
+        { status: 400 }
+      );
+
+    const slug = slugify(data.businessName + "-" + Date.now());
+    const updated = await Business.findByIdAndUpdate(
+      businessId,
+      { ...data, slug },
+      { new: true }
+    );
+    return NextResponse.json(updated, { status: 200 });
+  }
+
   const currentCount = await Business.countDocuments({ userId, isActive: true });
   if (plan && currentCount >= plan.maxListings)
     return NextResponse.json(
@@ -55,21 +81,17 @@ export async function POST(req: Request) {
       { status: 403 }
     );
 
-  const body = await req.json();
-
-  // Validate cardImages max 10
-  if (body.cardImages && body.cardImages.length > 10)
+  if (data.cardImages && data.cardImages.length > 10)
     return NextResponse.json({ error: "Maximum 10 card images allowed" }, { status: 400 });
 
-  // Validate HSN codes per plan
-  if (plan?.maxHsnCodes && body.hsnCodes?.length > plan.maxHsnCodes)
+  if (plan?.maxHsnCodes && data.hsnCodes?.length > plan.maxHsnCodes)
     return NextResponse.json(
       { error: `Plan allows max ${plan.maxHsnCodes} HSN codes` },
       { status: 400 }
     );
 
-  const slug = slugify(body.businessName + "-" + Date.now());
-  const business = await Business.create({ ...body, slug, userId });
+  const slug = slugify(data.businessName + "-" + Date.now());
+  const business = await Business.create({ ...data, slug, userId });
 
   return NextResponse.json(business, { status: 201 });
 }

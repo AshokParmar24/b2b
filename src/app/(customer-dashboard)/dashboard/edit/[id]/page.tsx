@@ -1,4 +1,7 @@
 import BusinessCardForm from "@/components/forms/BusinessCardForm";
+import dbConnect from "@/lib/dbConnect";
+import BusinessModel from "@/models/Business";
+import { notFound } from "next/navigation";
 
 export const metadata = {
   title: "Edit Business Listing",
@@ -7,29 +10,40 @@ export const metadata = {
 export default async function EditBusinessPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  // Simulate fetching business data by ID
-  const mockInitialData = {
-    name: "Stark Industries",
-    ownerName: "Tony Stark",
-    email: "tony@stark.com",
-    mobiles: [{ value: "9876543210" }, { value: "1122334455" }],
-    countryId: "in",
-    stateId: "mh",
-    cityId: "bom",
-    pincodeId: "400001",
-    address: "Stark Tower, Manhattan",
-    gstNumber: "22AAAAA0000A1Z5",
-    hsnCodes: [{ code: "8484", description: "Mechanical seals" }],
-    cardImages: ["https://images.unsplash.com/photo-1560179707-f14e90ef3623"],
+  await dbConnect();
+  
+  // Fetch real database business listing by ID
+  const business = await BusinessModel.findById(id).lean();
+  
+  if (!business) {
+    notFound();
+  }
+
+  // Transform business model fields to fit BusinessCardForm properties
+  const initialData = {
+    name: business.businessName,
+    ownerName: business.ownerName,
+    email: business.email || "",
+    mobiles: (business.mobiles || []).map((m: string) => ({ value: m })),
+    countryId: business.countryId?.toString() || "",
+    stateId: business.stateId?.toString() || "",
+    cityId: business.cityId?.toString() || "",
+    pincodeId: business.pincodeId?.toString() || "",
+    address: business.address || "",
+    gstNumber: business.gstNumber || "",
+    hsnCodes: (business.hsnCodes || []).map((h: any) => ({ code: h.code, description: h.description })),
+    cardImages: business.cardImages || [],
   };
 
   return (
-    <div className="animate-fadeInUp mx-auto max-w-4xl py-8">
+    <div className="animate-fadeInUp mx-auto max-w-4xl py-8 px-4">
       <div className="mb-6">
         <h1 className="mb-2 text-2xl font-bold text-white">Update Listing</h1>
-        <p className="text-gray-400">Modify your business details for ID: {id}</p>
+        <p className="text-gray-400">
+          Modify your business details for: <span className="text-primary font-black">{initialData.name}</span>
+        </p>
       </div>
-      <BusinessCardForm initialData={mockInitialData} isEditing={true} />
+      <BusinessCardForm initialData={initialData} isEditing={true} businessId={id} />
     </div>
   );
 }

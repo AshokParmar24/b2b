@@ -118,6 +118,8 @@ export interface User {
   planEndDate?: Date | null;
   isActive?: boolean;
   dataCredits?: number;
+  resetPasswordToken?: string | null;
+  resetPasswordExpires?: Date | null;
   createdAt?: Date;
   updatedAt?: Date;
 }

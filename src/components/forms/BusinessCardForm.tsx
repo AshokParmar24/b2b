@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { UploadCloud, X, Image as ImageIcon } from "lucide-react";
+import { UploadCloud, X, Image as ImageIcon, Building2, Plus, Loader2, ShieldCheck } from "lucide-react";
 import { CountrySelect } from "@/components/common/CountrySelect";
 import { api } from "@/lib/api";
 import { API_ENDPOINTS } from "@/lib/api-endpoints";
@@ -58,11 +58,13 @@ type FormData = yup.InferType<typeof schema>;
 interface BusinessCardFormProps {
   initialData?: Partial<FormData>;
   isEditing?: boolean;
+  businessId?: string;
 }
 
 export default function BusinessCardForm({
   initialData,
   isEditing = false,
+  businessId,
 }: BusinessCardFormProps) {
   const router = useRouter();
   const {
@@ -195,6 +197,7 @@ export default function BusinessCardForm({
     const loadingToast = toast.loading(isEditing ? "Saving changes..." : "Creating listing...");
     try {
       const payload = {
+        businessId,
         businessName: data.name,
         ownerName: data.ownerName,
         email: data.email,
