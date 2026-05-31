@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import dbConnect from "@/lib/dbConnect";
 import Favorite from "@/models/Favorite";
 import Business from "@/models/Business";
+import City from "@/models/City";
+import State from "@/models/State";
 import { Star, MapPin, Building2, ExternalLink, Trash2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -17,6 +19,8 @@ export default async function CustomerFavoritesPage() {
   await dbConnect();
   // Ensure models are registered
   void Business;
+  void City;
+  void State;
   
   const userId = (session.user as any).id;
   

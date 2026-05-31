@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import dbConnect from "@/lib/dbConnect";
 import Business from "@/models/Business";
 import Inquiry from "@/models/Inquiry";
+import City from "@/models/City";
+import State from "@/models/State";
 import Link from "next/link";
 import { 
   Plus, 
@@ -29,6 +31,9 @@ export default async function CustomerBusinessesPage() {
 
   await dbConnect();
   const userId = (session.user as any).id;
+  
+  // Ensure referenced models are registered before populate
+  void City; void State;
   
   // Fetch only this user's businesses
   const businessesData = await Business.find({ userId })

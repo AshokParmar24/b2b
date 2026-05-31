@@ -7,6 +7,10 @@ import Plan from "@/models/Plan";
 import Business from "@/models/Business";
 import Inquiry from "@/models/Inquiry";
 import Favorite from "@/models/Favorite";
+import Country from "@/models/Country";
+import State from "@/models/State";
+import City from "@/models/City";
+import Pincode from "@/models/Pincode";
 import {
   Settings,
   User as UserIcon,
@@ -43,6 +47,10 @@ export default async function CustomerSettingsPage() {
   // Ensure models are registered
   void Plan;
   void Business;
+  void Country;
+  void State;
+  void City;
+  void Pincode;
 
   const userId = (session.user as any).id;
 
