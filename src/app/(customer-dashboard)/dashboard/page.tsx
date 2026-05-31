@@ -7,6 +7,7 @@ import Plan from "@/models/Plan";
 import User from "@/models/User";
 import State from "@/models/State";
 import City from "@/models/City";
+import ShipmentRecord from "@/models/ShipmentRecord";
 import Link from "next/link";
 import {
   Plus,
@@ -24,6 +25,7 @@ import {
   AlertCircle,
   CheckCircle2,
   ExternalLink,
+  Globe,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -34,11 +36,11 @@ export default async function DashboardPage() {
   if (!session) redirect("/login");
 
   await dbConnect();
-  void User; void Plan; void State; void City;
+  void User; void Plan; void State; void City; void ShipmentRecord;
 
   const userId = (session.user as any).id;
 
-  const [user, cardCount, recentBusinesses] = await Promise.all([
+  const [user, cardCount, recentBusinesses, totalShipments] = await Promise.all([
     User.findById(userId).populate("planId").lean(),
     Business.countDocuments({ userId }),
     Business.find({ userId })
@@ -47,7 +49,10 @@ export default async function DashboardPage() {
       .sort({ createdAt: -1 })
       .limit(5)
       .lean(),
+    ShipmentRecord.countDocuments({}),
   ]);
+
+  const dataCredits = (user as any)?.dataCredits || 0;
 
   const plan = (user as any)?.planId as any;
   const planEndDate = (user as any)?.planEndDate;
@@ -249,6 +254,43 @@ export default async function DashboardPage() {
           </Link>
         </div>
       )}
+
+      {/* ── VOLZA TRADE INTELLIGENCE PREVIEW ── */}
+      <div className="rounded-[28px] border border-emerald-500/20 bg-card/40 backdrop-blur-xl p-6 sm:p-8 relative overflow-hidden group">
+        <div className="absolute -right-12 -top-12 h-40 w-40 bg-emerald-500/10 rounded-full blur-3xl group-hover:scale-125 transition-all duration-700 pointer-events-none" />
+        
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 text-[10px] font-black uppercase tracking-widest">
+              <Globe className="h-3.5 w-3.5 text-emerald-500" />
+              Volza Trade Intelligence
+            </div>
+            
+            <h2 className="text-xl sm:text-2xl font-black text-foreground tracking-tight">
+              Explore Global Customs Shipments
+            </h2>
+            <p className="text-xs sm:text-sm font-medium text-muted-foreground max-w-2xl">
+              Track competitors, audit suppliers, and monitor global import/export markets dynamically. Drill down across <strong>{totalShipments}+ verified customs records</strong>, HSN codes, and regional ports in real-time.
+            </p>
+          </div>
+          
+          {/* Quick Credit Info & Button */}
+          <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-4 shrink-0 border-t border-border/10 pt-4 md:border-0 md:pt-0">
+            <div className="text-left md:text-right">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">Unlocked Credits</p>
+              <p className="text-2xl font-[1000] text-primary tracking-tight">{dataCredits} <span className="text-xs font-black text-muted-foreground/60">Credits</span></p>
+            </div>
+            
+            <Link href="/dashboard/trade-intelligence">
+              <button className="inline-flex items-center gap-2 h-11 px-5 rounded-[16px] bg-primary text-primary-foreground font-black text-xs shadow-lg shadow-primary/20 hover:scale-[1.03] active:scale-95 transition-all duration-300">
+                <Globe className="h-4 w-4" />
+                Launch Trade Portal
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
 
       {/* ── RECENT BUSINESSES ── */}
       {recentBusinesses.length > 0 && (

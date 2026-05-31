@@ -613,14 +613,12 @@ export function GenericMasterList({
                   <tr
                     key={item._id}
                     className={cn(
-                      "group transition-all duration-300 hover:bg-background/80 relative",
+                      "group transition-all duration-300 hover:bg-background/80",
                       !item.isActive && "opacity-60 bg-muted/5 grayscale-[0.5]",
                       selectedIds.includes(item._id) && "bg-primary/[0.03] hover:bg-primary/[0.05]"
                     )}
                   >
-                    <td className="px-6 py-4 relative">
-                      {/* Active row indicator */}
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-emerald-400 scale-y-0 group-hover:scale-y-100 transition-transform origin-center duration-300 rounded-r-full" />
+                    <td className="px-6 py-4 border-l-[3px] border-l-transparent group-hover:border-l-primary transition-all duration-300">
                       <div className="flex items-center justify-center">
                         <div
                           onClick={() => toggleSelect(item._id)}
@@ -637,7 +635,7 @@ export function GenericMasterList({
                       <td
                         key={col.key}
                         className={cn(
-                          "px-6 py-4 relative whitespace-nowrap",
+                          "px-6 py-4 whitespace-nowrap",
                           col.hideOnMobile ? "hidden lg:table-cell" : ""
                         )}
                       >

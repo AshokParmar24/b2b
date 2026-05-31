@@ -164,7 +164,7 @@ export function RegisterForm() {
             </div>
             <BrandName className="text-2xl sm:text-5xl tracking-tight" />
           </Link>
-          <p className="text-[9px] sm:text-xs font-black uppercase tracking-[0.3em] text-slate-300">
+          <p className="text-[8px] sm:text-xs font-black uppercase tracking-[0.1em] sm:tracking-[0.3em] text-slate-300 text-center leading-relaxed max-w-[280px] sm:max-w-full">
             {SITE_TAGLINE}
           </p>
         </div>

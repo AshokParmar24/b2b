@@ -90,12 +90,12 @@ export function LoginForm() {
             <BrandName className="text-2xl sm:text-4xl tracking-tight" />
           </Link>
           
-          <div className="flex items-center gap-3 w-full max-w-[280px]">
-            <div className="h-[1px] flex-1 bg-slate-100" />
-            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 whitespace-nowrap">
+          <div className="flex items-center gap-2 sm:gap-3 w-full max-w-[280px] justify-center">
+            <div className="h-[1px] flex-1 bg-slate-100 hidden sm:block" />
+            <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] text-slate-400 text-center leading-relaxed max-w-full">
               {SITE_TAGLINE}
             </p>
-            <div className="h-[1px] flex-1 bg-slate-100" />
+            <div className="h-[1px] flex-1 bg-slate-100 hidden sm:block" />
           </div>
         </div>
 
